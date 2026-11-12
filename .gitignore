@@ -8,3 +8,4 @@ __pycache__/
 logs/runs/*.tmp
 node_modules/
 web/dist/
+*.tsbuildinfo
