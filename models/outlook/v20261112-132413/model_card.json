@@ -1,0 +1,545 @@
+{
+  "task": "P(next-3-month rainfall in driest tercile) per Kenyan county",
+  "model": {
+    "kind": "gbm",
+    "params": {
+      "max_depth": 2,
+      "learning_rate": 0.010651187503748367,
+      "max_iter": 250,
+      "min_samples_leaf": 22,
+      "l2_regularization": 4.90497775252226
+    },
+    "num_features": [
+      "rain_z_1m",
+      "rain_z_3m",
+      "tmean_anom_3m",
+      "oni_lag",
+      "oni_change_3m",
+      "dmi_lag",
+      "target_month_sin",
+      "target_month_cos",
+      "log_clim_target_mm"
+    ],
+    "feature_set": "base",
+    "categorical_features": [
+      "zone"
+    ],
+    "calibration": "sigmoid",
+    "threshold": 0.36
+  },
+  "data": {
+    "monthly_from": "1991-01-01",
+    "monthly_to": "2026-10-01",
+    "test_start": "2018-01-01",
+    "n_train": 4010,
+    "n_test": 1295,
+    "n_live_train": 5332,
+    "stats_window": {
+      "stats_from": "1991-01-01",
+      "stats_to": "2017-12-01",
+      "train_end_exclusive": "2018-01-01"
+    }
+  },
+  "cv": {
+    "folds": [
+      "2010-01-01",
+      "2012-01-01",
+      "2014-01-01",
+      "2016-01-01"
+    ],
+    "brier": 0.22663692239019173,
+    "brier_climatology": 0.25030525030525036,
+    "bss": 0.09455785640211223,
+    "n_trials": 40
+  },
+  "test": {
+    "n": 1295,
+    "base_rate": 0.311969111969112,
+    "brier": 0.21293116427687636,
+    "bss_vs_climatology": 0.010086669466695786,
+    "bss_90ci": [
+      -0.09483651356869484,
+      0.07710144588343258
+    ],
+    "roc_auc": 0.6201286795346201,
+    "pr_auc": 0.4176413471014564,
+    "ece": 0.05935141902128503,
+    "threshold": 0.36,
+    "cat_hits": 171,
+    "cat_false_alarms": 247,
+    "cat_misses": 233,
+    "cat_correct_negatives": 644,
+    "cat_pod": 0.42326732673267325,
+    "cat_far": 0.5909090909090909,
+    "cat_pofd": 0.2772166105499439,
+    "cat_csi": 0.2626728110599078,
+    "cat_pss": 0.14605071618272936,
+    "cat_hss": 0.14468053487738497,
+    "cat_bias": 1.0346534653465347,
+    "bss_vs_persistence": 0.004930676193802275
+  },
+  "reliability": [
+    {
+      "bin_lo": 0.0,
+      "bin_hi": 0.1,
+      "n": 320,
+      "mean_forecast": 0.05365977481820725,
+      "observed_freq": 0.1875
+    },
+    {
+      "bin_lo": 0.1,
+      "bin_hi": 0.2,
+      "n": 76,
+      "mean_forecast": 0.16273826883099315,
+      "observed_freq": 0.35526315789473684
+    },
+    {
+      "bin_lo": 0.2,
+      "bin_hi": 0.30000000000000004,
+      "n": 266,
+      "mean_forecast": 0.2541484567959138,
+      "observed_freq": 0.2706766917293233
+    },
+    {
+      "bin_lo": 0.30000000000000004,
+      "bin_hi": 0.4,
+      "n": 330,
+      "mean_forecast": 0.3453844927195238,
+      "observed_freq": 0.3242424242424242
+    },
+    {
+      "bin_lo": 0.4,
+      "bin_hi": 0.5,
+      "n": 227,
+      "mean_forecast": 0.45862606453935095,
+      "observed_freq": 0.43171806167400884
+    },
+    {
+      "bin_lo": 0.5,
+      "bin_hi": 0.6000000000000001,
+      "n": 59,
+      "mean_forecast": 0.5348624472533297,
+      "observed_freq": 0.5254237288135594
+    },
+    {
+      "bin_lo": 0.6000000000000001,
+      "bin_hi": 0.7000000000000001,
+      "n": 17,
+      "mean_forecast": 0.6094664633786482,
+      "observed_freq": 0.5294117647058824
+    }
+  ],
+  "relative_value": [
+    {
+      "cost_loss": 0.05,
+      "value": -0.3086419753086418,
+      "best_threshold": 0.05
+    },
+    {
+      "cost_loss": 0.1,
+      "value": -0.08417508417508401,
+      "best_threshold": 0.05
+    },
+    {
+      "cost_loss": 0.15,
+      "value": -0.009352787130564892,
+      "best_threshold": 0.05
+    },
+    {
+      "cost_loss": 0.2,
+      "value": 0.03254769921436601,
+      "best_threshold": 0.15
+    },
+    {
+      "cost_loss": 0.25,
+      "value": 0.10213243546576888,
+      "best_threshold": 0.15
+    },
+    {
+      "cost_loss": 0.3,
+      "value": 0.14852225963337082,
+      "best_threshold": 0.15
+    },
+    {
+      "cost_loss": 0.35,
+      "value": 0.12166793602437166,
+      "best_threshold": 0.4
+    },
+    {
+      "cost_loss": 0.4,
+      "value": 0.0693069306930692,
+      "best_threshold": 0.4
+    },
+    {
+      "cost_loss": 0.45,
+      "value": 0.026102610261026206,
+      "best_threshold": 0.5
+    },
+    {
+      "cost_loss": 0.5,
+      "value": 0.009900990099009951,
+      "best_threshold": 0.5
+    },
+    {
+      "cost_loss": 0.55,
+      "value": 0.0,
+      "best_threshold": 0.65
+    },
+    {
+      "cost_loss": 0.6,
+      "value": 0.0,
+      "best_threshold": 0.65
+    },
+    {
+      "cost_loss": 0.65,
+      "value": 0.0,
+      "best_threshold": 0.65
+    },
+    {
+      "cost_loss": 0.7,
+      "value": 0.0,
+      "best_threshold": 0.65
+    },
+    {
+      "cost_loss": 0.75,
+      "value": 0.0,
+      "best_threshold": 0.65
+    },
+    {
+      "cost_loss": 0.8,
+      "value": 0.0,
+      "best_threshold": 0.65
+    },
+    {
+      "cost_loss": 0.85,
+      "value": 0.0,
+      "best_threshold": 0.65
+    },
+    {
+      "cost_loss": 0.9,
+      "value": 0.0,
+      "best_threshold": 0.65
+    },
+    {
+      "cost_loss": 0.95,
+      "value": 0.0,
+      "best_threshold": 0.65
+    }
+  ],
+  "by_county": [
+    {
+      "county": "Busia",
+      "n": 104,
+      "base_rate": 0.3654,
+      "brier": 0.2629,
+      "bss": -0.1287,
+      "roc_auc": 0.497,
+      "ece": 0.1424,
+      "pod": 0.2105,
+      "far": 0.7143,
+      "pss": -0.0925,
+      "hss": -0.098
+    },
+    {
+      "county": "Garissa",
+      "n": 68,
+      "base_rate": 0.3382,
+      "brier": 0.2258,
+      "bss": -0.0088,
+      "roc_auc": 0.6198,
+      "ece": 0.1545,
+      "pod": 0.5652,
+      "far": 0.5357,
+      "pss": 0.2319,
+      "hss": 0.2202
+    },
+    {
+      "county": "Kilifi",
+      "n": 104,
+      "base_rate": 0.2019,
+      "brier": 0.1756,
+      "bss": 0.0156,
+      "roc_auc": 0.5961,
+      "ece": 0.1225,
+      "pod": 0.4286,
+      "far": 0.7,
+      "pss": 0.1756,
+      "hss": 0.1513
+    },
+    {
+      "county": "Kisumu",
+      "n": 104,
+      "base_rate": 0.1346,
+      "brier": 0.1613,
+      "bss": -0.0343,
+      "roc_auc": 0.4381,
+      "ece": 0.1983,
+      "pod": 0.2143,
+      "far": 0.8929,
+      "pss": -0.0635,
+      "hss": -0.0446
+    },
+    {
+      "county": "Kwale",
+      "n": 104,
+      "base_rate": 0.2404,
+      "brier": 0.1814,
+      "bss": 0.0517,
+      "roc_auc": 0.6423,
+      "ece": 0.0745,
+      "pod": 0.44,
+      "far": 0.6562,
+      "pss": 0.1742,
+      "hss": 0.159
+    },
+    {
+      "county": "Lamu",
+      "n": 104,
+      "base_rate": 0.2885,
+      "brier": 0.2028,
+      "bss": 0.0216,
+      "roc_auc": 0.6185,
+      "ece": 0.1104,
+      "pod": 0.4667,
+      "far": 0.5758,
+      "pss": 0.2099,
+      "hss": 0.2038
+    },
+    {
+      "county": "Makueni",
+      "n": 86,
+      "base_rate": 0.4651,
+      "brier": 0.2498,
+      "bss": 0.0614,
+      "roc_auc": 0.7207,
+      "ece": 0.1977,
+      "pod": 0.525,
+      "far": 0.3226,
+      "pss": 0.3076,
+      "hss": 0.3122
+    },
+    {
+      "county": "Mandera",
+      "n": 69,
+      "base_rate": 0.4928,
+      "brier": 0.2657,
+      "bss": 0.0351,
+      "roc_auc": 0.7046,
+      "ece": 0.2141,
+      "pod": 0.4412,
+      "far": 0.375,
+      "pss": 0.184,
+      "hss": 0.1848
+    },
+    {
+      "county": "Marsabit",
+      "n": 77,
+      "base_rate": 0.4286,
+      "brier": 0.2376,
+      "bss": 0.0643,
+      "roc_auc": 0.6794,
+      "ece": 0.1617,
+      "pod": 0.4545,
+      "far": 0.4828,
+      "pss": 0.1364,
+      "hss": 0.1385
+    },
+    {
+      "county": "Mombasa",
+      "n": 104,
+      "base_rate": 0.2404,
+      "brier": 0.1823,
+      "bss": 0.047,
+      "roc_auc": 0.6337,
+      "ece": 0.0857,
+      "pod": 0.44,
+      "far": 0.6452,
+      "pss": 0.1868,
+      "hss": 0.1727
+    },
+    {
+      "county": "Nairobi",
+      "n": 104,
+      "base_rate": 0.3173,
+      "brier": 0.2274,
+      "bss": -0.0484,
+      "roc_auc": 0.5638,
+      "ece": 0.1146,
+      "pod": 0.3333,
+      "far": 0.6452,
+      "pss": 0.0516,
+      "hss": 0.0525
+    },
+    {
+      "county": "Tana River",
+      "n": 86,
+      "base_rate": 0.3256,
+      "brier": 0.205,
+      "bss": 0.0666,
+      "roc_auc": 0.6752,
+      "ece": 0.0858,
+      "pod": 0.5357,
+      "far": 0.5161,
+      "pss": 0.2599,
+      "hss": 0.2528
+    },
+    {
+      "county": "Turkana",
+      "n": 104,
+      "base_rate": 0.2596,
+      "brier": 0.2137,
+      "bss": -0.0813,
+      "roc_auc": 0.5176,
+      "ece": 0.1253,
+      "pod": 0.2593,
+      "far": 0.7742,
+      "pss": -0.0524,
+      "hss": -0.05
+    },
+    {
+      "county": "Wajir",
+      "n": 77,
+      "base_rate": 0.4286,
+      "brier": 0.227,
+      "bss": 0.106,
+      "roc_auc": 0.7101,
+      "ece": 0.146,
+      "pod": 0.5455,
+      "far": 0.4194,
+      "pss": 0.25,
+      "hss": 0.2519
+    }
+  ],
+  "by_season": [
+    {
+      "season": "MAM (issued end Feb)",
+      "n": 126,
+      "base_rate": 0.254,
+      "brier": 0.185,
+      "bss": 0.0552,
+      "roc_auc": 0.7221,
+      "ece": 0.162,
+      "pod": 0.8438,
+      "far": 0.6447,
+      "pss": 0.3225,
+      "hss": 0.2219
+    },
+    {
+      "season": "OND (issued end Sep)",
+      "n": 112,
+      "base_rate": 0.3304,
+      "brier": 0.1771,
+      "bss": 0.1995,
+      "roc_auc": 0.8247,
+      "ece": 0.1216,
+      "pod": 0.4324,
+      "far": 0.3333,
+      "pss": 0.3258,
+      "hss": 0.3576
+    }
+  ],
+  "config": {
+    "n_trials": 40,
+    "seed": 0,
+    "cv": {
+      "n_folds": 4,
+      "fold_years": 2
+    },
+    "search": {
+      "kinds": [
+        "logistic",
+        "gbm"
+      ],
+      "calibration": [
+        null,
+        "sigmoid",
+        "isotonic"
+      ],
+      "feature_sets": {
+        "base": [
+          "rain_z_1m",
+          "rain_z_3m",
+          "tmean_anom_3m",
+          "oni_lag",
+          "oni_change_3m",
+          "dmi_lag",
+          "target_month_sin",
+          "target_month_cos",
+          "log_clim_target_mm"
+        ],
+        "base+drivers": [
+          "rain_z_1m",
+          "rain_z_3m",
+          "tmean_anom_3m",
+          "oni_lag",
+          "oni_change_3m",
+          "dmi_lag",
+          "target_month_sin",
+          "target_month_cos",
+          "log_clim_target_mm",
+          "dmi_change_3m",
+          "oni_x_ond",
+          "dmi_x_ond"
+        ],
+        "all": [
+          "rain_z_1m",
+          "rain_z_3m",
+          "tmean_anom_3m",
+          "oni_lag",
+          "oni_change_3m",
+          "dmi_lag",
+          "target_month_sin",
+          "target_month_cos",
+          "log_clim_target_mm",
+          "rain_z_6m",
+          "dmi_change_3m",
+          "oni_x_ond",
+          "dmi_x_ond"
+        ]
+      },
+      "logistic": {
+        "C": [
+          0.01,
+          3.0
+        ]
+      },
+      "gbm": {
+        "max_depth": [
+          2,
+          5
+        ],
+        "learning_rate": [
+          0.01,
+          0.2
+        ],
+        "max_iter": [
+          50,
+          400
+        ],
+        "min_samples_leaf": [
+          20,
+          120
+        ],
+        "l2_regularization": [
+          0.0,
+          5.0
+        ]
+      }
+    },
+    "threshold_grid": [
+      0.34,
+      0.6,
+      0.02
+    ]
+  },
+  "environment": {
+    "sklearn": "1.9.1"
+  },
+  "version": "v20261112-132413",
+  "saved_utc": "2026-11-12T13:24:13+00:00",
+  "git_sha": "5f1df0c",
+  "promotion": {
+    "promoted": false,
+    "reason": "no demonstrable skill over climatology (BSS CI includes 0); keeping inline default"
+  }
+}

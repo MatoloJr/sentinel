@@ -1,5 +1,5 @@
 {
-  "built_utc": "2026-11-12T12:08:04+00:00",
+  "built_utc": "2026-11-12T13:24:19+00:00",
   "daily_range": [
     "1991-01-01",
     "2026-11-05"
@@ -25,6 +25,7 @@
           "best_f1": 0.46942800788954636
         }
       },
+      "source": "inline selection",
       "inner_train_end": "2013-01-01",
       "n_inner_train": 3260,
       "n_inner_valid": 723
@@ -48,6 +49,7 @@
       "log_clim_target_mm",
       "zone"
     ],
+    "model_source": "inline selection",
     "train_issue_range": [
       "1991-01-01",
       "2017-09-01"

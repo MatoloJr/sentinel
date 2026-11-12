@@ -19,6 +19,7 @@
         "best_f1": 0.46942800788954636
       }
     },
+    "source": "inline selection",
     "inner_train_end": "2013-01-01",
     "n_inner_train": 3260,
     "n_inner_valid": 723
@@ -42,6 +43,7 @@
     "log_clim_target_mm",
     "zone"
   ],
+  "model_source": "inline selection",
   "train_issue_range": [
     "1991-01-01",
     "2017-09-01"
