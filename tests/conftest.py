@@ -17,6 +17,8 @@ def synth(tmp_path_factory):
     base = tmp_path_factory.mktemp("synthetic")
     C.DATA_DIR, C.RAW_DIR = base, base / "raw"
     C.OUT_DIR, C.LOG_DIR = base / "outputs", base / "logs"
+    from sentinel import model_registry
+    model_registry.MODELS_DIR = base / "models"  # never read or promote into the real models/
     make_raw(C.RAW_DIR)
     import run_all
     run_all.build(offline=True, skip_forecast=True, n_boot=50)

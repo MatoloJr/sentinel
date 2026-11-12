@@ -29,7 +29,7 @@ def make_raw(raw: Path, seed: int = 1, end: str = "2026-11-01") -> None:
     dmi_by_month = dict(zip(months, dmi))
 
     frames = []
-    doy = dates.dayofyear.to_numpy()
+    doy = dates.day_of_year.to_numpy()
     for k, c in enumerate(C.COUNTIES):
         wet = 0.25 + 0.2 * np.sin(2 * np.pi * (doy - 60) / 182.5) ** 2  # bimodal-ish
         mstart = dates.to_period("M").to_timestamp()

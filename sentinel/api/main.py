@@ -85,7 +85,7 @@ def meta():
     return {"counties": [{"county": c.name, "town": c.town, "lat": c.lat, "lon": c.lon, "zone": c.zone,
                           "coastal": c.coastal} for c in C.COUNTIES],
             "levels": C.LEVELS, "playbook_levels": pb["levels"], "playbook_sources": pb["sources"],
-            "thresholds": {"drought_classes": [[lo, hi, lv] for lo, hi, lv in C.DROUGHT_CLASSES],
+            "thresholds": {"drought_classes": [[sio.clean(lo), sio.clean(hi), lv] for lo, hi, lv in C.DROUGHT_CLASSES],
                            "heavy_pctls": C.HEAVY_PCTLS, "gale_gust_kmh": C.GALE_GUST_KMH,
                            "cyclone_radius_km": C.CYCLONE_RADIUS_KM}}
 
