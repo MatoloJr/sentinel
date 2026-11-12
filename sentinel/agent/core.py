@@ -12,12 +12,11 @@ from pathlib import Path
 from .. import config as C
 from .tools import TOOL_SCHEMAS, call_tool, now_iso
 
-PROVIDERS = {
-    "gemini": {"base_url": "https://generativelanguage.googleapis.com/v1beta/openai/",
-               "key_env": "GEMINI_API_KEY", "default_model": "gemini-2.5-flash"},
-    "groq": {"base_url": "https://api.groq.com/openai/v1",
-             "key_env": "GROQ_API_KEY", "default_model": "llama-3.3-70b-versatile"},
-}
+# Gemini through its OpenAI-compatible endpoint: keeps the tool-calling loop, the validator and the
+# fake-client tests provider-neutral while only Gemini is supported.
+GEMINI_BASE_URL = "https://generativelanguage.googleapis.com/v1beta/openai/"
+GEMINI_KEY_ENV = "GEMINI_API_KEY"
+GEMINI_DEFAULT_MODEL = "gemini-2.5-flash"
 
 SYSTEM_PROMPT = f"""You are Climate Sentinel, an early-warning assistant for county disaster managers in Kenya.
 You cover only these counties: {", ".join(C.COUNTY_NAMES)}.
@@ -141,22 +140,22 @@ def reject(run_id: str, approver: str, note: str = "") -> dict:
 # ---------------------------------------------------------------- LLM loop
 @dataclass
 class Agent:
-    provider: str = field(default_factory=lambda: os.environ.get("LLM_PROVIDER", "gemini"))
     model: str | None = None
     client: object | None = None  # any object with .chat.completions.create (tests pass a fake)
     max_steps: int = 10
+    provider: str = "gemini"      # kept for run logs; Gemini is the only supported provider
 
     def __post_init__(self):
-        cfg = PROVIDERS.get(self.provider)
-        if cfg is None:
-            raise ValueError(f"Unknown provider {self.provider}; use one of {list(PROVIDERS)}")
-        self.model = self.model or os.environ.get("LLM_MODEL") or cfg["default_model"]
+        if self.provider != "gemini":
+            raise ValueError("Only the 'gemini' provider is supported.")
+        self.model = self.model or os.environ.get("LLM_MODEL") or GEMINI_DEFAULT_MODEL
         if self.client is None:
-            key = os.environ.get(cfg["key_env"])
+            key = os.environ.get(GEMINI_KEY_ENV)
             if not key:
-                raise RuntimeError(f"Set {cfg['key_env']} (free key) in your environment or .env file.")
+                raise RuntimeError(f"Set {GEMINI_KEY_ENV} (free key from https://aistudio.google.com/apikey) "
+                                   "in your environment or .env file.")
             from openai import OpenAI
-            self.client = OpenAI(api_key=key, base_url=cfg["base_url"])
+            self.client = OpenAI(api_key=key, base_url=GEMINI_BASE_URL)
 
     def ask(self, question: str) -> dict:
         run = {"run_id": time.strftime("%Y%m%d-%H%M%S") + "-" + uuid.uuid4().hex[:6],

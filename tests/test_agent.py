@@ -78,7 +78,7 @@ def test_validator_blocks_risk_denial():
 
 # ---------------------------------------------------------------- loop + approval (scripted fake LLM)
 class FakeLLM:
-    """Stands in for Gemini/Groq: first asks for a tool, then answers using the result."""
+    """Stands in for Gemini: first asks for a tool, then answers using the result."""
 
     def __init__(self, final_text):
         self.final_text, self.n = final_text, 0

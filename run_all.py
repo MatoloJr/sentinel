@@ -5,6 +5,7 @@
 3. seasonal outlook backtest + live outlook
 4. 7-day forecast watch
 5. current status table used by the dashboard and the agent
+6. insights.json: ranked, actionable county cards (manager + public views)
 """
 from __future__ import annotations
 
@@ -15,7 +16,7 @@ from pathlib import Path
 
 import pandas as pd
 
-from sentinel import climate, config as C, geo, indicators as ind, outlook, watch
+from sentinel import climate, config as C, geo, indicators as ind, insights, outlook, watch
 
 
 def exposure_class(per_decade: float) -> str:
@@ -106,6 +107,9 @@ def build(offline: bool, skip_forecast: bool, n_boot: int) -> dict:
     gj.to_file(out / "counties_status.geojson", driver="GeoJSON")
     summary["latest_complete_month"] = str(mon["date"].max().date())
     (out / "run_summary.json").write_text(json.dumps(summary, indent=2, default=str))
+
+    print("== insights + actions")
+    insights.save(out)
     print(f"Done. Outputs in {out}")
     return summary
 

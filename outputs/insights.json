@@ -1,0 +1,2176 @@
+{
+  "generated_for": "2026-11-12",
+  "region": {
+    "counties_at_watch_or_above": 14,
+    "counties_at_warning_or_above": 4,
+    "people_at_watch_or_above": 18952114,
+    "people_at_warning_or_above": 7872510,
+    "rising": [
+      "Nairobi",
+      "Turkana",
+      "Wajir",
+      "Tana River",
+      "Garissa",
+      "Mandera"
+    ],
+    "top_priorities": [
+      "Nairobi",
+      "Turkana",
+      "Wajir"
+    ]
+  },
+  "counties": [
+    {
+      "county": "Nairobi",
+      "zone": "Central highlands",
+      "overall_level": "Warning",
+      "headline": "Drought Warning: 44% of normal rain over the 3 months to 2026-10 (33.8 mm vs 77.4 mm normal)",
+      "hazard_levels": {
+        "drought": "Warning",
+        "flood": "Watch",
+        "cyclone": "Normal"
+      },
+      "drivers": [
+        {
+          "hazard": "drought",
+          "level": "Warning",
+          "text": "44% of normal rain over the 3 months to 2026-10 (33.8 mm vs 77.4 mm normal)",
+          "value": 44.0,
+          "unit": "% of normal"
+        },
+        {
+          "hazard": "flood",
+          "level": "Normal",
+          "text": "Wettest 3 days in the last week: 4.5 mm (11% of the county's 1-in-100-day level)",
+          "value": 4.5,
+          "unit": "mm / 3 days"
+        }
+      ],
+      "trend": {
+        "variable": "Annual rainfall",
+        "slope_mm_per_decade": 16.5,
+        "change_pct_of_mean": 9.7,
+        "p_value": 0.66,
+        "significant": false,
+        "years": "1991-2025"
+      },
+      "significant_extreme_trends": [
+        {
+          "variable": "hot_days",
+          "unit": "days",
+          "slope_per_decade": 3.2,
+          "p_value": 0.011
+        }
+      ],
+      "next": {
+        "forecast": {
+          "level": "Watch",
+          "max_3day_mm": 37.9,
+          "window": "12 Nov - 14 Nov",
+          "total_7day_mm": 70.2,
+          "p99_3day_mm": 41.1,
+          "gale_gusts": null,
+          "max_gust_kmh": null,
+          "hot_days": 0,
+          "fetched_utc": "2026-11-12T12:08+00:00"
+        },
+        "outlook": {
+          "target_months": "Nov 2026 - Jan 2027",
+          "prob_below_normal": 0.33,
+          "skilful": false,
+          "verdict": "No skill - use climatology",
+          "confidence": "low",
+          "model_raw_prob": 0.23,
+          "message": "No reliable signal for Nov 2026 - Jan 2027: the model did not beat climatology in testing, so plan for normal odds (33% chance of below-normal rain)."
+        }
+      },
+      "rising": true,
+      "exposure": {
+        "population_2020": 4633706,
+        "share_of_region_pct": 24.4,
+        "people_at_watch_or_above": 4633706
+      },
+      "priority_score": 28.17,
+      "priority_explained": "severity 4 (Watch=1, Warning=3, Emergency=6 per hazard) x population weight 5.63 (1 + people/1M) x 1.25 rising risk",
+      "actions": [
+        {
+          "id": "DR-A1",
+          "hazard": "drought",
+          "level": "Warning",
+          "action": "Repair and rehabilitate water facilities (e.g. boreholes)",
+          "timeframe": "This week",
+          "source": "Kenya Red Cross Society / IFRC DREF, Kenya: Drought - Early Action Protocol Summary (EAP2022KE02)",
+          "source_url": "https://www.anticipation-hub.org/Documents/EAPs/MDRKE055_EAP.pdf",
+          "section": "WASH"
+        },
+        {
+          "id": "DR-A2",
+          "hazard": "drought",
+          "level": "Warning",
+          "action": "Desilt water pans and repair earth dams",
+          "timeframe": "This week",
+          "source": "Kenya Red Cross Society / IFRC DREF, Kenya: Drought - Early Action Protocol Summary (EAP2022KE02)",
+          "source_url": "https://www.anticipation-hub.org/Documents/EAPs/MDRKE055_EAP.pdf",
+          "section": "WASH"
+        },
+        {
+          "id": "DR-A3",
+          "hazard": "drought",
+          "level": "Warning",
+          "action": "Install mass water storage tanks",
+          "timeframe": "This week",
+          "source": "Kenya Red Cross Society / IFRC DREF, Kenya: Drought - Early Action Protocol Summary (EAP2022KE02)",
+          "source_url": "https://www.anticipation-hub.org/Documents/EAPs/MDRKE055_EAP.pdf",
+          "section": "WASH"
+        },
+        {
+          "id": "DR-A4",
+          "hazard": "drought",
+          "level": "Warning",
+          "action": "Provide cash for WASH to targeted households",
+          "timeframe": "This week",
+          "source": "Kenya Red Cross Society / IFRC DREF, Kenya: Drought - Early Action Protocol Summary (EAP2022KE02)",
+          "source_url": "https://www.anticipation-hub.org/Documents/EAPs/MDRKE055_EAP.pdf",
+          "section": "WASH / Cash"
+        },
+        {
+          "id": "DR-A5",
+          "hazard": "drought",
+          "level": "Warning",
+          "action": "Provide fodder for priority livestock through commodity vouchers",
+          "timeframe": "This week",
+          "source": "Kenya Red Cross Society / IFRC DREF, Kenya: Drought - Early Action Protocol Summary (EAP2022KE02)",
+          "source_url": "https://www.anticipation-hub.org/Documents/EAPs/MDRKE055_EAP.pdf",
+          "section": "Livelihoods"
+        },
+        {
+          "id": "DR-A6",
+          "hazard": "drought",
+          "level": "Warning",
+          "action": "Procure and distribute drought-tolerant seeds before the next planting season",
+          "timeframe": "This week",
+          "source": "Kenya Red Cross Society / IFRC DREF, Kenya: Drought - Early Action Protocol Summary (EAP2022KE02)",
+          "source_url": "https://www.anticipation-hub.org/Documents/EAPs/MDRKE055_EAP.pdf",
+          "section": "Livelihoods"
+        },
+        {
+          "id": "DR-A7",
+          "hazard": "drought",
+          "level": "Warning",
+          "action": "Encourage early de-stocking and saving fodder for key animals",
+          "timeframe": "This week",
+          "source": "IFRC, Public awareness and public education for disaster risk reduction: key messages (PAPE), 2nd edition",
+          "source_url": "https://www.ifrc.org/sites/default/files/PAPE-2.0-English.pdf",
+          "section": "Drought, p. 47"
+        },
+        {
+          "id": "FL-W1",
+          "hazard": "flood",
+          "level": "Watch",
+          "action": "Disseminate targeted early warnings to at-risk communities through trained volunteers",
+          "timeframe": "Next 2-4 weeks",
+          "source": "Kenya Red Cross Society / IFRC DREF, Kenya: Floods - Early Action Protocol Summary (EAP2021KE01)",
+          "source_url": "https://www.anticipation-hub.org/Documents/EAPs/EAP_Kenya_Floods_2021.pdf",
+          "section": "Early actions / DRR"
+        },
+        {
+          "id": "FL-W2",
+          "hazard": "flood",
+          "level": "Watch",
+          "action": "Place or check flood depth markers at crossing points (cash for work)",
+          "timeframe": "Next 2-4 weeks",
+          "source": "Kenya Red Cross Society / IFRC DREF, Kenya: Floods - Early Action Protocol Summary (EAP2021KE01)",
+          "source_url": "https://www.anticipation-hub.org/Documents/EAPs/EAP_Kenya_Floods_2021.pdf",
+          "section": "Early actions"
+        },
+        {
+          "id": "FL-W3",
+          "hazard": "flood",
+          "level": "Watch",
+          "action": "Identify evacuation sites",
+          "timeframe": "Next 2-4 weeks",
+          "source": "Kenya Red Cross Society / IFRC DREF, Kenya: Floods - Early Action Protocol Summary (EAP2021KE01)",
+          "source_url": "https://www.anticipation-hub.org/Documents/EAPs/EAP_Kenya_Floods_2021.pdf",
+          "section": "Physical evacuation"
+        },
+        {
+          "id": "FL-W4",
+          "hazard": "flood",
+          "level": "Watch",
+          "action": "Pre-position shelter and WASH relief items",
+          "timeframe": "Next 2-4 weeks",
+          "source": "Kenya Red Cross Society / IFRC DREF, Kenya: Floods - Early Action Protocol Summary (EAP2021KE01)",
+          "source_url": "https://www.anticipation-hub.org/Documents/EAPs/EAP_Kenya_Floods_2021.pdf",
+          "section": "Early actions"
+        },
+        {
+          "id": "FL-W5",
+          "hazard": "flood",
+          "level": "Watch",
+          "action": "Advise households to store valuables above flood level and keep extra drinking water",
+          "timeframe": "Next 2-4 weeks",
+          "source": "IFRC, Public awareness and public education for disaster risk reduction: key messages (PAPE), 2nd edition",
+          "source_url": "https://www.ifrc.org/sites/default/files/PAPE-2.0-English.pdf",
+          "section": "Floods, pp. 100, 102"
+        }
+      ],
+      "rainy_seasons": "Mar-May (45% of annual); Nov (14% of annual)",
+      "public": {
+        "summary": "Rain is well below normal. Water and pasture may run short. Conserve water and contact your ward office about water and fodder support. Heavy rain is possible. Keep drinking water, move valuables up, and know your nearest higher ground.",
+        "sms": "Nairobi Drought WARNING: Save water; ask ward office about water/fodder help. Follow KMD/county alerts.",
+        "level": "Warning"
+      },
+      "priority_rank": 1
+    },
+    {
+      "county": "Turkana",
+      "zone": "Arid north",
+      "overall_level": "Warning",
+      "headline": "Drought Warning: 35% of normal rain over the 3 months to 2026-10 (21.0 mm vs 60.7 mm normal)",
+      "hazard_levels": {
+        "drought": "Warning",
+        "flood": "Watch",
+        "cyclone": "Normal"
+      },
+      "drivers": [
+        {
+          "hazard": "drought",
+          "level": "Warning",
+          "text": "35% of normal rain over the 3 months to 2026-10 (21.0 mm vs 60.7 mm normal)",
+          "value": 35.0,
+          "unit": "% of normal"
+        },
+        {
+          "hazard": "flood",
+          "level": "Normal",
+          "text": "Wettest 3 days in the last week: 6.3 mm (16% of the county's 1-in-100-day level)",
+          "value": 6.3,
+          "unit": "mm / 3 days"
+        }
+      ],
+      "trend": {
+        "variable": "Annual rainfall",
+        "slope_mm_per_decade": 52.1,
+        "change_pct_of_mean": 49.4,
+        "p_value": 0.034,
+        "significant": true,
+        "years": "1991-2025"
+      },
+      "significant_extreme_trends": [
+        {
+          "variable": "heavy_rain_days",
+          "unit": "days",
+          "slope_per_decade": 0.59,
+          "p_value": 0.027
+        },
+        {
+          "variable": "max_3day_rain_mm",
+          "unit": "mm",
+          "slope_per_decade": 5.47,
+          "p_value": 0.037
+        },
+        {
+          "variable": "hot_days",
+          "unit": "days",
+          "slope_per_decade": 7.78,
+          "p_value": 0.0
+        }
+      ],
+      "next": {
+        "forecast": {
+          "level": "Watch",
+          "max_3day_mm": 34.8,
+          "window": "12 Nov - 14 Nov",
+          "total_7day_mm": 42.3,
+          "p99_3day_mm": 38.4,
+          "gale_gusts": null,
+          "max_gust_kmh": null,
+          "hot_days": 0,
+          "fetched_utc": "2026-11-12T12:08+00:00"
+        },
+        "outlook": {
+          "target_months": "Nov 2026 - Jan 2027",
+          "prob_below_normal": 0.33,
+          "skilful": false,
+          "verdict": "No skill - use climatology",
+          "confidence": "low",
+          "model_raw_prob": 0.23,
+          "message": "No reliable signal for Nov 2026 - Jan 2027: the model did not beat climatology in testing, so plan for normal odds (33% chance of below-normal rain)."
+        }
+      },
+      "rising": true,
+      "exposure": {
+        "population_2020": 1226408,
+        "share_of_region_pct": 6.5,
+        "people_at_watch_or_above": 1226408
+      },
+      "priority_score": 11.13,
+      "priority_explained": "severity 4 (Watch=1, Warning=3, Emergency=6 per hazard) x population weight 2.23 (1 + people/1M) x 1.25 rising risk",
+      "actions": [
+        {
+          "id": "DR-A1",
+          "hazard": "drought",
+          "level": "Warning",
+          "action": "Repair and rehabilitate water facilities (e.g. boreholes)",
+          "timeframe": "This week",
+          "source": "Kenya Red Cross Society / IFRC DREF, Kenya: Drought - Early Action Protocol Summary (EAP2022KE02)",
+          "source_url": "https://www.anticipation-hub.org/Documents/EAPs/MDRKE055_EAP.pdf",
+          "section": "WASH"
+        },
+        {
+          "id": "DR-A2",
+          "hazard": "drought",
+          "level": "Warning",
+          "action": "Desilt water pans and repair earth dams",
+          "timeframe": "This week",
+          "source": "Kenya Red Cross Society / IFRC DREF, Kenya: Drought - Early Action Protocol Summary (EAP2022KE02)",
+          "source_url": "https://www.anticipation-hub.org/Documents/EAPs/MDRKE055_EAP.pdf",
+          "section": "WASH"
+        },
+        {
+          "id": "DR-A3",
+          "hazard": "drought",
+          "level": "Warning",
+          "action": "Install mass water storage tanks",
+          "timeframe": "This week",
+          "source": "Kenya Red Cross Society / IFRC DREF, Kenya: Drought - Early Action Protocol Summary (EAP2022KE02)",
+          "source_url": "https://www.anticipation-hub.org/Documents/EAPs/MDRKE055_EAP.pdf",
+          "section": "WASH"
+        },
+        {
+          "id": "DR-A4",
+          "hazard": "drought",
+          "level": "Warning",
+          "action": "Provide cash for WASH to targeted households",
+          "timeframe": "This week",
+          "source": "Kenya Red Cross Society / IFRC DREF, Kenya: Drought - Early Action Protocol Summary (EAP2022KE02)",
+          "source_url": "https://www.anticipation-hub.org/Documents/EAPs/MDRKE055_EAP.pdf",
+          "section": "WASH / Cash"
+        },
+        {
+          "id": "DR-A5",
+          "hazard": "drought",
+          "level": "Warning",
+          "action": "Provide fodder for priority livestock through commodity vouchers",
+          "timeframe": "This week",
+          "source": "Kenya Red Cross Society / IFRC DREF, Kenya: Drought - Early Action Protocol Summary (EAP2022KE02)",
+          "source_url": "https://www.anticipation-hub.org/Documents/EAPs/MDRKE055_EAP.pdf",
+          "section": "Livelihoods"
+        },
+        {
+          "id": "DR-A6",
+          "hazard": "drought",
+          "level": "Warning",
+          "action": "Procure and distribute drought-tolerant seeds before the next planting season",
+          "timeframe": "This week",
+          "source": "Kenya Red Cross Society / IFRC DREF, Kenya: Drought - Early Action Protocol Summary (EAP2022KE02)",
+          "source_url": "https://www.anticipation-hub.org/Documents/EAPs/MDRKE055_EAP.pdf",
+          "section": "Livelihoods"
+        },
+        {
+          "id": "DR-A7",
+          "hazard": "drought",
+          "level": "Warning",
+          "action": "Encourage early de-stocking and saving fodder for key animals",
+          "timeframe": "This week",
+          "source": "IFRC, Public awareness and public education for disaster risk reduction: key messages (PAPE), 2nd edition",
+          "source_url": "https://www.ifrc.org/sites/default/files/PAPE-2.0-English.pdf",
+          "section": "Drought, p. 47"
+        },
+        {
+          "id": "FL-W1",
+          "hazard": "flood",
+          "level": "Watch",
+          "action": "Disseminate targeted early warnings to at-risk communities through trained volunteers",
+          "timeframe": "Next 2-4 weeks",
+          "source": "Kenya Red Cross Society / IFRC DREF, Kenya: Floods - Early Action Protocol Summary (EAP2021KE01)",
+          "source_url": "https://www.anticipation-hub.org/Documents/EAPs/EAP_Kenya_Floods_2021.pdf",
+          "section": "Early actions / DRR"
+        },
+        {
+          "id": "FL-W2",
+          "hazard": "flood",
+          "level": "Watch",
+          "action": "Place or check flood depth markers at crossing points (cash for work)",
+          "timeframe": "Next 2-4 weeks",
+          "source": "Kenya Red Cross Society / IFRC DREF, Kenya: Floods - Early Action Protocol Summary (EAP2021KE01)",
+          "source_url": "https://www.anticipation-hub.org/Documents/EAPs/EAP_Kenya_Floods_2021.pdf",
+          "section": "Early actions"
+        },
+        {
+          "id": "FL-W3",
+          "hazard": "flood",
+          "level": "Watch",
+          "action": "Identify evacuation sites",
+          "timeframe": "Next 2-4 weeks",
+          "source": "Kenya Red Cross Society / IFRC DREF, Kenya: Floods - Early Action Protocol Summary (EAP2021KE01)",
+          "source_url": "https://www.anticipation-hub.org/Documents/EAPs/EAP_Kenya_Floods_2021.pdf",
+          "section": "Physical evacuation"
+        },
+        {
+          "id": "FL-W4",
+          "hazard": "flood",
+          "level": "Watch",
+          "action": "Pre-position shelter and WASH relief items",
+          "timeframe": "Next 2-4 weeks",
+          "source": "Kenya Red Cross Society / IFRC DREF, Kenya: Floods - Early Action Protocol Summary (EAP2021KE01)",
+          "source_url": "https://www.anticipation-hub.org/Documents/EAPs/EAP_Kenya_Floods_2021.pdf",
+          "section": "Early actions"
+        },
+        {
+          "id": "FL-W5",
+          "hazard": "flood",
+          "level": "Watch",
+          "action": "Advise households to store valuables above flood level and keep extra drinking water",
+          "timeframe": "Next 2-4 weeks",
+          "source": "IFRC, Public awareness and public education for disaster risk reduction: key messages (PAPE), 2nd edition",
+          "source_url": "https://www.ifrc.org/sites/default/files/PAPE-2.0-English.pdf",
+          "section": "Floods, pp. 100, 102"
+        }
+      ],
+      "rainy_seasons": "Mar-May (43% of annual); Oct-Nov (25% of annual)",
+      "public": {
+        "summary": "Rain is well below normal. Water and pasture may run short. Conserve water and contact your ward office about water and fodder support. Heavy rain is possible. Keep drinking water, move valuables up, and know your nearest higher ground.",
+        "sms": "Turkana Drought WARNING: Save water; ask ward office about water/fodder help. Follow KMD/county alerts.",
+        "level": "Warning"
+      },
+      "priority_rank": 2
+    },
+    {
+      "county": "Wajir",
+      "zone": "Arid north-east",
+      "overall_level": "Warning",
+      "headline": "Heavy rain / flooding Warning: Forecast 52.3 mm in 3 days (12 Nov - 14 Nov)",
+      "hazard_levels": {
+        "drought": "Normal",
+        "flood": "Warning",
+        "cyclone": "Normal"
+      },
+      "drivers": [
+        {
+          "hazard": "drought",
+          "level": "Normal",
+          "text": "143% of normal rain over the 3 months to 2026-10 (56.9 mm vs 39.9 mm normal)",
+          "value": 143.0,
+          "unit": "% of normal"
+        },
+        {
+          "hazard": "flood",
+          "level": "Normal",
+          "text": "Wettest 3 days in the last week: 10.3 mm (32% of the county's 1-in-100-day level)",
+          "value": 10.3,
+          "unit": "mm / 3 days"
+        }
+      ],
+      "trend": {
+        "variable": "Annual rainfall",
+        "slope_mm_per_decade": -24.7,
+        "change_pct_of_mean": -29.5,
+        "p_value": 0.16,
+        "significant": false,
+        "years": "1991-2025"
+      },
+      "significant_extreme_trends": [
+        {
+          "variable": "hot_days",
+          "unit": "days",
+          "slope_per_decade": 3.75,
+          "p_value": 0.027
+        }
+      ],
+      "next": {
+        "forecast": {
+          "level": "Warning",
+          "max_3day_mm": 52.3,
+          "window": "12 Nov - 14 Nov",
+          "total_7day_mm": 63.5,
+          "p99_3day_mm": 31.8,
+          "gale_gusts": null,
+          "max_gust_kmh": null,
+          "hot_days": 0,
+          "fetched_utc": "2026-11-12T12:08+00:00"
+        },
+        "outlook": {
+          "target_months": "Nov 2026 - Jan 2027",
+          "prob_below_normal": 0.16,
+          "skilful": true,
+          "verdict": "Weak or uncertain skill",
+          "confidence": "low",
+          "model_raw_prob": 0.16,
+          "message": "16% chance the Nov 2026 - Jan 2027 rain is in the driest third (normal chance 33%; model skill: weak or uncertain skill)."
+        }
+      },
+      "rising": true,
+      "exposure": {
+        "population_2020": 1696642,
+        "share_of_region_pct": 9.0,
+        "people_at_watch_or_above": 1696642
+      },
+      "priority_score": 10.11,
+      "priority_explained": "severity 3 (Watch=1, Warning=3, Emergency=6 per hazard) x population weight 2.70 (1 + people/1M) x 1.25 rising risk",
+      "actions": [
+        {
+          "id": "FL-A1",
+          "hazard": "flood",
+          "level": "Warning",
+          "action": "Give cash grants or vouchers so vulnerable people can evacuate early",
+          "timeframe": "This week",
+          "source": "Kenya Red Cross Society / IFRC DREF, Kenya: Floods - Early Action Protocol Summary (EAP2021KE01)",
+          "source_url": "https://www.anticipation-hub.org/Documents/EAPs/EAP_Kenya_Floods_2021.pdf",
+          "section": "Physical evacuation"
+        },
+        {
+          "id": "FL-A2",
+          "hazard": "flood",
+          "level": "Warning",
+          "action": "Support physical evacuation to identified sites",
+          "timeframe": "This week",
+          "source": "Kenya Red Cross Society / IFRC, EAP Activation: Kenya Riverine Floods 2023",
+          "source_url": "https://www.anticipation-hub.org/Documents/EAPs/EAP_Activation_Kenya_Riverine_Floods_2023.pdf",
+          "section": "Disaster risk reduction"
+        },
+        {
+          "id": "FL-A3",
+          "hazard": "flood",
+          "level": "Warning",
+          "action": "Vaccinate or treat livestock through community animal health workers",
+          "timeframe": "This week",
+          "source": "Kenya Red Cross Society / IFRC DREF, Kenya: Floods - Early Action Protocol Summary (EAP2021KE01)",
+          "source_url": "https://www.anticipation-hub.org/Documents/EAPs/EAP_Kenya_Floods_2021.pdf",
+          "section": "Early actions"
+        },
+        {
+          "id": "FL-A4",
+          "hazard": "flood",
+          "level": "Warning",
+          "action": "Deploy emergency water treatment and sensitise communities on household water treatment",
+          "timeframe": "This week",
+          "source": "Kenya Red Cross Society / IFRC DREF, Kenya: Floods - Early Action Protocol Summary (EAP2021KE01)",
+          "source_url": "https://www.anticipation-hub.org/Documents/EAPs/EAP_Kenya_Floods_2021.pdf",
+          "section": "WASH"
+        },
+        {
+          "id": "FL-A5",
+          "hazard": "flood",
+          "level": "Warning",
+          "action": "Tell people to evacuate immediately when advised, or move to higher ground",
+          "timeframe": "This week",
+          "source": "IFRC, Public awareness and public education for disaster risk reduction: key messages (PAPE), 2nd edition",
+          "source_url": "https://www.ifrc.org/sites/default/files/PAPE-2.0-English.pdf",
+          "section": "Floods, pp. 102-103"
+        },
+        {
+          "id": "FL-A6",
+          "hazard": "flood",
+          "level": "Warning",
+          "action": "Warn against walking or driving through flowing water and underpasses ('turn around, don't drown')",
+          "timeframe": "This week",
+          "source": "IFRC, Public awareness and public education for disaster risk reduction: key messages (PAPE), 2nd edition",
+          "source_url": "https://www.ifrc.org/sites/default/files/PAPE-2.0-English.pdf",
+          "section": "Floods, p. 103"
+        }
+      ],
+      "rainy_seasons": "Mar-Apr (34% of annual); Oct-Dec (52% of annual)",
+      "public": {
+        "summary": "Very heavy rain is likely. Do not walk or drive through flowing water. Be ready to move to higher ground if told to.",
+        "sms": "Wajir Heavy rain WARNING: Avoid flowing water; be ready to move to high ground. Follow KMD/county alerts.",
+        "level": "Warning"
+      },
+      "priority_rank": 3
+    },
+    {
+      "county": "Tana River",
+      "zone": "Tana basin",
+      "overall_level": "Warning",
+      "headline": "Heavy rain / flooding Warning: Forecast 30.1 mm in 3 days (13 Nov - 15 Nov)",
+      "hazard_levels": {
+        "drought": "Normal",
+        "flood": "Warning",
+        "cyclone": "Watch"
+      },
+      "drivers": [
+        {
+          "hazard": "drought",
+          "level": "Normal",
+          "text": "141% of normal rain over the 3 months to 2026-10 (73.7 mm vs 52.5 mm normal)",
+          "value": 141.0,
+          "unit": "% of normal"
+        },
+        {
+          "hazard": "flood",
+          "level": "Watch",
+          "text": "Wettest 3 days in the last week: 14.9 mm (58% of the county's 1-in-100-day level)",
+          "value": 14.9,
+          "unit": "mm / 3 days"
+        },
+        {
+          "hazard": "cyclone",
+          "level": "Watch",
+          "text": "Cyclone season (Nov-Apr); 1 tropical storm(s) passed within 300 km since 1981",
+          "value": 1,
+          "unit": "storms"
+        }
+      ],
+      "trend": {
+        "variable": "Annual rainfall",
+        "slope_mm_per_decade": -17.2,
+        "change_pct_of_mean": -18.3,
+        "p_value": 0.28,
+        "significant": false,
+        "years": "1991-2025"
+      },
+      "significant_extreme_trends": [],
+      "next": {
+        "forecast": {
+          "level": "Warning",
+          "max_3day_mm": 30.1,
+          "window": "13 Nov - 15 Nov",
+          "total_7day_mm": 39.8,
+          "p99_3day_mm": 25.8,
+          "gale_gusts": null,
+          "max_gust_kmh": null,
+          "hot_days": 0,
+          "fetched_utc": "2026-11-12T12:08+00:00"
+        },
+        "outlook": {
+          "target_months": "Nov 2026 - Jan 2027",
+          "prob_below_normal": 0.16,
+          "skilful": true,
+          "verdict": "Weak or uncertain skill",
+          "confidence": "low",
+          "model_raw_prob": 0.16,
+          "message": "16% chance the Nov 2026 - Jan 2027 rain is in the driest third (normal chance 33%; model skill: weak or uncertain skill)."
+        }
+      },
+      "rising": true,
+      "exposure": {
+        "population_2020": 315754,
+        "share_of_region_pct": 1.7,
+        "people_at_watch_or_above": 315754
+      },
+      "priority_score": 6.58,
+      "priority_explained": "severity 4 (Watch=1, Warning=3, Emergency=6 per hazard) x population weight 1.32 (1 + people/1M) x 1.25 rising risk",
+      "actions": [
+        {
+          "id": "FL-A1",
+          "hazard": "flood",
+          "level": "Warning",
+          "action": "Give cash grants or vouchers so vulnerable people can evacuate early",
+          "timeframe": "This week",
+          "source": "Kenya Red Cross Society / IFRC DREF, Kenya: Floods - Early Action Protocol Summary (EAP2021KE01)",
+          "source_url": "https://www.anticipation-hub.org/Documents/EAPs/EAP_Kenya_Floods_2021.pdf",
+          "section": "Physical evacuation"
+        },
+        {
+          "id": "FL-A2",
+          "hazard": "flood",
+          "level": "Warning",
+          "action": "Support physical evacuation to identified sites",
+          "timeframe": "This week",
+          "source": "Kenya Red Cross Society / IFRC, EAP Activation: Kenya Riverine Floods 2023",
+          "source_url": "https://www.anticipation-hub.org/Documents/EAPs/EAP_Activation_Kenya_Riverine_Floods_2023.pdf",
+          "section": "Disaster risk reduction"
+        },
+        {
+          "id": "FL-A3",
+          "hazard": "flood",
+          "level": "Warning",
+          "action": "Vaccinate or treat livestock through community animal health workers",
+          "timeframe": "This week",
+          "source": "Kenya Red Cross Society / IFRC DREF, Kenya: Floods - Early Action Protocol Summary (EAP2021KE01)",
+          "source_url": "https://www.anticipation-hub.org/Documents/EAPs/EAP_Kenya_Floods_2021.pdf",
+          "section": "Early actions"
+        },
+        {
+          "id": "FL-A4",
+          "hazard": "flood",
+          "level": "Warning",
+          "action": "Deploy emergency water treatment and sensitise communities on household water treatment",
+          "timeframe": "This week",
+          "source": "Kenya Red Cross Society / IFRC DREF, Kenya: Floods - Early Action Protocol Summary (EAP2021KE01)",
+          "source_url": "https://www.anticipation-hub.org/Documents/EAPs/EAP_Kenya_Floods_2021.pdf",
+          "section": "WASH"
+        },
+        {
+          "id": "FL-A5",
+          "hazard": "flood",
+          "level": "Warning",
+          "action": "Tell people to evacuate immediately when advised, or move to higher ground",
+          "timeframe": "This week",
+          "source": "IFRC, Public awareness and public education for disaster risk reduction: key messages (PAPE), 2nd edition",
+          "source_url": "https://www.ifrc.org/sites/default/files/PAPE-2.0-English.pdf",
+          "section": "Floods, pp. 102-103"
+        },
+        {
+          "id": "FL-A6",
+          "hazard": "flood",
+          "level": "Warning",
+          "action": "Warn against walking or driving through flowing water and underpasses ('turn around, don't drown')",
+          "timeframe": "This week",
+          "source": "IFRC, Public awareness and public education for disaster risk reduction: key messages (PAPE), 2nd edition",
+          "source_url": "https://www.ifrc.org/sites/default/files/PAPE-2.0-English.pdf",
+          "section": "Floods, p. 103"
+        },
+        {
+          "id": "CY-W1",
+          "hazard": "cyclone",
+          "level": "Watch",
+          "action": "Track official cyclone information and follow early-warning advisories (KMD, RSMC La Reunion)",
+          "timeframe": "Next 2-4 weeks",
+          "source": "IFRC, Public awareness and public education for disaster risk reduction: key messages (PAPE), 2nd edition",
+          "source_url": "https://www.ifrc.org/sites/default/files/PAPE-2.0-English.pdf",
+          "section": "School safety, storm rules, p. 144"
+        },
+        {
+          "id": "CY-W2",
+          "hazard": "cyclone",
+          "level": "Watch",
+          "action": "Assess risk and make a household and community cyclone plan",
+          "timeframe": "Next 2-4 weeks",
+          "source": "IFRC, Public awareness and public education for disaster risk reduction: key messages (PAPE), 2nd edition",
+          "source_url": "https://www.ifrc.org/sites/default/files/PAPE-2.0-English.pdf",
+          "section": "Tropical cyclones, p. 94"
+        },
+        {
+          "id": "CY-W3",
+          "hazard": "cyclone",
+          "level": "Watch",
+          "action": "Do mitigation work: brace roofs, fit shutters, trim trees",
+          "timeframe": "Next 2-4 weeks",
+          "source": "IFRC, Public awareness and public education for disaster risk reduction: key messages (PAPE), 2nd edition",
+          "source_url": "https://www.ifrc.org/sites/default/files/PAPE-2.0-English.pdf",
+          "section": "Tropical cyclones, p. 95"
+        },
+        {
+          "id": "CY-W4",
+          "hazard": "cyclone",
+          "level": "Watch",
+          "action": "Practise evacuation routes and stock emergency supplies",
+          "timeframe": "Next 2-4 weeks",
+          "source": "IFRC, Public awareness and public education for disaster risk reduction: key messages (PAPE), 2nd edition",
+          "source_url": "https://www.ifrc.org/sites/default/files/PAPE-2.0-English.pdf",
+          "section": "Tropical cyclones, p. 96"
+        },
+        {
+          "id": "CY-W5",
+          "hazard": "cyclone",
+          "level": "Watch",
+          "action": "Disseminate early-warning messages to coastal communities",
+          "timeframe": "Next 2-4 weeks",
+          "source": "World Food Programme, Weathering the Storm: what makes anticipating cyclones successful",
+          "source_url": "https://docs.wfp.org/api/documents/WFP-0000173687/download/",
+          "section": "Anticipatory actions"
+        }
+      ],
+      "rainy_seasons": "Apr-May (30% of annual); Oct-Dec (46% of annual)",
+      "public": {
+        "summary": "Very heavy rain is likely. Do not walk or drive through flowing water. Be ready to move to higher ground if told to. It is cyclone season. Follow Kenya Met Department updates, secure roofs and know your evacuation route.",
+        "sms": "Tana River Heavy rain WARNING: Avoid flowing water; be ready to move to high ground. Follow KMD/county alerts.",
+        "level": "Warning"
+      },
+      "priority_rank": 4
+    },
+    {
+      "county": "Garissa",
+      "zone": "Arid north-east",
+      "overall_level": "Watch",
+      "headline": "Heavy rain / flooding Watch: Forecast 18.7 mm in 3 days (12 Nov - 14 Nov)",
+      "hazard_levels": {
+        "drought": "Normal",
+        "flood": "Watch",
+        "cyclone": "Watch"
+      },
+      "drivers": [
+        {
+          "hazard": "drought",
+          "level": "Dry season (not assessed)",
+          "text": "Dry season: the 3-month normal is too small to judge drought",
+          "value": null,
+          "unit": null
+        },
+        {
+          "hazard": "flood",
+          "level": "Normal",
+          "text": "Wettest 3 days in the last week: 6.9 mm (26% of the county's 1-in-100-day level)",
+          "value": 6.9,
+          "unit": "mm / 3 days"
+        },
+        {
+          "hazard": "cyclone",
+          "level": "Watch",
+          "text": "Cyclone season (Nov-Apr); 1 tropical storm(s) passed within 300 km since 1981",
+          "value": 1,
+          "unit": "storms"
+        }
+      ],
+      "trend": {
+        "variable": "Annual rainfall",
+        "slope_mm_per_decade": -18.9,
+        "change_pct_of_mean": -28.8,
+        "p_value": 0.222,
+        "significant": false,
+        "years": "1991-2025"
+      },
+      "significant_extreme_trends": [],
+      "next": {
+        "forecast": {
+          "level": "Watch",
+          "max_3day_mm": 18.7,
+          "window": "12 Nov - 14 Nov",
+          "total_7day_mm": 30.8,
+          "p99_3day_mm": 26.9,
+          "gale_gusts": null,
+          "max_gust_kmh": null,
+          "hot_days": 0,
+          "fetched_utc": "2026-11-12T12:08+00:00"
+        },
+        "outlook": {
+          "target_months": "Nov 2026 - Jan 2027",
+          "prob_below_normal": 0.33,
+          "skilful": false,
+          "verdict": "No skill - use climatology",
+          "confidence": "low",
+          "model_raw_prob": 0.16,
+          "message": "No reliable signal for Nov 2026 - Jan 2027: the model did not beat climatology in testing, so plan for normal odds (33% chance of below-normal rain)."
+        }
+      },
+      "rising": true,
+      "exposure": {
+        "population_2020": 1587261,
+        "share_of_region_pct": 8.4,
+        "people_at_watch_or_above": 1587261
+      },
+      "priority_score": 6.47,
+      "priority_explained": "severity 2 (Watch=1, Warning=3, Emergency=6 per hazard) x population weight 2.59 (1 + people/1M) x 1.25 rising risk",
+      "actions": [
+        {
+          "id": "FL-W1",
+          "hazard": "flood",
+          "level": "Watch",
+          "action": "Disseminate targeted early warnings to at-risk communities through trained volunteers",
+          "timeframe": "Next 2-4 weeks",
+          "source": "Kenya Red Cross Society / IFRC DREF, Kenya: Floods - Early Action Protocol Summary (EAP2021KE01)",
+          "source_url": "https://www.anticipation-hub.org/Documents/EAPs/EAP_Kenya_Floods_2021.pdf",
+          "section": "Early actions / DRR"
+        },
+        {
+          "id": "FL-W2",
+          "hazard": "flood",
+          "level": "Watch",
+          "action": "Place or check flood depth markers at crossing points (cash for work)",
+          "timeframe": "Next 2-4 weeks",
+          "source": "Kenya Red Cross Society / IFRC DREF, Kenya: Floods - Early Action Protocol Summary (EAP2021KE01)",
+          "source_url": "https://www.anticipation-hub.org/Documents/EAPs/EAP_Kenya_Floods_2021.pdf",
+          "section": "Early actions"
+        },
+        {
+          "id": "FL-W3",
+          "hazard": "flood",
+          "level": "Watch",
+          "action": "Identify evacuation sites",
+          "timeframe": "Next 2-4 weeks",
+          "source": "Kenya Red Cross Society / IFRC DREF, Kenya: Floods - Early Action Protocol Summary (EAP2021KE01)",
+          "source_url": "https://www.anticipation-hub.org/Documents/EAPs/EAP_Kenya_Floods_2021.pdf",
+          "section": "Physical evacuation"
+        },
+        {
+          "id": "FL-W4",
+          "hazard": "flood",
+          "level": "Watch",
+          "action": "Pre-position shelter and WASH relief items",
+          "timeframe": "Next 2-4 weeks",
+          "source": "Kenya Red Cross Society / IFRC DREF, Kenya: Floods - Early Action Protocol Summary (EAP2021KE01)",
+          "source_url": "https://www.anticipation-hub.org/Documents/EAPs/EAP_Kenya_Floods_2021.pdf",
+          "section": "Early actions"
+        },
+        {
+          "id": "FL-W5",
+          "hazard": "flood",
+          "level": "Watch",
+          "action": "Advise households to store valuables above flood level and keep extra drinking water",
+          "timeframe": "Next 2-4 weeks",
+          "source": "IFRC, Public awareness and public education for disaster risk reduction: key messages (PAPE), 2nd edition",
+          "source_url": "https://www.ifrc.org/sites/default/files/PAPE-2.0-English.pdf",
+          "section": "Floods, pp. 100, 102"
+        },
+        {
+          "id": "CY-W1",
+          "hazard": "cyclone",
+          "level": "Watch",
+          "action": "Track official cyclone information and follow early-warning advisories (KMD, RSMC La Reunion)",
+          "timeframe": "Next 2-4 weeks",
+          "source": "IFRC, Public awareness and public education for disaster risk reduction: key messages (PAPE), 2nd edition",
+          "source_url": "https://www.ifrc.org/sites/default/files/PAPE-2.0-English.pdf",
+          "section": "School safety, storm rules, p. 144"
+        },
+        {
+          "id": "CY-W2",
+          "hazard": "cyclone",
+          "level": "Watch",
+          "action": "Assess risk and make a household and community cyclone plan",
+          "timeframe": "Next 2-4 weeks",
+          "source": "IFRC, Public awareness and public education for disaster risk reduction: key messages (PAPE), 2nd edition",
+          "source_url": "https://www.ifrc.org/sites/default/files/PAPE-2.0-English.pdf",
+          "section": "Tropical cyclones, p. 94"
+        },
+        {
+          "id": "CY-W3",
+          "hazard": "cyclone",
+          "level": "Watch",
+          "action": "Do mitigation work: brace roofs, fit shutters, trim trees",
+          "timeframe": "Next 2-4 weeks",
+          "source": "IFRC, Public awareness and public education for disaster risk reduction: key messages (PAPE), 2nd edition",
+          "source_url": "https://www.ifrc.org/sites/default/files/PAPE-2.0-English.pdf",
+          "section": "Tropical cyclones, p. 95"
+        },
+        {
+          "id": "CY-W4",
+          "hazard": "cyclone",
+          "level": "Watch",
+          "action": "Practise evacuation routes and stock emergency supplies",
+          "timeframe": "Next 2-4 weeks",
+          "source": "IFRC, Public awareness and public education for disaster risk reduction: key messages (PAPE), 2nd edition",
+          "source_url": "https://www.ifrc.org/sites/default/files/PAPE-2.0-English.pdf",
+          "section": "Tropical cyclones, p. 96"
+        },
+        {
+          "id": "CY-W5",
+          "hazard": "cyclone",
+          "level": "Watch",
+          "action": "Disseminate early-warning messages to coastal communities",
+          "timeframe": "Next 2-4 weeks",
+          "source": "World Food Programme, Weathering the Storm: what makes anticipating cyclones successful",
+          "source_url": "https://docs.wfp.org/api/documents/WFP-0000173687/download/",
+          "section": "Anticipatory actions"
+        }
+      ],
+      "rainy_seasons": "Mar-Apr (24% of annual); Nov-Dec (48% of annual)",
+      "public": {
+        "summary": "Heavy rain is possible. Keep drinking water, move valuables up, and know your nearest higher ground. It is cyclone season. Follow Kenya Met Department updates, secure roofs and know your evacuation route.",
+        "sms": "Garissa Heavy rain WATCH: Keep water, raise valuables, know high ground. Follow KMD/county alerts.",
+        "level": "Watch"
+      },
+      "priority_rank": 5
+    },
+    {
+      "county": "Mandera",
+      "zone": "Arid north-east",
+      "overall_level": "Watch",
+      "headline": "Heavy rain / flooding Watch: Forecast 21.8 mm in 3 days (12 Nov - 14 Nov)",
+      "hazard_levels": {
+        "drought": "Normal",
+        "flood": "Watch",
+        "cyclone": "Normal"
+      },
+      "drivers": [
+        {
+          "hazard": "drought",
+          "level": "Normal",
+          "text": "91% of normal rain over the 3 months to 2026-10 (67.5 mm vs 74.6 mm normal)",
+          "value": 91.0,
+          "unit": "% of normal"
+        },
+        {
+          "hazard": "flood",
+          "level": "Normal",
+          "text": "Wettest 3 days in the last week: 3.9 mm (12% of the county's 1-in-100-day level)",
+          "value": 3.9,
+          "unit": "mm / 3 days"
+        }
+      ],
+      "trend": {
+        "variable": "Annual rainfall",
+        "slope_mm_per_decade": -16.2,
+        "change_pct_of_mean": -18.3,
+        "p_value": 0.196,
+        "significant": false,
+        "years": "1991-2025"
+      },
+      "significant_extreme_trends": [
+        {
+          "variable": "hot_days",
+          "unit": "days",
+          "slope_per_decade": 3.33,
+          "p_value": 0.045
+        }
+      ],
+      "next": {
+        "forecast": {
+          "level": "Watch",
+          "max_3day_mm": 21.8,
+          "window": "12 Nov - 14 Nov",
+          "total_7day_mm": 37.7,
+          "p99_3day_mm": 32.8,
+          "gale_gusts": null,
+          "max_gust_kmh": null,
+          "hot_days": 0,
+          "fetched_utc": "2026-11-12T12:08+00:00"
+        },
+        "outlook": {
+          "target_months": "Nov 2026 - Jan 2027",
+          "prob_below_normal": 0.33,
+          "skilful": false,
+          "verdict": "No skill - use climatology",
+          "confidence": "low",
+          "model_raw_prob": 0.16,
+          "message": "No reliable signal for Nov 2026 - Jan 2027: the model did not beat climatology in testing, so plan for normal odds (33% chance of below-normal rain)."
+        }
+      },
+      "rising": true,
+      "exposure": {
+        "population_2020": 2596580,
+        "share_of_region_pct": 13.7,
+        "people_at_watch_or_above": 2596580
+      },
+      "priority_score": 4.5,
+      "priority_explained": "severity 1 (Watch=1, Warning=3, Emergency=6 per hazard) x population weight 3.60 (1 + people/1M) x 1.25 rising risk",
+      "actions": [
+        {
+          "id": "FL-W1",
+          "hazard": "flood",
+          "level": "Watch",
+          "action": "Disseminate targeted early warnings to at-risk communities through trained volunteers",
+          "timeframe": "Next 2-4 weeks",
+          "source": "Kenya Red Cross Society / IFRC DREF, Kenya: Floods - Early Action Protocol Summary (EAP2021KE01)",
+          "source_url": "https://www.anticipation-hub.org/Documents/EAPs/EAP_Kenya_Floods_2021.pdf",
+          "section": "Early actions / DRR"
+        },
+        {
+          "id": "FL-W2",
+          "hazard": "flood",
+          "level": "Watch",
+          "action": "Place or check flood depth markers at crossing points (cash for work)",
+          "timeframe": "Next 2-4 weeks",
+          "source": "Kenya Red Cross Society / IFRC DREF, Kenya: Floods - Early Action Protocol Summary (EAP2021KE01)",
+          "source_url": "https://www.anticipation-hub.org/Documents/EAPs/EAP_Kenya_Floods_2021.pdf",
+          "section": "Early actions"
+        },
+        {
+          "id": "FL-W3",
+          "hazard": "flood",
+          "level": "Watch",
+          "action": "Identify evacuation sites",
+          "timeframe": "Next 2-4 weeks",
+          "source": "Kenya Red Cross Society / IFRC DREF, Kenya: Floods - Early Action Protocol Summary (EAP2021KE01)",
+          "source_url": "https://www.anticipation-hub.org/Documents/EAPs/EAP_Kenya_Floods_2021.pdf",
+          "section": "Physical evacuation"
+        },
+        {
+          "id": "FL-W4",
+          "hazard": "flood",
+          "level": "Watch",
+          "action": "Pre-position shelter and WASH relief items",
+          "timeframe": "Next 2-4 weeks",
+          "source": "Kenya Red Cross Society / IFRC DREF, Kenya: Floods - Early Action Protocol Summary (EAP2021KE01)",
+          "source_url": "https://www.anticipation-hub.org/Documents/EAPs/EAP_Kenya_Floods_2021.pdf",
+          "section": "Early actions"
+        },
+        {
+          "id": "FL-W5",
+          "hazard": "flood",
+          "level": "Watch",
+          "action": "Advise households to store valuables above flood level and keep extra drinking water",
+          "timeframe": "Next 2-4 weeks",
+          "source": "IFRC, Public awareness and public education for disaster risk reduction: key messages (PAPE), 2nd edition",
+          "source_url": "https://www.ifrc.org/sites/default/files/PAPE-2.0-English.pdf",
+          "section": "Floods, pp. 100, 102"
+        }
+      ],
+      "rainy_seasons": "Apr-May (42% of annual); Oct-Nov (47% of annual)",
+      "public": {
+        "summary": "Heavy rain is possible. Keep drinking water, move valuables up, and know your nearest higher ground.",
+        "sms": "Mandera Heavy rain WATCH: Keep water, raise valuables, know high ground. Follow KMD/county alerts.",
+        "level": "Watch"
+      },
+      "priority_rank": 6
+    },
+    {
+      "county": "Kilifi",
+      "zone": "Coast",
+      "overall_level": "Watch",
+      "headline": "Cyclone season Watch: Cyclone season (Nov-Apr); 1 tropical storm(s) passed within 300 km since 1981",
+      "hazard_levels": {
+        "drought": "Normal",
+        "flood": "Normal",
+        "cyclone": "Watch"
+      },
+      "drivers": [
+        {
+          "hazard": "drought",
+          "level": "Normal",
+          "text": "131% of normal rain over the 3 months to 2026-10 (184.4 mm vs 141.1 mm normal)",
+          "value": 131.0,
+          "unit": "% of normal"
+        },
+        {
+          "hazard": "flood",
+          "level": "Normal",
+          "text": "Wettest 3 days in the last week: 10.4 mm (21% of the county's 1-in-100-day level)",
+          "value": 10.4,
+          "unit": "mm / 3 days"
+        },
+        {
+          "hazard": "cyclone",
+          "level": "Watch",
+          "text": "Cyclone season (Nov-Apr); 1 tropical storm(s) passed within 300 km since 1981",
+          "value": 1,
+          "unit": "storms"
+        }
+      ],
+      "trend": {
+        "variable": "Annual rainfall",
+        "slope_mm_per_decade": 24.3,
+        "change_pct_of_mean": 10.8,
+        "p_value": 0.523,
+        "significant": false,
+        "years": "1991-2025"
+      },
+      "significant_extreme_trends": [
+        {
+          "variable": "hot_days",
+          "unit": "days",
+          "slope_per_decade": 5.2,
+          "p_value": 0.0
+        }
+      ],
+      "next": {
+        "forecast": {
+          "level": "Normal",
+          "max_3day_mm": 14.7,
+          "window": "13 Nov - 15 Nov",
+          "total_7day_mm": 25.8,
+          "p99_3day_mm": 50.3,
+          "gale_gusts": false,
+          "max_gust_kmh": 37.0,
+          "hot_days": 1,
+          "fetched_utc": "2026-11-12T12:08+00:00"
+        },
+        "outlook": {
+          "target_months": "Nov 2026 - Jan 2027",
+          "prob_below_normal": 0.33,
+          "skilful": false,
+          "verdict": "No skill - use climatology",
+          "confidence": "low",
+          "model_raw_prob": 0.24,
+          "message": "No reliable signal for Nov 2026 - Jan 2027: the model did not beat climatology in testing, so plan for normal odds (33% chance of below-normal rain)."
+        }
+      },
+      "rising": false,
+      "exposure": {
+        "population_2020": 1399141,
+        "share_of_region_pct": 7.4,
+        "people_at_watch_or_above": 1399141
+      },
+      "priority_score": 2.4,
+      "priority_explained": "severity 1 (Watch=1, Warning=3, Emergency=6 per hazard) x population weight 2.40 (1 + people/1M)",
+      "actions": [
+        {
+          "id": "CY-W1",
+          "hazard": "cyclone",
+          "level": "Watch",
+          "action": "Track official cyclone information and follow early-warning advisories (KMD, RSMC La Reunion)",
+          "timeframe": "Next 2-4 weeks",
+          "source": "IFRC, Public awareness and public education for disaster risk reduction: key messages (PAPE), 2nd edition",
+          "source_url": "https://www.ifrc.org/sites/default/files/PAPE-2.0-English.pdf",
+          "section": "School safety, storm rules, p. 144"
+        },
+        {
+          "id": "CY-W2",
+          "hazard": "cyclone",
+          "level": "Watch",
+          "action": "Assess risk and make a household and community cyclone plan",
+          "timeframe": "Next 2-4 weeks",
+          "source": "IFRC, Public awareness and public education for disaster risk reduction: key messages (PAPE), 2nd edition",
+          "source_url": "https://www.ifrc.org/sites/default/files/PAPE-2.0-English.pdf",
+          "section": "Tropical cyclones, p. 94"
+        },
+        {
+          "id": "CY-W3",
+          "hazard": "cyclone",
+          "level": "Watch",
+          "action": "Do mitigation work: brace roofs, fit shutters, trim trees",
+          "timeframe": "Next 2-4 weeks",
+          "source": "IFRC, Public awareness and public education for disaster risk reduction: key messages (PAPE), 2nd edition",
+          "source_url": "https://www.ifrc.org/sites/default/files/PAPE-2.0-English.pdf",
+          "section": "Tropical cyclones, p. 95"
+        },
+        {
+          "id": "CY-W4",
+          "hazard": "cyclone",
+          "level": "Watch",
+          "action": "Practise evacuation routes and stock emergency supplies",
+          "timeframe": "Next 2-4 weeks",
+          "source": "IFRC, Public awareness and public education for disaster risk reduction: key messages (PAPE), 2nd edition",
+          "source_url": "https://www.ifrc.org/sites/default/files/PAPE-2.0-English.pdf",
+          "section": "Tropical cyclones, p. 96"
+        },
+        {
+          "id": "CY-W5",
+          "hazard": "cyclone",
+          "level": "Watch",
+          "action": "Disseminate early-warning messages to coastal communities",
+          "timeframe": "Next 2-4 weeks",
+          "source": "World Food Programme, Weathering the Storm: what makes anticipating cyclones successful",
+          "source_url": "https://docs.wfp.org/api/documents/WFP-0000173687/download/",
+          "section": "Anticipatory actions"
+        }
+      ],
+      "rainy_seasons": "Apr-May (37% of annual); Oct-Dec (28% of annual)",
+      "public": {
+        "summary": "It is cyclone season. Follow Kenya Met Department updates, secure roofs and know your evacuation route.",
+        "sms": "Kilifi Cyclone season WATCH: Follow KMD updates; secure roofs. Follow KMD/county alerts.",
+        "level": "Watch"
+      },
+      "priority_rank": 7
+    },
+    {
+      "county": "Kisumu",
+      "zone": "Lake Victoria basin",
+      "overall_level": "Watch",
+      "headline": "Heavy rain / flooding Watch: Wettest 3 days in the last week: 50.3 mm (75% of the county's 1-in-100-day level)",
+      "hazard_levels": {
+        "drought": "Normal",
+        "flood": "Watch",
+        "cyclone": "Normal"
+      },
+      "drivers": [
+        {
+          "hazard": "drought",
+          "level": "Normal",
+          "text": "87% of normal rain over the 3 months to 2026-10 (348.3 mm vs 400.2 mm normal)",
+          "value": 87.0,
+          "unit": "% of normal"
+        },
+        {
+          "hazard": "flood",
+          "level": "Watch",
+          "text": "Wettest 3 days in the last week: 50.3 mm (75% of the county's 1-in-100-day level)",
+          "value": 50.3,
+          "unit": "mm / 3 days"
+        }
+      ],
+      "trend": {
+        "variable": "Annual rainfall",
+        "slope_mm_per_decade": -24.1,
+        "change_pct_of_mean": -4.3,
+        "p_value": 0.66,
+        "significant": false,
+        "years": "1991-2025"
+      },
+      "significant_extreme_trends": [
+        {
+          "variable": "hot_days",
+          "unit": "days",
+          "slope_per_decade": 3.48,
+          "p_value": 0.029
+        }
+      ],
+      "next": {
+        "forecast": {
+          "level": "Normal",
+          "max_3day_mm": 35.4,
+          "window": "12 Nov - 14 Nov",
+          "total_7day_mm": 40.9,
+          "p99_3day_mm": 66.7,
+          "gale_gusts": null,
+          "max_gust_kmh": null,
+          "hot_days": 0,
+          "fetched_utc": "2026-11-12T12:08+00:00"
+        },
+        "outlook": {
+          "target_months": "Nov 2026 - Jan 2027",
+          "prob_below_normal": 0.33,
+          "skilful": false,
+          "verdict": "No skill - use climatology",
+          "confidence": "low",
+          "model_raw_prob": 0.24,
+          "message": "No reliable signal for Nov 2026 - Jan 2027: the model did not beat climatology in testing, so plan for normal odds (33% chance of below-normal rain)."
+        }
+      },
+      "rising": false,
+      "exposure": {
+        "population_2020": 1206586,
+        "share_of_region_pct": 6.4,
+        "people_at_watch_or_above": 1206586
+      },
+      "priority_score": 2.21,
+      "priority_explained": "severity 1 (Watch=1, Warning=3, Emergency=6 per hazard) x population weight 2.21 (1 + people/1M)",
+      "actions": [
+        {
+          "id": "FL-W1",
+          "hazard": "flood",
+          "level": "Watch",
+          "action": "Disseminate targeted early warnings to at-risk communities through trained volunteers",
+          "timeframe": "Next 2-4 weeks",
+          "source": "Kenya Red Cross Society / IFRC DREF, Kenya: Floods - Early Action Protocol Summary (EAP2021KE01)",
+          "source_url": "https://www.anticipation-hub.org/Documents/EAPs/EAP_Kenya_Floods_2021.pdf",
+          "section": "Early actions / DRR"
+        },
+        {
+          "id": "FL-W2",
+          "hazard": "flood",
+          "level": "Watch",
+          "action": "Place or check flood depth markers at crossing points (cash for work)",
+          "timeframe": "Next 2-4 weeks",
+          "source": "Kenya Red Cross Society / IFRC DREF, Kenya: Floods - Early Action Protocol Summary (EAP2021KE01)",
+          "source_url": "https://www.anticipation-hub.org/Documents/EAPs/EAP_Kenya_Floods_2021.pdf",
+          "section": "Early actions"
+        },
+        {
+          "id": "FL-W3",
+          "hazard": "flood",
+          "level": "Watch",
+          "action": "Identify evacuation sites",
+          "timeframe": "Next 2-4 weeks",
+          "source": "Kenya Red Cross Society / IFRC DREF, Kenya: Floods - Early Action Protocol Summary (EAP2021KE01)",
+          "source_url": "https://www.anticipation-hub.org/Documents/EAPs/EAP_Kenya_Floods_2021.pdf",
+          "section": "Physical evacuation"
+        },
+        {
+          "id": "FL-W4",
+          "hazard": "flood",
+          "level": "Watch",
+          "action": "Pre-position shelter and WASH relief items",
+          "timeframe": "Next 2-4 weeks",
+          "source": "Kenya Red Cross Society / IFRC DREF, Kenya: Floods - Early Action Protocol Summary (EAP2021KE01)",
+          "source_url": "https://www.anticipation-hub.org/Documents/EAPs/EAP_Kenya_Floods_2021.pdf",
+          "section": "Early actions"
+        },
+        {
+          "id": "FL-W5",
+          "hazard": "flood",
+          "level": "Watch",
+          "action": "Advise households to store valuables above flood level and keep extra drinking water",
+          "timeframe": "Next 2-4 weeks",
+          "source": "IFRC, Public awareness and public education for disaster risk reduction: key messages (PAPE), 2nd edition",
+          "source_url": "https://www.ifrc.org/sites/default/files/PAPE-2.0-English.pdf",
+          "section": "Floods, pp. 100, 102"
+        }
+      ],
+      "rainy_seasons": "Mar-May (35% of annual); Oct-Dec (33% of annual)",
+      "public": {
+        "summary": "Heavy rain is possible. Keep drinking water, move valuables up, and know your nearest higher ground.",
+        "sms": "Kisumu Heavy rain WATCH: Keep water, raise valuables, know high ground. Follow KMD/county alerts.",
+        "level": "Watch"
+      },
+      "priority_rank": 8
+    },
+    {
+      "county": "Makueni",
+      "zone": "Semi-arid south-east",
+      "overall_level": "Watch",
+      "headline": "Heavy rain / flooding Watch: Forecast 30.0 mm in 3 days (13 Nov - 15 Nov)",
+      "hazard_levels": {
+        "drought": "Normal",
+        "flood": "Watch",
+        "cyclone": "Normal"
+      },
+      "drivers": [
+        {
+          "hazard": "drought",
+          "level": "Normal",
+          "text": "129% of normal rain over the 3 months to 2026-10 (69.6 mm vs 53.9 mm normal)",
+          "value": 129.0,
+          "unit": "% of normal"
+        },
+        {
+          "hazard": "flood",
+          "level": "Watch",
+          "text": "Wettest 3 days in the last week: 29.6 mm (68% of the county's 1-in-100-day level)",
+          "value": 29.6,
+          "unit": "mm / 3 days"
+        }
+      ],
+      "trend": {
+        "variable": "Annual rainfall",
+        "slope_mm_per_decade": -24.3,
+        "change_pct_of_mean": -13.0,
+        "p_value": 0.274,
+        "significant": false,
+        "years": "1991-2025"
+      },
+      "significant_extreme_trends": [
+        {
+          "variable": "hot_days",
+          "unit": "days",
+          "slope_per_decade": 5.0,
+          "p_value": 0.003
+        }
+      ],
+      "next": {
+        "forecast": {
+          "level": "Watch",
+          "max_3day_mm": 30.0,
+          "window": "13 Nov - 15 Nov",
+          "total_7day_mm": 61.3,
+          "p99_3day_mm": 43.5,
+          "gale_gusts": null,
+          "max_gust_kmh": null,
+          "hot_days": 0,
+          "fetched_utc": "2026-11-12T12:08+00:00"
+        },
+        "outlook": {
+          "target_months": "Nov 2026 - Jan 2027",
+          "prob_below_normal": 0.33,
+          "skilful": false,
+          "verdict": "No skill - use climatology",
+          "confidence": "low",
+          "model_raw_prob": 0.24,
+          "message": "No reliable signal for Nov 2026 - Jan 2027: the model did not beat climatology in testing, so plan for normal odds (33% chance of below-normal rain)."
+        }
+      },
+      "rising": false,
+      "exposure": {
+        "population_2020": 1074120,
+        "share_of_region_pct": 5.7,
+        "people_at_watch_or_above": 1074120
+      },
+      "priority_score": 2.07,
+      "priority_explained": "severity 1 (Watch=1, Warning=3, Emergency=6 per hazard) x population weight 2.07 (1 + people/1M)",
+      "actions": [
+        {
+          "id": "FL-W1",
+          "hazard": "flood",
+          "level": "Watch",
+          "action": "Disseminate targeted early warnings to at-risk communities through trained volunteers",
+          "timeframe": "Next 2-4 weeks",
+          "source": "Kenya Red Cross Society / IFRC DREF, Kenya: Floods - Early Action Protocol Summary (EAP2021KE01)",
+          "source_url": "https://www.anticipation-hub.org/Documents/EAPs/EAP_Kenya_Floods_2021.pdf",
+          "section": "Early actions / DRR"
+        },
+        {
+          "id": "FL-W2",
+          "hazard": "flood",
+          "level": "Watch",
+          "action": "Place or check flood depth markers at crossing points (cash for work)",
+          "timeframe": "Next 2-4 weeks",
+          "source": "Kenya Red Cross Society / IFRC DREF, Kenya: Floods - Early Action Protocol Summary (EAP2021KE01)",
+          "source_url": "https://www.anticipation-hub.org/Documents/EAPs/EAP_Kenya_Floods_2021.pdf",
+          "section": "Early actions"
+        },
+        {
+          "id": "FL-W3",
+          "hazard": "flood",
+          "level": "Watch",
+          "action": "Identify evacuation sites",
+          "timeframe": "Next 2-4 weeks",
+          "source": "Kenya Red Cross Society / IFRC DREF, Kenya: Floods - Early Action Protocol Summary (EAP2021KE01)",
+          "source_url": "https://www.anticipation-hub.org/Documents/EAPs/EAP_Kenya_Floods_2021.pdf",
+          "section": "Physical evacuation"
+        },
+        {
+          "id": "FL-W4",
+          "hazard": "flood",
+          "level": "Watch",
+          "action": "Pre-position shelter and WASH relief items",
+          "timeframe": "Next 2-4 weeks",
+          "source": "Kenya Red Cross Society / IFRC DREF, Kenya: Floods - Early Action Protocol Summary (EAP2021KE01)",
+          "source_url": "https://www.anticipation-hub.org/Documents/EAPs/EAP_Kenya_Floods_2021.pdf",
+          "section": "Early actions"
+        },
+        {
+          "id": "FL-W5",
+          "hazard": "flood",
+          "level": "Watch",
+          "action": "Advise households to store valuables above flood level and keep extra drinking water",
+          "timeframe": "Next 2-4 weeks",
+          "source": "IFRC, Public awareness and public education for disaster risk reduction: key messages (PAPE), 2nd edition",
+          "source_url": "https://www.ifrc.org/sites/default/files/PAPE-2.0-English.pdf",
+          "section": "Floods, pp. 100, 102"
+        }
+      ],
+      "rainy_seasons": "Mar-Apr (32% of annual); Nov-Dec (39% of annual)",
+      "public": {
+        "summary": "Heavy rain is possible. Keep drinking water, move valuables up, and know your nearest higher ground.",
+        "sms": "Makueni Heavy rain WATCH: Keep water, raise valuables, know high ground. Follow KMD/county alerts.",
+        "level": "Watch"
+      },
+      "priority_rank": 9
+    },
+    {
+      "county": "Mombasa",
+      "zone": "Coast",
+      "overall_level": "Watch",
+      "headline": "Cyclone season Watch: Cyclone season (Nov-Apr); 1 tropical storm(s) passed within 300 km since 1981",
+      "hazard_levels": {
+        "drought": "Normal",
+        "flood": "Normal",
+        "cyclone": "Watch"
+      },
+      "drivers": [
+        {
+          "hazard": "drought",
+          "level": "Normal",
+          "text": "130% of normal rain over the 3 months to 2026-10 (190.9 mm vs 146.7 mm normal)",
+          "value": 130.0,
+          "unit": "% of normal"
+        },
+        {
+          "hazard": "flood",
+          "level": "Normal",
+          "text": "Wettest 3 days in the last week: 14.4 mm (29% of the county's 1-in-100-day level)",
+          "value": 14.4,
+          "unit": "mm / 3 days"
+        },
+        {
+          "hazard": "cyclone",
+          "level": "Watch",
+          "text": "Cyclone season (Nov-Apr); 1 tropical storm(s) passed within 300 km since 1981",
+          "value": 1,
+          "unit": "storms"
+        }
+      ],
+      "trend": {
+        "variable": "Annual rainfall",
+        "slope_mm_per_decade": 18.2,
+        "change_pct_of_mean": 7.9,
+        "p_value": 0.599,
+        "significant": false,
+        "years": "1991-2025"
+      },
+      "significant_extreme_trends": [
+        {
+          "variable": "hot_days",
+          "unit": "days",
+          "slope_per_decade": 4.74,
+          "p_value": 0.003
+        }
+      ],
+      "next": {
+        "forecast": {
+          "level": "Normal",
+          "max_3day_mm": 9.2,
+          "window": "16 Nov - 18 Nov",
+          "total_7day_mm": 18.0,
+          "p99_3day_mm": 49.3,
+          "gale_gusts": false,
+          "max_gust_kmh": 42.0,
+          "hot_days": 0,
+          "fetched_utc": "2026-11-12T12:08+00:00"
+        },
+        "outlook": {
+          "target_months": "Nov 2026 - Jan 2027",
+          "prob_below_normal": 0.24,
+          "skilful": true,
+          "verdict": "Weak or uncertain skill",
+          "confidence": "low",
+          "model_raw_prob": 0.24,
+          "message": "24% chance the Nov 2026 - Jan 2027 rain is in the driest third (normal chance 33%; model skill: weak or uncertain skill)."
+        }
+      },
+      "rising": false,
+      "exposure": {
+        "population_2020": 1040263,
+        "share_of_region_pct": 5.5,
+        "people_at_watch_or_above": 1040263
+      },
+      "priority_score": 2.04,
+      "priority_explained": "severity 1 (Watch=1, Warning=3, Emergency=6 per hazard) x population weight 2.04 (1 + people/1M)",
+      "actions": [
+        {
+          "id": "CY-W1",
+          "hazard": "cyclone",
+          "level": "Watch",
+          "action": "Track official cyclone information and follow early-warning advisories (KMD, RSMC La Reunion)",
+          "timeframe": "Next 2-4 weeks",
+          "source": "IFRC, Public awareness and public education for disaster risk reduction: key messages (PAPE), 2nd edition",
+          "source_url": "https://www.ifrc.org/sites/default/files/PAPE-2.0-English.pdf",
+          "section": "School safety, storm rules, p. 144"
+        },
+        {
+          "id": "CY-W2",
+          "hazard": "cyclone",
+          "level": "Watch",
+          "action": "Assess risk and make a household and community cyclone plan",
+          "timeframe": "Next 2-4 weeks",
+          "source": "IFRC, Public awareness and public education for disaster risk reduction: key messages (PAPE), 2nd edition",
+          "source_url": "https://www.ifrc.org/sites/default/files/PAPE-2.0-English.pdf",
+          "section": "Tropical cyclones, p. 94"
+        },
+        {
+          "id": "CY-W3",
+          "hazard": "cyclone",
+          "level": "Watch",
+          "action": "Do mitigation work: brace roofs, fit shutters, trim trees",
+          "timeframe": "Next 2-4 weeks",
+          "source": "IFRC, Public awareness and public education for disaster risk reduction: key messages (PAPE), 2nd edition",
+          "source_url": "https://www.ifrc.org/sites/default/files/PAPE-2.0-English.pdf",
+          "section": "Tropical cyclones, p. 95"
+        },
+        {
+          "id": "CY-W4",
+          "hazard": "cyclone",
+          "level": "Watch",
+          "action": "Practise evacuation routes and stock emergency supplies",
+          "timeframe": "Next 2-4 weeks",
+          "source": "IFRC, Public awareness and public education for disaster risk reduction: key messages (PAPE), 2nd edition",
+          "source_url": "https://www.ifrc.org/sites/default/files/PAPE-2.0-English.pdf",
+          "section": "Tropical cyclones, p. 96"
+        },
+        {
+          "id": "CY-W5",
+          "hazard": "cyclone",
+          "level": "Watch",
+          "action": "Disseminate early-warning messages to coastal communities",
+          "timeframe": "Next 2-4 weeks",
+          "source": "World Food Programme, Weathering the Storm: what makes anticipating cyclones successful",
+          "source_url": "https://docs.wfp.org/api/documents/WFP-0000173687/download/",
+          "section": "Anticipatory actions"
+        }
+      ],
+      "rainy_seasons": "Apr-May (34% of annual); Oct-Dec (28% of annual)",
+      "public": {
+        "summary": "It is cyclone season. Follow Kenya Met Department updates, secure roofs and know your evacuation route.",
+        "sms": "Mombasa Cyclone season WATCH: Follow KMD updates; secure roofs. Follow KMD/county alerts.",
+        "level": "Watch"
+      },
+      "priority_rank": 10
+    },
+    {
+      "county": "Busia",
+      "zone": "Lake Victoria basin",
+      "overall_level": "Watch",
+      "headline": "Drought Watch: 56% of normal rain over the 3 months to 2026-10 (319.5 mm vs 568.5 mm normal)",
+      "hazard_levels": {
+        "drought": "Watch",
+        "flood": "Normal",
+        "cyclone": "Normal"
+      },
+      "drivers": [
+        {
+          "hazard": "drought",
+          "level": "Watch",
+          "text": "56% of normal rain over the 3 months to 2026-10 (319.5 mm vs 568.5 mm normal)",
+          "value": 56.0,
+          "unit": "% of normal"
+        },
+        {
+          "hazard": "flood",
+          "level": "Normal",
+          "text": "Wettest 3 days in the last week: 28.2 mm (43% of the county's 1-in-100-day level)",
+          "value": 28.2,
+          "unit": "mm / 3 days"
+        }
+      ],
+      "trend": {
+        "variable": "Annual rainfall",
+        "slope_mm_per_decade": -58.3,
+        "change_pct_of_mean": -8.9,
+        "p_value": 0.3,
+        "significant": false,
+        "years": "1991-2025"
+      },
+      "significant_extreme_trends": [
+        {
+          "variable": "longest_dry_spell_days",
+          "unit": "days",
+          "slope_per_decade": 1.3,
+          "p_value": 0.005
+        }
+      ],
+      "next": {
+        "forecast": {
+          "level": "Normal",
+          "max_3day_mm": 22.7,
+          "window": "14 Nov - 16 Nov",
+          "total_7day_mm": 37.1,
+          "p99_3day_mm": 65.6,
+          "gale_gusts": null,
+          "max_gust_kmh": null,
+          "hot_days": 0,
+          "fetched_utc": "2026-11-12T12:08+00:00"
+        },
+        "outlook": {
+          "target_months": "Nov 2026 - Jan 2027",
+          "prob_below_normal": 0.33,
+          "skilful": false,
+          "verdict": "No skill - use climatology",
+          "confidence": "low",
+          "model_raw_prob": 0.23,
+          "message": "No reliable signal for Nov 2026 - Jan 2027: the model did not beat climatology in testing, so plan for normal odds (33% chance of below-normal rain)."
+        }
+      },
+      "rising": false,
+      "exposure": {
+        "population_2020": 941986,
+        "share_of_region_pct": 5.0,
+        "people_at_watch_or_above": 941986
+      },
+      "priority_score": 1.94,
+      "priority_explained": "severity 1 (Watch=1, Warning=3, Emergency=6 per hazard) x population weight 1.94 (1 + people/1M)",
+      "actions": [
+        {
+          "id": "DR-W1",
+          "hazard": "drought",
+          "level": "Watch",
+          "action": "Disseminate drought early-warning messages through local radio and SMS",
+          "timeframe": "Next 2-4 weeks",
+          "source": "Kenya Red Cross Society / IFRC DREF, Kenya: Drought - Early Action Protocol Summary (EAP2022KE02)",
+          "source_url": "https://www.anticipation-hub.org/Documents/EAPs/MDRKE055_EAP.pdf",
+          "section": "Early warning and community engagement"
+        },
+        {
+          "id": "DR-W2",
+          "hazard": "drought",
+          "level": "Watch",
+          "action": "Deploy trained volunteers to engage communities and support early-warning dissemination",
+          "timeframe": "Next 2-4 weeks",
+          "source": "Kenya Red Cross Society / IFRC DREF, Kenya: Drought - Early Action Protocol Summary (EAP2022KE02)",
+          "source_url": "https://www.anticipation-hub.org/Documents/EAPs/MDRKE055_EAP.pdf",
+          "section": "Early warning and community engagement"
+        },
+        {
+          "id": "DR-W3",
+          "hazard": "drought",
+          "level": "Watch",
+          "action": "Carry out a rapid assessment of water facility functionality",
+          "timeframe": "Next 2-4 weeks",
+          "source": "Kenya Red Cross Society / IFRC DREF, Kenya: Drought - Early Action Protocol Summary (EAP2022KE02)",
+          "source_url": "https://www.anticipation-hub.org/Documents/EAPs/MDRKE055_EAP.pdf",
+          "section": "WASH"
+        },
+        {
+          "id": "DR-W4",
+          "hazard": "drought",
+          "level": "Watch",
+          "action": "Activate community water committees",
+          "timeframe": "Next 2-4 weeks",
+          "source": "Kenya Red Cross Society / IFRC DREF, Kenya: Drought - Early Action Protocol Summary (EAP2022KE02)",
+          "source_url": "https://www.anticipation-hub.org/Documents/EAPs/MDRKE055_EAP.pdf",
+          "section": "WASH"
+        },
+        {
+          "id": "DR-W5",
+          "hazard": "drought",
+          "level": "Watch",
+          "action": "Advocate for expanding and protecting fallback grazing areas",
+          "timeframe": "Next 2-4 weeks",
+          "source": "Kenya Red Cross Society / IFRC DREF, Kenya: Drought - Early Action Protocol Summary (EAP2022KE02)",
+          "source_url": "https://www.anticipation-hub.org/Documents/EAPs/MDRKE055_EAP.pdf",
+          "section": "Livelihoods"
+        },
+        {
+          "id": "DR-W6",
+          "hazard": "drought",
+          "level": "Watch",
+          "action": "Promote household water conservation, water storage and rainwater harvesting",
+          "timeframe": "Next 2-4 weeks",
+          "source": "IFRC, Public awareness and public education for disaster risk reduction: key messages (PAPE), 2nd edition",
+          "source_url": "https://www.ifrc.org/sites/default/files/PAPE-2.0-English.pdf",
+          "section": "Drought, pp. 44-45"
+        }
+      ],
+      "rainy_seasons": "Mar-May (35% of annual); Oct-Nov (19% of annual)",
+      "public": {
+        "summary": "Rain has been below normal. Save and store water, and follow county advice on water points and grazing.",
+        "sms": "Busia Drought WATCH: Save water. Follow KMD/county alerts.",
+        "level": "Watch"
+      },
+      "priority_rank": 11
+    },
+    {
+      "county": "Kwale",
+      "zone": "Coast",
+      "overall_level": "Watch",
+      "headline": "Cyclone season Watch: Cyclone season (Nov-Apr); 1 tropical storm(s) passed within 300 km since 1981",
+      "hazard_levels": {
+        "drought": "Normal",
+        "flood": "Normal",
+        "cyclone": "Watch"
+      },
+      "drivers": [
+        {
+          "hazard": "drought",
+          "level": "Normal",
+          "text": "131% of normal rain over the 3 months to 2026-10 (259.8 mm vs 198.2 mm normal)",
+          "value": 131.0,
+          "unit": "% of normal"
+        },
+        {
+          "hazard": "flood",
+          "level": "Normal",
+          "text": "Wettest 3 days in the last week: 10.5 mm (16% of the county's 1-in-100-day level)",
+          "value": 10.5,
+          "unit": "mm / 3 days"
+        },
+        {
+          "hazard": "cyclone",
+          "level": "Watch",
+          "text": "Cyclone season (Nov-Apr); 1 tropical storm(s) passed within 300 km since 1981",
+          "value": 1,
+          "unit": "storms"
+        }
+      ],
+      "trend": {
+        "variable": "Annual rainfall",
+        "slope_mm_per_decade": 5.4,
+        "change_pct_of_mean": 1.9,
+        "p_value": 0.831,
+        "significant": false,
+        "years": "1991-2025"
+      },
+      "significant_extreme_trends": [
+        {
+          "variable": "hot_days",
+          "unit": "days",
+          "slope_per_decade": 4.62,
+          "p_value": 0.001
+        }
+      ],
+      "next": {
+        "forecast": {
+          "level": "Normal",
+          "max_3day_mm": 15.5,
+          "window": "16 Nov - 18 Nov",
+          "total_7day_mm": 27.7,
+          "p99_3day_mm": 63.7,
+          "gale_gusts": false,
+          "max_gust_kmh": 38.0,
+          "hot_days": 4,
+          "fetched_utc": "2026-11-12T12:08+00:00"
+        },
+        "outlook": {
+          "target_months": "Nov 2026 - Jan 2027",
+          "prob_below_normal": 0.24,
+          "skilful": true,
+          "verdict": "Weak or uncertain skill",
+          "confidence": "low",
+          "model_raw_prob": 0.24,
+          "message": "24% chance the Nov 2026 - Jan 2027 rain is in the driest third (normal chance 33%; model skill: weak or uncertain skill)."
+        }
+      },
+      "rising": false,
+      "exposure": {
+        "population_2020": 788722,
+        "share_of_region_pct": 4.2,
+        "people_at_watch_or_above": 788722
+      },
+      "priority_score": 1.79,
+      "priority_explained": "severity 1 (Watch=1, Warning=3, Emergency=6 per hazard) x population weight 1.79 (1 + people/1M)",
+      "actions": [
+        {
+          "id": "CY-W1",
+          "hazard": "cyclone",
+          "level": "Watch",
+          "action": "Track official cyclone information and follow early-warning advisories (KMD, RSMC La Reunion)",
+          "timeframe": "Next 2-4 weeks",
+          "source": "IFRC, Public awareness and public education for disaster risk reduction: key messages (PAPE), 2nd edition",
+          "source_url": "https://www.ifrc.org/sites/default/files/PAPE-2.0-English.pdf",
+          "section": "School safety, storm rules, p. 144"
+        },
+        {
+          "id": "CY-W2",
+          "hazard": "cyclone",
+          "level": "Watch",
+          "action": "Assess risk and make a household and community cyclone plan",
+          "timeframe": "Next 2-4 weeks",
+          "source": "IFRC, Public awareness and public education for disaster risk reduction: key messages (PAPE), 2nd edition",
+          "source_url": "https://www.ifrc.org/sites/default/files/PAPE-2.0-English.pdf",
+          "section": "Tropical cyclones, p. 94"
+        },
+        {
+          "id": "CY-W3",
+          "hazard": "cyclone",
+          "level": "Watch",
+          "action": "Do mitigation work: brace roofs, fit shutters, trim trees",
+          "timeframe": "Next 2-4 weeks",
+          "source": "IFRC, Public awareness and public education for disaster risk reduction: key messages (PAPE), 2nd edition",
+          "source_url": "https://www.ifrc.org/sites/default/files/PAPE-2.0-English.pdf",
+          "section": "Tropical cyclones, p. 95"
+        },
+        {
+          "id": "CY-W4",
+          "hazard": "cyclone",
+          "level": "Watch",
+          "action": "Practise evacuation routes and stock emergency supplies",
+          "timeframe": "Next 2-4 weeks",
+          "source": "IFRC, Public awareness and public education for disaster risk reduction: key messages (PAPE), 2nd edition",
+          "source_url": "https://www.ifrc.org/sites/default/files/PAPE-2.0-English.pdf",
+          "section": "Tropical cyclones, p. 96"
+        },
+        {
+          "id": "CY-W5",
+          "hazard": "cyclone",
+          "level": "Watch",
+          "action": "Disseminate early-warning messages to coastal communities",
+          "timeframe": "Next 2-4 weeks",
+          "source": "World Food Programme, Weathering the Storm: what makes anticipating cyclones successful",
+          "source_url": "https://docs.wfp.org/api/documents/WFP-0000173687/download/",
+          "section": "Anticipatory actions"
+        }
+      ],
+      "rainy_seasons": "Apr-Jun (47% of annual); Oct (9% of annual)",
+      "public": {
+        "summary": "It is cyclone season. Follow Kenya Met Department updates, secure roofs and know your evacuation route.",
+        "sms": "Kwale Cyclone season WATCH: Follow KMD updates; secure roofs. Follow KMD/county alerts.",
+        "level": "Watch"
+      },
+      "priority_rank": 12
+    },
+    {
+      "county": "Marsabit",
+      "zone": "Arid north",
+      "overall_level": "Watch",
+      "headline": "Heavy rain / flooding Watch: Forecast 29.8 mm in 3 days (12 Nov - 14 Nov)",
+      "hazard_levels": {
+        "drought": "Normal",
+        "flood": "Watch",
+        "cyclone": "Normal"
+      },
+      "drivers": [
+        {
+          "hazard": "drought",
+          "level": "Normal",
+          "text": "96% of normal rain over the 3 months to 2026-10 (41.9 mm vs 43.4 mm normal)",
+          "value": 96.0,
+          "unit": "% of normal"
+        },
+        {
+          "hazard": "flood",
+          "level": "Watch",
+          "text": "Wettest 3 days in the last week: 16.6 mm (53% of the county's 1-in-100-day level)",
+          "value": 16.6,
+          "unit": "mm / 3 days"
+        }
+      ],
+      "trend": {
+        "variable": "Annual rainfall",
+        "slope_mm_per_decade": -0.8,
+        "change_pct_of_mean": -0.8,
+        "p_value": 0.989,
+        "significant": false,
+        "years": "1991-2025"
+      },
+      "significant_extreme_trends": [
+        {
+          "variable": "hot_days",
+          "unit": "days",
+          "slope_per_decade": 8.57,
+          "p_value": 0.0
+        }
+      ],
+      "next": {
+        "forecast": {
+          "level": "Watch",
+          "max_3day_mm": 29.8,
+          "window": "12 Nov - 14 Nov",
+          "total_7day_mm": 39.8,
+          "p99_3day_mm": 31.6,
+          "gale_gusts": null,
+          "max_gust_kmh": null,
+          "hot_days": 0,
+          "fetched_utc": "2026-11-12T12:08+00:00"
+        },
+        "outlook": {
+          "target_months": "Nov 2026 - Jan 2027",
+          "prob_below_normal": 0.33,
+          "skilful": false,
+          "verdict": "No skill - use climatology",
+          "confidence": "low",
+          "model_raw_prob": 0.24,
+          "message": "No reliable signal for Nov 2026 - Jan 2027: the model did not beat climatology in testing, so plan for normal odds (33% chance of below-normal rain)."
+        }
+      },
+      "rising": false,
+      "exposure": {
+        "population_2020": 355053,
+        "share_of_region_pct": 1.9,
+        "people_at_watch_or_above": 355053
+      },
+      "priority_score": 1.36,
+      "priority_explained": "severity 1 (Watch=1, Warning=3, Emergency=6 per hazard) x population weight 1.36 (1 + people/1M)",
+      "actions": [
+        {
+          "id": "FL-W1",
+          "hazard": "flood",
+          "level": "Watch",
+          "action": "Disseminate targeted early warnings to at-risk communities through trained volunteers",
+          "timeframe": "Next 2-4 weeks",
+          "source": "Kenya Red Cross Society / IFRC DREF, Kenya: Floods - Early Action Protocol Summary (EAP2021KE01)",
+          "source_url": "https://www.anticipation-hub.org/Documents/EAPs/EAP_Kenya_Floods_2021.pdf",
+          "section": "Early actions / DRR"
+        },
+        {
+          "id": "FL-W2",
+          "hazard": "flood",
+          "level": "Watch",
+          "action": "Place or check flood depth markers at crossing points (cash for work)",
+          "timeframe": "Next 2-4 weeks",
+          "source": "Kenya Red Cross Society / IFRC DREF, Kenya: Floods - Early Action Protocol Summary (EAP2021KE01)",
+          "source_url": "https://www.anticipation-hub.org/Documents/EAPs/EAP_Kenya_Floods_2021.pdf",
+          "section": "Early actions"
+        },
+        {
+          "id": "FL-W3",
+          "hazard": "flood",
+          "level": "Watch",
+          "action": "Identify evacuation sites",
+          "timeframe": "Next 2-4 weeks",
+          "source": "Kenya Red Cross Society / IFRC DREF, Kenya: Floods - Early Action Protocol Summary (EAP2021KE01)",
+          "source_url": "https://www.anticipation-hub.org/Documents/EAPs/EAP_Kenya_Floods_2021.pdf",
+          "section": "Physical evacuation"
+        },
+        {
+          "id": "FL-W4",
+          "hazard": "flood",
+          "level": "Watch",
+          "action": "Pre-position shelter and WASH relief items",
+          "timeframe": "Next 2-4 weeks",
+          "source": "Kenya Red Cross Society / IFRC DREF, Kenya: Floods - Early Action Protocol Summary (EAP2021KE01)",
+          "source_url": "https://www.anticipation-hub.org/Documents/EAPs/EAP_Kenya_Floods_2021.pdf",
+          "section": "Early actions"
+        },
+        {
+          "id": "FL-W5",
+          "hazard": "flood",
+          "level": "Watch",
+          "action": "Advise households to store valuables above flood level and keep extra drinking water",
+          "timeframe": "Next 2-4 weeks",
+          "source": "IFRC, Public awareness and public education for disaster risk reduction: key messages (PAPE), 2nd edition",
+          "source_url": "https://www.ifrc.org/sites/default/files/PAPE-2.0-English.pdf",
+          "section": "Floods, pp. 100, 102"
+        }
+      ],
+      "rainy_seasons": "Mar-Apr (33% of annual); Oct-Dec (52% of annual)",
+      "public": {
+        "summary": "Heavy rain is possible. Keep drinking water, move valuables up, and know your nearest higher ground.",
+        "sms": "Marsabit Heavy rain WATCH: Keep water, raise valuables, know high ground. Follow KMD/county alerts.",
+        "level": "Watch"
+      },
+      "priority_rank": 13
+    },
+    {
+      "county": "Lamu",
+      "zone": "Coast",
+      "overall_level": "Watch",
+      "headline": "Cyclone season Watch: Cyclone season (Nov-Apr); 1 tropical storm(s) passed within 300 km since 1981",
+      "hazard_levels": {
+        "drought": "Normal",
+        "flood": "Normal",
+        "cyclone": "Watch"
+      },
+      "drivers": [
+        {
+          "hazard": "drought",
+          "level": "Normal",
+          "text": "122% of normal rain over the 3 months to 2026-10 (128.5 mm vs 105.6 mm normal)",
+          "value": 122.0,
+          "unit": "% of normal"
+        },
+        {
+          "hazard": "flood",
+          "level": "Normal",
+          "text": "Wettest 3 days in the last week: 11.4 mm (29% of the county's 1-in-100-day level)",
+          "value": 11.4,
+          "unit": "mm / 3 days"
+        },
+        {
+          "hazard": "cyclone",
+          "level": "Watch",
+          "text": "Cyclone season (Nov-Apr); 1 tropical storm(s) passed within 300 km since 1981",
+          "value": 1,
+          "unit": "storms"
+        }
+      ],
+      "trend": {
+        "variable": "Annual rainfall",
+        "slope_mm_per_decade": -8.4,
+        "change_pct_of_mean": -4.8,
+        "p_value": 0.755,
+        "significant": false,
+        "years": "1991-2025"
+      },
+      "significant_extreme_trends": [],
+      "next": {
+        "forecast": {
+          "level": "Normal",
+          "max_3day_mm": 19.5,
+          "window": "13 Nov - 15 Nov",
+          "total_7day_mm": 28.0,
+          "p99_3day_mm": 39.8,
+          "gale_gusts": false,
+          "max_gust_kmh": 37.0,
+          "hot_days": 0,
+          "fetched_utc": "2026-11-12T12:08+00:00"
+        },
+        "outlook": {
+          "target_months": "Nov 2026 - Jan 2027",
+          "prob_below_normal": 0.16,
+          "skilful": true,
+          "verdict": "Weak or uncertain skill",
+          "confidence": "low",
+          "model_raw_prob": 0.16,
+          "message": "16% chance the Nov 2026 - Jan 2027 rain is in the driest third (normal chance 33%; model skill: weak or uncertain skill)."
+        }
+      },
+      "rising": false,
+      "exposure": {
+        "population_2020": 89892,
+        "share_of_region_pct": 0.5,
+        "people_at_watch_or_above": 89892
+      },
+      "priority_score": 1.09,
+      "priority_explained": "severity 1 (Watch=1, Warning=3, Emergency=6 per hazard) x population weight 1.09 (1 + people/1M)",
+      "actions": [
+        {
+          "id": "CY-W1",
+          "hazard": "cyclone",
+          "level": "Watch",
+          "action": "Track official cyclone information and follow early-warning advisories (KMD, RSMC La Reunion)",
+          "timeframe": "Next 2-4 weeks",
+          "source": "IFRC, Public awareness and public education for disaster risk reduction: key messages (PAPE), 2nd edition",
+          "source_url": "https://www.ifrc.org/sites/default/files/PAPE-2.0-English.pdf",
+          "section": "School safety, storm rules, p. 144"
+        },
+        {
+          "id": "CY-W2",
+          "hazard": "cyclone",
+          "level": "Watch",
+          "action": "Assess risk and make a household and community cyclone plan",
+          "timeframe": "Next 2-4 weeks",
+          "source": "IFRC, Public awareness and public education for disaster risk reduction: key messages (PAPE), 2nd edition",
+          "source_url": "https://www.ifrc.org/sites/default/files/PAPE-2.0-English.pdf",
+          "section": "Tropical cyclones, p. 94"
+        },
+        {
+          "id": "CY-W3",
+          "hazard": "cyclone",
+          "level": "Watch",
+          "action": "Do mitigation work: brace roofs, fit shutters, trim trees",
+          "timeframe": "Next 2-4 weeks",
+          "source": "IFRC, Public awareness and public education for disaster risk reduction: key messages (PAPE), 2nd edition",
+          "source_url": "https://www.ifrc.org/sites/default/files/PAPE-2.0-English.pdf",
+          "section": "Tropical cyclones, p. 95"
+        },
+        {
+          "id": "CY-W4",
+          "hazard": "cyclone",
+          "level": "Watch",
+          "action": "Practise evacuation routes and stock emergency supplies",
+          "timeframe": "Next 2-4 weeks",
+          "source": "IFRC, Public awareness and public education for disaster risk reduction: key messages (PAPE), 2nd edition",
+          "source_url": "https://www.ifrc.org/sites/default/files/PAPE-2.0-English.pdf",
+          "section": "Tropical cyclones, p. 96"
+        },
+        {
+          "id": "CY-W5",
+          "hazard": "cyclone",
+          "level": "Watch",
+          "action": "Disseminate early-warning messages to coastal communities",
+          "timeframe": "Next 2-4 weeks",
+          "source": "World Food Programme, Weathering the Storm: what makes anticipating cyclones successful",
+          "source_url": "https://docs.wfp.org/api/documents/WFP-0000173687/download/",
+          "section": "Anticipatory actions"
+        }
+      ],
+      "rainy_seasons": "Apr-May (37% of annual); Oct-Dec (32% of annual)",
+      "public": {
+        "summary": "It is cyclone season. Follow Kenya Met Department updates, secure roofs and know your evacuation route.",
+        "sms": "Lamu Cyclone season WATCH: Follow KMD updates; secure roofs. Follow KMD/county alerts.",
+        "level": "Watch"
+      },
+      "priority_rank": 14
+    }
+  ],
+  "note": "Deterministic: numbers copied from pipeline outputs, actions only from the cited playbook. Official warnings from the Kenya Meteorological Department (KMD) and the National Disaster Operations Centre take priority over this planning-support tool."
+}

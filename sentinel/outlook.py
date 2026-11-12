@@ -26,6 +26,9 @@ from . import config as C
 NUM_FEATURES = ["rain_z_1m", "rain_z_3m", "tmean_anom_3m", "oni_lag", "oni_change_3m", "dmi_lag",
                 "target_month_sin", "target_month_cos", "log_clim_target_mm"]
 CAT_FEATURES = ["zone"]
+# Extra leak-free predictors the training pipeline (sentinel/train.py, Colab) may select.
+EXTRA_FEATURES = ["rain_z_6m", "dmi_change_3m", "oni_x_ond", "dmi_x_ond"]
+ALL_NUM_FEATURES = NUM_FEATURES + EXTRA_FEATURES
 SEASON_OF_ISSUE = {2: "MAM (issued end Feb)", 9: "OND (issued end Sep)"}
 
 
@@ -48,8 +51,9 @@ def build_panel(mon: pd.DataFrame, idx: pd.DataFrame, train_end: pd.Timestamp) -
         g = g.sort_values("date").set_index("date").asfreq("MS")
         p, t = g["precip"], g["tmean"]
         p3 = p.rolling(3, min_periods=3).sum()
+        p6 = p.rolling(6, min_periods=6).sum()
         tgt = p.shift(-1) + p.shift(-2) + p.shift(-3)  # next 3 months
-        df = pd.DataFrame({"county": county, "precip_1m": p, "precip_3m": p3, "target_mm": tgt})
+        df = pd.DataFrame({"county": county, "precip_1m": p, "precip_3m": p3, "precip_6m": p6, "target_mm": tgt})
         df["month"] = df.index.month
         df["target_start_month"] = (df["month"] % 12) + 1
         df["target_end"] = df.index + pd.DateOffset(months=3)
@@ -61,6 +65,7 @@ def build_panel(mon: pd.DataFrame, idx: pd.DataFrame, train_end: pd.Timestamp) -
 
         m1 = df[tr].groupby("month")["precip_1m"].agg(["mean", "std"])
         m3 = df[tr].groupby("month")["precip_3m"].agg(["mean", "std"])
+        m6 = df[tr].groupby("month")["precip_6m"].agg(["mean", "std"])
         tn = pd.DataFrame({"t": t, "month": df["month"]})[tr].groupby("month")["t"].mean()
         tq = df[tr_target].groupby("target_start_month")["target_mm"].agg(
             p33=lambda s: s.quantile(1 / 3), clim="mean")
@@ -68,6 +73,7 @@ def build_panel(mon: pd.DataFrame, idx: pd.DataFrame, train_end: pd.Timestamp) -
 
         df["rain_z_1m"] = (df["precip_1m"] - df["month"].map(m1["mean"])) / df["month"].map(m1["std"]).replace(0, np.nan)
         df["rain_z_3m"] = (df["precip_3m"] - df["month"].map(m3["mean"])) / df["month"].map(m3["std"]).replace(0, np.nan)
+        df["rain_z_6m"] = (df["precip_6m"] - df["month"].map(m6["mean"])) / df["month"].map(m6["std"]).replace(0, np.nan)
         tanom = t - df["month"].map(tn)
         df["tmean_anom_3m"] = tanom.rolling(3, min_periods=3).mean()
         df["p33_mm"] = df["target_start_month"].map(tq["p33"])
@@ -89,6 +95,11 @@ def build_panel(mon: pd.DataFrame, idx: pd.DataFrame, train_end: pd.Timestamp) -
     panel["oni_lag"] = (panel["issue_date"] - pd.DateOffset(months=2)).map(oni)
     panel["oni_change_3m"] = panel["oni_lag"] - (panel["issue_date"] - pd.DateOffset(months=5)).map(oni)
     panel["dmi_lag"] = (panel["issue_date"] - pd.DateOffset(months=1)).map(dmi)
+    panel["dmi_change_3m"] = panel["dmi_lag"] - (panel["issue_date"] - pd.DateOffset(months=4)).map(dmi)
+    # ENSO/IOD matter most for the Oct-Dec short rains: let linear models see that interaction.
+    ond = panel["target_start_month"].isin([9, 10, 11, 12]).astype(float)
+    panel["oni_x_ond"] = panel["oni_lag"] * ond
+    panel["dmi_x_ond"] = panel["dmi_lag"] * ond
     ang = 2 * np.pi * (panel["target_start_month"] - 1) / 12
     panel["target_month_sin"], panel["target_month_cos"] = np.sin(ang), np.cos(ang)
     panel["eligible"] = panel["clim_target_mm"] >= C.DRY_SEASON_MIN_MM
@@ -97,17 +108,53 @@ def build_panel(mon: pd.DataFrame, idx: pd.DataFrame, train_end: pd.Timestamp) -
 
 
 # ---------------------------------------------------------------- models
-def _make_model(kind: str) -> Pipeline:
+DEFAULT_PARAMS = {
+    "logistic": {"C": 0.3},
+    "gbm": {"max_depth": 3, "learning_rate": 0.05, "max_iter": 150, "l2_regularization": 1.0, "min_samples_leaf": 40},
+}
+
+
+def _make_model(kind: str, params: dict | None = None, num_features: list[str] | None = None,
+                calibration: str | None = None):
+    """Preprocessing + classifier. `params` override DEFAULT_PARAMS; `calibration` in
+    {None, 'isotonic', 'sigmoid'} wraps the pipeline in CalibratedClassifierCV (fit on training rows only)."""
+    num = list(num_features or NUM_FEATURES)
     pre = ColumnTransformer([
-        ("num", Pipeline([("imp", SimpleImputer(strategy="median")), ("sc", StandardScaler())]), NUM_FEATURES),
+        ("num", Pipeline([("imp", SimpleImputer(strategy="median")), ("sc", StandardScaler())]), num),
         ("cat", OneHotEncoder(handle_unknown="ignore"), CAT_FEATURES),
     ])
+    p = {**DEFAULT_PARAMS.get(kind, {}), **(params or {})}
     if kind == "logistic":
-        clf = LogisticRegression(C=0.3, max_iter=2000)
+        clf = LogisticRegression(max_iter=2000, **p)
+    elif kind == "gbm":
+        clf = HistGradientBoostingClassifier(random_state=0, **p)
     else:
-        clf = HistGradientBoostingClassifier(max_depth=3, learning_rate=0.05, max_iter=150,
-                                             l2_regularization=1.0, min_samples_leaf=40, random_state=0)
-    return Pipeline([("pre", pre), ("clf", clf)])
+        raise ValueError(f"unknown model kind {kind!r}")
+    model = Pipeline([("pre", pre), ("clf", clf)])
+    if calibration in ("isotonic", "sigmoid"):
+        from sklearn.calibration import CalibratedClassifierCV
+        model = CalibratedClassifierCV(model, method=calibration, cv=3)
+    return model
+
+
+def features_of(sel: dict) -> list[str]:
+    return list(sel.get("num_features") or NUM_FEATURES) + CAT_FEATURES
+
+
+def make_from_selection(sel: dict):
+    return _make_model(sel["chosen"], sel.get("params"), sel.get("num_features"), sel.get("calibration"))
+
+
+def registry_selection() -> dict | None:
+    """Model config promoted by sentinel/train.py (models/registry.json), if any."""
+    from . import model_registry
+    card = model_registry.active_card()
+    if not card:
+        return None
+    m = card["model"]
+    return {"chosen": m["kind"], "params": m.get("params"), "num_features": m.get("num_features"),
+            "calibration": m.get("calibration"), "threshold": float(m["threshold"]),
+            "source": f"registry {card['version']}", "candidates": {}}
 
 
 def _fit_rows(panel: pd.DataFrame, train_end: pd.Timestamp) -> pd.DataFrame:
@@ -138,7 +185,7 @@ def select_model(mon: pd.DataFrame, idx: pd.DataFrame, test_start: pd.Timestamp)
         res[kind] = {"brier": float(brier_score_loss(va["y"], prob)),
                      "best_threshold": float(thr_grid[int(np.argmax(f1s))]), "best_f1": float(max(f1s))}
     best = min(res, key=lambda k: res[k]["brier"])
-    return {"chosen": best, "threshold": res[best]["best_threshold"], "candidates": res,
+    return {"chosen": best, "threshold": res[best]["best_threshold"], "candidates": res, "source": "inline selection",
             "inner_train_end": str(inner_start.date()), "n_inner_train": int(len(tr)), "n_inner_valid": int(len(va))}
 
 
@@ -178,14 +225,17 @@ def verdict(bss: float, lo: float, f1_model: float, f1_best_baseline: float) -> 
     return "Weak or uncertain skill", "low"
 
 
-def run(mon: pd.DataFrame, idx: pd.DataFrame, n_boot: int = C.BOOTSTRAP_N) -> dict:
+def run(mon: pd.DataFrame, idx: pd.DataFrame, n_boot: int = C.BOOTSTRAP_N, use_registry: bool = True) -> dict:
+    """Backtest + live outlook. If a model config was promoted by `sentinel.train` it is used
+    (re-fitted here leak-free, so the backtest stays honest); otherwise the model is picked inline."""
     sd = split_dates(mon)
     test_start = sd["test_start"]
-    sel = select_model(mon, idx, test_start)
+    sel = (registry_selection() if use_registry else None) or select_model(mon, idx, test_start)
+    feats = features_of(sel)
     panel, meta = build_panel(mon, idx, test_start)
     tr, te = _fit_rows(panel, test_start), _test_rows(panel, test_start).copy()
-    model = _make_model(sel["chosen"]).fit(tr[NUM_FEATURES + CAT_FEATURES], tr["y"].astype(int))
-    te["p_model"] = model.predict_proba(te[NUM_FEATURES + CAT_FEATURES])[:, 1]
+    model = make_from_selection(sel).fit(tr[feats], tr["y"].astype(int))
+    te["p_model"] = model.predict_proba(te[feats])[:, 1]
     te["pred_model"] = (te["p_model"] >= sel["threshold"]).astype(int)
     # Persistence as a probability: training frequency of 'below' given last 3 months dry / not dry.
     cond = tr.groupby("persist_dry")["y"].mean()
@@ -235,7 +285,7 @@ def run(mon: pd.DataFrame, idx: pd.DataFrame, n_boot: int = C.BOOTSTRAP_N) -> di
     live = live_outlook(mon, idx, sel, metrics)
     info = {"split": {k: str(v.date()) if hasattr(v, "date") else v for k, v in sd.items()},
             "selection": sel, "stats_window": meta, "n_train": int(len(tr)), "n_test": int(len(te)),
-            "features": NUM_FEATURES + CAT_FEATURES,
+            "features": feats, "model_source": sel.get("source", "inline selection"),
             "train_issue_range": [str(tr["issue_date"].min().date()), str(tr["issue_date"].max().date())],
             "test_issue_range": [str(te["issue_date"].min().date()), str(te["issue_date"].max().date())]}
     return {"metrics": metrics, "by_season": by_season, "test_predictions": te, "live": live, "info": info}
@@ -248,9 +298,10 @@ def live_outlook(mon: pd.DataFrame, idx: pd.DataFrame, sel: dict, metrics: pd.Da
     cutoff = last + pd.DateOffset(months=1)
     panel, _ = build_panel(mon, idx, cutoff)
     tr = panel[(panel["target_end"] <= last) & panel["eligible"] & panel["y"].notna()]
-    model = _make_model(sel["chosen"]).fit(tr[NUM_FEATURES + CAT_FEATURES], tr["y"].astype(int))
+    feats = features_of(sel)
+    model = make_from_selection(sel).fit(tr[feats], tr["y"].astype(int))
     now = panel[panel["issue_date"] == last].copy()
-    now["p_model"] = model.predict_proba(now[NUM_FEATURES + CAT_FEATURES])[:, 1]
+    now["p_model"] = model.predict_proba(now[feats])[:, 1]
     vm = metrics.set_index("county")
     out = []
     for r in now.itertuples():

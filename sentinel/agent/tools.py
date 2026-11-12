@@ -7,41 +7,18 @@ from __future__ import annotations
 
 import datetime as dt
 import json
-from functools import lru_cache
-from pathlib import Path
 
 import pandas as pd
 
 from .. import config as C
+from .. import io as sio
 
 TOWN_TO_COUNTY = {c.town.lower(): c.name for c in C.COUNTIES}
 
-
-def _out() -> Path:
-    return C.OUT_DIR
-
-
-@lru_cache(maxsize=None)
-def _csv(path: str, mtime: float) -> pd.DataFrame:  # mtime busts the cache when outputs change
-    return pd.read_csv(path)
-
-
-def _read(name: str) -> pd.DataFrame | None:
-    p = _out() / name
-    return _csv(str(p), p.stat().st_mtime) if p.exists() else None
-
-
-def _clean(v):
-    if isinstance(v, float) and pd.isna(v):
-        return None
-    if hasattr(v, "item"):
-        return v.item()
-    return v
-
-
-def _row(df: pd.DataFrame, county: str) -> dict:
-    r = df[df["county"] == county]
-    return {k: _clean(v) for k, v in r.iloc[0].to_dict().items()} if len(r) else {}
+_out = sio.out_dir
+_read = sio.read
+_clean = sio.clean
+_row = sio.row
 
 
 def resolve_district(name: str | None) -> tuple[str | None, dict | None]:
@@ -78,10 +55,9 @@ def get_climate_status(district: str) -> dict:
     if st is None:
         return _missing("Current climate status")
     s = _row(st, county)
-    mon = _out() / "drought.parquet"
+    d = _read("drought.parquet")
     recent = []
-    if mon.exists():
-        d = pd.read_parquet(mon)
+    if d is not None:
         d = d[d["county"] == county].sort_values("date").tail(6)
         recent = [{"window_end": f"{r.date:%Y-%m}", "rain_3m_mm": round(r.rain_3m_mm, 1),
                    "normal_3m_mm": round(r.normal_3m_mm, 1),
@@ -206,6 +182,22 @@ def _pb_level(level: str | None) -> str | None:
     return level if level in ("Watch", "Warning", "Emergency") else None
 
 
+def get_insights(district: str) -> dict:
+    """Pre-computed insight card: headline, what's next, exposure, priority and triggered actions."""
+    county, err = resolve_district(district)
+    if err:
+        return err
+    from ..insights import load_insights
+    data = load_insights()
+    if data is None:
+        return _missing("County insights")
+    card = next((c for c in data["counties"] if c["county"] == county), None)
+    if card is None:
+        return _missing(f"Insights for {county}")
+    keep = ("county", "headline", "overall_level", "priority_score", "priority_rank", "drivers", "next", "exposure")
+    return {k: card[k] for k in keep if k in card}
+
+
 TOOLS = {
     "list_districts": list_districts,
     "get_climate_status": get_climate_status,
@@ -214,6 +206,7 @@ TOOLS = {
     "get_cyclone_exposure": get_cyclone_exposure,
     "get_population_exposure": get_population_exposure,
     "get_playbook_actions": get_playbook_actions,
+    "get_insights": get_insights,
 }
 
 _D = {"type": "object", "properties": {"district": {"type": "string", "description": "Kenyan county name, e.g. 'Tana River'"}},
@@ -232,6 +225,7 @@ TOOL_SCHEMAS = [
                                           "hazard": {"type": "string", "enum": ["drought", "flood", "cyclone"]},
                                           "level": {"type": "string", "enum": ["Watch", "Warning", "Emergency"]}},
                                           "required": ["hazard", "level"]}}},
+    {"type": "function", "function": {"name": "get_insights", "description": "Summary card for a county: overall level, main drivers, what is likely next, people exposed and its priority rank among all counties.", "parameters": _D}},
 ]
 
 
