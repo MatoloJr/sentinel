@@ -1,0 +1,90 @@
+{
+  "title": "Climate Sentinel Kenya - Action Playbook",
+  "note": "Planning-support only. Actions are taken from the cited guidance documents; the agent may only recommend actions listed here. Official warnings from the Kenya Meteorological Department and the National Disaster Operations Centre take priority.",
+  "levels": {
+    "drought": {
+      "Watch": "3-month rain 50-75% of normal (comparable to NDMA 'Alert')",
+      "Warning": "3-month rain 25-50% of normal (comparable to NDMA 'Alarm')",
+      "Emergency": "3-month rain below 25% of normal (comparable to NDMA 'Emergency')"
+    },
+    "flood": {
+      "Watch": "3-day rain (observed or forecast) at or above the county's 95th percentile",
+      "Warning": "3-day rain at or above the county's 99th percentile",
+      "Emergency": "3-day rain at or above the county's 99.9th percentile, or flooding reported"
+    },
+    "cyclone": {
+      "Watch": "Cyclone season (Nov-Apr) in a county with recorded storm exposure, or a storm reported in the South-West Indian Ocean by RSMC La Reunion/KMD",
+      "Warning": "Only when KMD or RSMC La Reunion has issued an official warning for the Kenyan coast (this tool never forecasts storm paths)",
+      "Emergency": "Storm impacts occurring or imminent per official warnings"
+    }
+  },
+  "sources": {
+    "S1": {"title": "Kenya: Drought - Early Action Protocol Summary (EAP2022KE02)", "org": "Kenya Red Cross Society / IFRC DREF", "year": 2022, "url": "https://www.anticipation-hub.org/Documents/EAPs/MDRKE055_EAP.pdf"},
+    "S2": {"title": "Kenya: Floods - Early Action Protocol Summary (EAP2021KE01)", "org": "Kenya Red Cross Society / IFRC DREF", "year": 2021, "url": "https://www.anticipation-hub.org/Documents/EAPs/EAP_Kenya_Floods_2021.pdf"},
+    "S3": {"title": "Public awareness and public education for disaster risk reduction: key messages (PAPE), 2nd edition", "org": "IFRC", "year": 2018, "url": "https://www.ifrc.org/sites/default/files/PAPE-2.0-English.pdf"},
+    "S4": {"title": "Weathering the Storm: what makes anticipating cyclones successful", "org": "World Food Programme", "year": 2026, "url": "https://docs.wfp.org/api/documents/WFP-0000173687/download/"},
+    "S5": {"title": "EAP Activation: Kenya Riverine Floods 2023", "org": "Kenya Red Cross Society / IFRC", "year": 2023, "url": "https://www.anticipation-hub.org/Documents/EAPs/EAP_Activation_Kenya_Riverine_Floods_2023.pdf"},
+    "S6": {"title": "Safeguarding pastoral livelihoods: FAO's anticipatory action against drought", "org": "FAO Kenya", "year": 2026, "url": "https://www.fao.org/emergencies/resources-repository/news/detail/safeguarding-pastoral-livelihoods--fao-s-anticipatory-action-against-drought/en"}
+  },
+  "actions": [
+    {"id": "DR-W1", "hazard": "drought", "level": "Watch", "action": "Disseminate drought early-warning messages through local radio and SMS", "source": "S1", "loc": "Early warning and community engagement"},
+    {"id": "DR-W2", "hazard": "drought", "level": "Watch", "action": "Deploy trained volunteers to engage communities and support early-warning dissemination", "source": "S1", "loc": "Early warning and community engagement"},
+    {"id": "DR-W3", "hazard": "drought", "level": "Watch", "action": "Carry out a rapid assessment of water facility functionality", "source": "S1", "loc": "WASH"},
+    {"id": "DR-W4", "hazard": "drought", "level": "Watch", "action": "Activate community water committees", "source": "S1", "loc": "WASH"},
+    {"id": "DR-W5", "hazard": "drought", "level": "Watch", "action": "Advocate for expanding and protecting fallback grazing areas", "source": "S1", "loc": "Livelihoods"},
+    {"id": "DR-W6", "hazard": "drought", "level": "Watch", "action": "Promote household water conservation, water storage and rainwater harvesting", "source": "S3", "loc": "Drought, pp. 44-45"},
+
+    {"id": "DR-A1", "hazard": "drought", "level": "Warning", "action": "Repair and rehabilitate water facilities (e.g. boreholes)", "source": "S1", "loc": "WASH"},
+    {"id": "DR-A2", "hazard": "drought", "level": "Warning", "action": "Desilt water pans and repair earth dams", "source": "S1", "loc": "WASH"},
+    {"id": "DR-A3", "hazard": "drought", "level": "Warning", "action": "Install mass water storage tanks", "source": "S1", "loc": "WASH"},
+    {"id": "DR-A4", "hazard": "drought", "level": "Warning", "action": "Provide cash for WASH to targeted households", "source": "S1", "loc": "WASH / Cash"},
+    {"id": "DR-A5", "hazard": "drought", "level": "Warning", "action": "Provide fodder for priority livestock through commodity vouchers", "source": "S1", "loc": "Livelihoods"},
+    {"id": "DR-A6", "hazard": "drought", "level": "Warning", "action": "Procure and distribute drought-tolerant seeds before the next planting season", "source": "S1", "loc": "Livelihoods"},
+    {"id": "DR-A7", "hazard": "drought", "level": "Warning", "action": "Encourage early de-stocking and saving fodder for key animals", "source": "S3", "loc": "Drought, p. 47"},
+
+    {"id": "DR-E1", "hazard": "drought", "level": "Emergency", "action": "Unconditional cash transfers to the most affected pastoral households", "source": "S6", "loc": "Anticipatory action description"},
+    {"id": "DR-E2", "hazard": "drought", "level": "Emergency", "action": "Livestock health services (treatment and vaccination) to protect core herds", "source": "S6", "loc": "Anticipatory action description"},
+    {"id": "DR-E3", "hazard": "drought", "level": "Emergency", "action": "Identify and assist vulnerable community members", "source": "S3", "loc": "Drought, p. 43"},
+    {"id": "DR-E4", "hazard": "drought", "level": "Emergency", "action": "Plan a basic food ration (about 2,100 kcal per person per day) for vulnerable households", "source": "S3", "loc": "Drought, p. 43"},
+    {"id": "DR-E5", "hazard": "drought", "level": "Emergency", "action": "Continue repair of critical water facilities and cash for WASH", "source": "S1", "loc": "WASH"},
+    {"id": "DR-E6", "hazard": "drought", "level": "Emergency", "action": "Hold community review meetings and post-trigger surveys to adjust the response", "source": "S1", "loc": "Coordination and learning"},
+
+    {"id": "FL-W1", "hazard": "flood", "level": "Watch", "action": "Disseminate targeted early warnings to at-risk communities through trained volunteers", "source": "S2", "loc": "Early actions / DRR"},
+    {"id": "FL-W2", "hazard": "flood", "level": "Watch", "action": "Place or check flood depth markers at crossing points (cash for work)", "source": "S2", "loc": "Early actions"},
+    {"id": "FL-W3", "hazard": "flood", "level": "Watch", "action": "Identify evacuation sites", "source": "S2", "loc": "Physical evacuation"},
+    {"id": "FL-W4", "hazard": "flood", "level": "Watch", "action": "Pre-position shelter and WASH relief items", "source": "S2", "loc": "Early actions"},
+    {"id": "FL-W5", "hazard": "flood", "level": "Watch", "action": "Advise households to store valuables above flood level and keep extra drinking water", "source": "S3", "loc": "Floods, pp. 100, 102"},
+
+    {"id": "FL-A1", "hazard": "flood", "level": "Warning", "action": "Give cash grants or vouchers so vulnerable people can evacuate early", "source": "S2", "loc": "Physical evacuation"},
+    {"id": "FL-A2", "hazard": "flood", "level": "Warning", "action": "Support physical evacuation to identified sites", "source": "S5", "loc": "Disaster risk reduction"},
+    {"id": "FL-A3", "hazard": "flood", "level": "Warning", "action": "Vaccinate or treat livestock through community animal health workers", "source": "S2", "loc": "Early actions"},
+    {"id": "FL-A4", "hazard": "flood", "level": "Warning", "action": "Deploy emergency water treatment and sensitise communities on household water treatment", "source": "S2", "loc": "WASH"},
+    {"id": "FL-A5", "hazard": "flood", "level": "Warning", "action": "Tell people to evacuate immediately when advised, or move to higher ground", "source": "S3", "loc": "Floods, pp. 102-103"},
+    {"id": "FL-A6", "hazard": "flood", "level": "Warning", "action": "Warn against walking or driving through flowing water and underpasses ('turn around, don't drown')", "source": "S3", "loc": "Floods, p. 103"},
+
+    {"id": "FL-E1", "hazard": "flood", "level": "Emergency", "action": "Distribute shelter and non-food item kits to displaced households", "source": "S2", "loc": "Shelter"},
+    {"id": "FL-E2", "hazard": "flood", "level": "Emergency", "action": "Provide multipurpose cash grants to affected households", "source": "S2", "loc": "Cash / basic needs"},
+    {"id": "FL-E3", "hazard": "flood", "level": "Emergency", "action": "Deploy health surge teams for disease outbreak management", "source": "S2", "loc": "Health"},
+    {"id": "FL-E4", "hazard": "flood", "level": "Emergency", "action": "Run emergency water treatment plants for affected communities", "source": "S2", "loc": "WASH"},
+    {"id": "FL-E5", "hazard": "flood", "level": "Emergency", "action": "After waters recede: avoid floodwater, clean and disinfect homes and water sources", "source": "S3", "loc": "Floods, pp. 103-104"},
+    {"id": "FL-E6", "hazard": "flood", "level": "Emergency", "action": "Hold community review meetings to review ongoing implementation", "source": "S5", "loc": "Cross cutting"},
+
+    {"id": "CY-W1", "hazard": "cyclone", "level": "Watch", "action": "Track official cyclone information and follow early-warning advisories (KMD, RSMC La Reunion)", "source": "S3", "loc": "School safety, storm rules, p. 144"},
+    {"id": "CY-W2", "hazard": "cyclone", "level": "Watch", "action": "Assess risk and make a household and community cyclone plan", "source": "S3", "loc": "Tropical cyclones, p. 94"},
+    {"id": "CY-W3", "hazard": "cyclone", "level": "Watch", "action": "Do mitigation work: brace roofs, fit shutters, trim trees", "source": "S3", "loc": "Tropical cyclones, p. 95"},
+    {"id": "CY-W4", "hazard": "cyclone", "level": "Watch", "action": "Practise evacuation routes and stock emergency supplies", "source": "S3", "loc": "Tropical cyclones, p. 96"},
+    {"id": "CY-W5", "hazard": "cyclone", "level": "Watch", "action": "Disseminate early-warning messages to coastal communities", "source": "S4", "loc": "Anticipatory actions"},
+
+    {"id": "CY-A1", "hazard": "cyclone", "level": "Warning", "action": "Secure loose objects and bring animals indoors", "source": "S3", "loc": "Tropical cyclones, p. 96"},
+    {"id": "CY-A2", "hazard": "cyclone", "level": "Warning", "action": "Make sure people know when and where to evacuate, prioritising those in temporary structures", "source": "S3", "loc": "Tropical cyclones, p. 97"},
+    {"id": "CY-A3", "hazard": "cyclone", "level": "Warning", "action": "Provide anticipatory cash transfers so households can prepare", "source": "S4", "loc": "Anticipatory actions"},
+    {"id": "CY-A4", "hazard": "cyclone", "level": "Warning", "action": "Support household food storage and evacuation planning", "source": "S4", "loc": "Anticipatory actions"},
+    {"id": "CY-A5", "hazard": "cyclone", "level": "Warning", "action": "Relocate people and assets and safeguard critical infrastructure", "source": "S4", "loc": "Anticipatory actions"},
+
+    {"id": "CY-E1", "hazard": "cyclone", "level": "Emergency", "action": "Shelter in place away from windows", "source": "S3", "loc": "Tropical cyclones, p. 97"},
+    {"id": "CY-E2", "hazard": "cyclone", "level": "Emergency", "action": "Stay sheltered during the calm eye of the storm", "source": "S3", "loc": "Tropical cyclones, p. 97"},
+    {"id": "CY-E3", "hazard": "cyclone", "level": "Emergency", "action": "After the storm: give first aid and check buildings for damage", "source": "S3", "loc": "Tropical cyclones, p. 97"},
+    {"id": "CY-E4", "hazard": "cyclone", "level": "Emergency", "action": "Avoid floodwater, electrical hazards and contaminated food or water", "source": "S3", "loc": "Tropical cyclones, p. 97"},
+    {"id": "CY-E5", "hazard": "cyclone", "level": "Emergency", "action": "Provide in-kind food where markets are not functioning", "source": "S4", "loc": "Anticipatory actions"}
+  ]
+}
