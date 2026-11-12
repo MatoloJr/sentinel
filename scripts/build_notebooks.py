@@ -184,13 +184,148 @@ print(f"\\nWhere there is no skill ({', '.join(ns) or 'none'}), the dashboard an
     ]
 
 
+COLAB_REPO = "https://github.com/MatoloJr/sentinel.git"
+
+
+def colab():
+    """Google Colab notebook: retrain / tune the seasonal outlook and export a versioned model."""
+    return [
+        md(f"""# Climate Sentinel Kenya: train & tune the seasonal outlook in Google Colab
+<a href="https://colab.research.google.com/github/MatoloJr/sentinel/blob/main/notebooks/colab/train_outlook.ipynb" target="_parent"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"/></a>
+
+This notebook runs the **same code** as `python -m sentinel.train` (`sentinel/train.py`):
+
+1. clone the repo and install the package
+2. get the raw data (committed in the repo, a zip in Google Drive, or a fresh download)
+3. rolling-origin cross-validation + an **Optuna** search over model type, hyper-parameters, feature set and calibration
+4. one-shot verification on the held-out last 8 years with the full metric suite (`sentinel/metrics.py`)
+5. export a versioned model (`model.joblib` + `model_card.json`) to Drive / your computer
+
+The model predicts **P(next 3 months' rain falls in the driest third)** for each county. All statistics are
+recomputed per fold from earlier years only (no leakage), and the test period is touched exactly once per run.
+Run the cells top to bottom (Runtime → Run all). A CPU runtime is enough."""),
+        md("## 1 · Settings"),
+        code(f"""REPO_URL   = "{COLAB_REPO}"   # your fork works too
+BRANCH     = "main"
+DATA_SOURCE = "repo"          # "repo" (data/raw committed) | "drive_zip" | "download" (slow: Open-Meteo rate limits)
+DRIVE_DIR  = "/content/drive/MyDrive/climate-sentinel"   # where data zips and trained models live
+RAW_ZIP    = "climate-sentinel-raw.zip"                  # created locally with: python -c "import shutil; shutil.make_archive('climate-sentinel-raw','zip','data/raw')"
+N_TRIALS   = 60               # Optuna trials; each = n_folds model fits (~1-3 s each)
+SAVE_TO_DRIVE = True"""),
+        md("## 2 · Install"),
+        code("""import os, subprocess, sys
+if not os.path.exists("/content/sentinel"):
+    subprocess.run(["git", "clone", "--depth", "1", "--branch", BRANCH, REPO_URL, "/content/sentinel"], check=True)
+%cd /content/sentinel
+!pip -q install -e ".[dev]"
+sys.path.insert(0, "/content/sentinel")"""),
+        md("## 3 · Data"),
+        code("""from pathlib import Path
+import shutil, zipfile
+from sentinel import config as C
+
+if SAVE_TO_DRIVE or DATA_SOURCE == "drive_zip":
+    from google.colab import drive
+    drive.mount("/content/drive")
+    Path(DRIVE_DIR).mkdir(parents=True, exist_ok=True)
+
+C.ensure_dirs()
+if DATA_SOURCE == "drive_zip":
+    with zipfile.ZipFile(Path(DRIVE_DIR) / RAW_ZIP) as z:
+        z.extractall(C.RAW_DIR)
+elif DATA_SOURCE == "download":
+    from sentinel import fetch
+    fetch.fetch_all(skip_forecast=True)   # resumable; re-run this cell if Open-Meteo's hourly quota stops it
+
+need = ["daily_all.parquet", "climate_indices.parquet"]
+missing = [f for f in need if not (C.RAW_DIR / f).exists()]
+assert not missing, f"Missing raw files {missing}: pick another DATA_SOURCE"
+print("raw data OK:", sorted(p.name for p in C.RAW_DIR.iterdir())[:10])"""),
+        md("""## 4 · Configure the search
+Edit anything below: add feature sets, widen ranges, or restrict to one model type. New features must be
+created inside `outlook.build_panel` so they obey the leakage rules (and `tests/test_outlook_leakage.py`)."""),
+        code("""from sentinel import train, outlook
+cfg = train.load_config(Path("configs/outlook.yaml"))
+cfg["n_trials"] = N_TRIALS
+print("feature sets:", {k: len(v) for k, v in cfg["search"]["feature_sets"].items()})
+print("available extra features:", outlook.EXTRA_FEATURES)
+cfg["cv"]"""),
+        md("## 5 · Train, tune and verify"),
+        code("""card = train.train(cfg, promote=False)   # promotion is decided below, after you look at the evidence
+version = card["version"]
+card["model"]"""),
+        md("## 6 · Evaluation"),
+        code("""import pandas as pd, matplotlib.pyplot as plt
+t = card["test"]
+print(f"Test BSS vs climatology {t['bss_vs_climatology']:+.3f}  (90% CI {t['bss_90ci'][0]:+.3f} .. {t['bss_90ci'][1]:+.3f})")
+print(f"BSS vs persistence {t.get('bss_vs_persistence', float('nan')):+.3f} | ROC AUC {t['roc_auc']:.3f} | PR AUC {t['pr_auc']:.3f} (base rate {t['base_rate']:.2f})")
+print(f"ECE {t['ece']:.3f} | at threshold {t['threshold']}: POD {t['cat_pod']:.2f} FAR {t['cat_far']:.2f} CSI {t['cat_csi']:.2f} PSS {t['cat_pss']:.2f} HSS {t['cat_hss']:.2f}")
+print("CV Brier", round(card['cv']['brier'], 4), "vs climatology", round(card['cv']['brier_climatology'], 4))
+
+fig, ax = plt.subplots(1, 3, figsize=(15, 4))
+rel = pd.DataFrame(card["reliability"])
+ax[0].plot([0, 1], [0, 1], "--", color="grey"); ax[0].scatter(rel.mean_forecast, rel.observed_freq, s=rel.n / rel.n.max() * 300)
+ax[0].plot(rel.mean_forecast, rel.observed_freq); ax[0].set(title="Reliability", xlabel="forecast", ylabel="observed")
+rv = pd.DataFrame(card["relative_value"])
+ax[1].plot(rv.cost_loss, rv.value.clip(lower=-0.5)); ax[1].axhline(0, color="grey")
+ax[1].set(title="Relative economic value", xlabel="cost / loss", ylabel="value")
+bc = pd.DataFrame(card["by_county"]).sort_values("bss")
+ax[2].barh(bc.county, bc.bss, color=["tab:green" if b > 0 else "tab:gray" for b in bc.bss]); ax[2].axvline(0, color="k")
+ax[2].set(title="BSS by county")
+plt.tight_layout(); plt.show()
+pd.DataFrame(card["by_season"])"""),
+        md("## 7 · Compare with the default (inline) model"),
+        code("""mon, idx = train.load_inputs()
+base = outlook.run(mon, idx, n_boot=200, use_registry=False)["metrics"].set_index("county")
+pooled = base.loc["ALL (pooled)"]
+print(f"Inline default: BSS {pooled.bss_model_vs_clim:+.3f} (CI {pooled.bss_90ci_lo:+.3f}..{pooled.bss_90ci_hi:+.3f})")
+print(f"This run:       BSS {t['bss_vs_climatology']:+.3f} (CI {t['bss_90ci'][0]:+.3f}..{t['bss_90ci'][1]:+.3f})")"""),
+        md("""## 8 · Promote & export
+The gate (`model_registry.promotion_decision`) promotes only if the test BSS 90% CI lower bound is above 0, or
+if the model beats the currently active one on Brier score without worse calibration. Re-running many searches
+against the same test years slowly overfits them, so treat repeated "wins" with caution."""),
+        code("""from sentinel import model_registry as R
+ok, why = R.promotion_decision(R.load_card(version), R.active_card())
+print("gate:", ok, "-", why)
+if ok:
+    R.promote(version, why)
+
+bundle = shutil.make_archive(f"/content/outlook-{version}", "zip", R.models_dir() / "outlook" / version)
+if SAVE_TO_DRIVE:
+    shutil.copy(bundle, DRIVE_DIR); print("saved to", DRIVE_DIR)
+try:
+    from google.colab import files
+    files.download(bundle)
+except Exception as e:
+    print("download manually:", bundle, e)"""),
+        md("""## 9 · Use the model in the app
+On your computer, in the repo folder:
+
+```bash
+python -m sentinel.model_registry import outlook-<version>.zip
+python -m sentinel.model_registry promote <version>        # add --force to override the gate
+python run_all.py --offline                                 # outlook backtest + live outlook now use this config
+```
+
+With Docker: copy the zip into the repo, run the two registry commands via
+`docker compose run --rm api python -m sentinel.model_registry ...`, then
+`docker compose --profile pipeline run --rm pipeline python run_all.py --offline` and restart `api`.
+The Evidence page in the dashboard shows the active model card."""),
+    ]
+
+
 def main():
     out = ROOT / "notebooks"
     out.mkdir(exist_ok=True)
-    for name, cells in [("01_weather_behavior.ipynb", nb1()), ("02_forecasting.ipynb", nb2())]:
+    (out / "colab").mkdir(exist_ok=True)
+    for name, cells in [("01_weather_behavior.ipynb", nb1()), ("02_forecasting.ipynb", nb2()),
+                        ("colab/train_outlook.ipynb", colab())]:
         nb = nbf.v4.new_notebook()
         nb["cells"] = cells
         nb["metadata"]["kernelspec"] = {"name": "python3", "display_name": "Python 3", "language": "python"}
+        if name.startswith("colab/"):
+            nb["metadata"]["colab"] = {"provenance": [], "name": "train_outlook.ipynb"}
+            nb["metadata"]["accelerator"] = "None"
         nbf.write(nb, out / name)
         print("wrote", out / name)
 

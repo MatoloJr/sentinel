@@ -115,3 +115,61 @@ def deactivate() -> None:
     reg = read_registry()
     reg["active"] = None
     _write_registry(reg)
+
+
+def import_bundle(path: Path) -> str:
+    """Copy a model folder (or .zip of it) exported from Colab into models/outlook/<version>/."""
+    import shutil
+    import tempfile
+    import zipfile
+    path = Path(path)
+    tmp = None
+    if path.suffix == ".zip":
+        tmp = Path(tempfile.mkdtemp())
+        with zipfile.ZipFile(path) as z:
+            z.extractall(tmp)
+        cards = list(tmp.rglob("model_card.json"))
+        if len(cards) != 1:
+            raise ValueError("zip must contain exactly one model_card.json")
+        path = cards[0].parent
+    card = json.loads((path / "model_card.json").read_text())
+    dest = models_dir() / "outlook" / card["version"]
+    dest.mkdir(parents=True, exist_ok=True)
+    for f in ("model.joblib", "model_card.json"):
+        shutil.copy2(path / f, dest / f)
+    reg = read_registry()
+    if not any(h["version"] == card["version"] for h in reg["history"]):
+        reg["history"].append({"version": card["version"], "saved_utc": card.get("saved_utc"),
+                               "test_bss": card.get("test", {}).get("bss_vs_climatology"), "promoted": False})
+        _write_registry(reg)
+    if tmp:
+        shutil.rmtree(tmp, ignore_errors=True)
+    return card["version"]
+
+
+if __name__ == "__main__":
+    import argparse
+    ap = argparse.ArgumentParser(description="Outlook model registry: list | import <zip|dir> | promote <version> [--force] | deactivate")
+    ap.add_argument("cmd", choices=["list", "import", "promote", "deactivate"])
+    ap.add_argument("arg", nargs="?")
+    ap.add_argument("--force", action="store_true", help="promote even if the gate fails")
+    a = ap.parse_args()
+    if a.cmd == "list":
+        reg = read_registry()
+        print("active:", reg["active"])
+        for h in reg["history"]:
+            print(f"  {h['version']}  test BSS={h.get('test_bss')}  promoted={h.get('promoted')}")
+    elif a.cmd == "import":
+        print("imported", import_bundle(Path(a.arg)))
+    elif a.cmd == "promote":
+        card = load_card(a.arg)
+        if card is None:
+            raise SystemExit(f"unknown version {a.arg}")
+        ok, why = promotion_decision(card, active_card())
+        if not ok and not a.force:
+            raise SystemExit(f"gate failed: {why} (use --force to override)")
+        promote(a.arg, why if ok else f"forced: {why}")
+        print("active ->", a.arg, f"({why})")
+    else:
+        deactivate()
+        print("no active model; pipeline uses inline selection")
