@@ -104,11 +104,11 @@ export function Island() {
                   data-active={active}
                   aria-current={active ? "page" : undefined}
                   aria-label={n.label}
-                  className="relative z-10 flex shrink-0 flex-col items-center justify-center gap-0.5 rounded-full px-3 md:flex-row md:gap-1.5 md:px-3.5"
-                  style={{ minHeight: 48, minWidth: 52, textDecoration: "none", scrollSnapAlign: "center", color: active ? "var(--accent-ink)" : "inherit", opacity: active ? 1 : 0.8, transition: "color 200ms, opacity 200ms" }}
+                  className="relative z-10 flex shrink-0 flex-row items-center justify-center gap-1.5 rounded-full px-3 sm:flex-col sm:gap-0.5 sm:px-2.5 xl:flex-row xl:gap-1.5 xl:px-3.5"
+                  style={{ minHeight: 48, minWidth: 46, textDecoration: "none", scrollSnapAlign: "center", color: active ? "var(--accent-ink)" : "inherit", opacity: active ? 1 : 0.8, transition: "color 200ms, opacity 200ms" }}
                 >
                   <Icon size={19} aria-hidden />
-                  <span className="text-[0.64rem] font-semibold leading-none md:text-sm">{n.label}</span>
+                  <span className={`${active ? "text-xs" : "sr-only sm:not-sr-only"} font-semibold leading-none sm:text-[0.66rem] xl:text-sm`}>{n.label}</span>
                 </NavLink>
               );
             })}
@@ -119,17 +119,17 @@ export function Island() {
           onClick={() => setMode(mode === "manager" ? "public" : "manager")}
           aria-label={`Switch to ${mode === "manager" ? "public" : "manager"} view`}
           title={mode === "manager" ? "Manager view" : "Public view"}
-          className="flex shrink-0 flex-col items-center justify-center gap-0.5 rounded-full px-2.5 hover:bg-white/10 md:flex-row md:gap-1.5 md:px-3"
-          style={{ minHeight: 48, minWidth: 48 }}
+          className="flex shrink-0 flex-col items-center justify-center gap-0.5 rounded-full px-2 hover:bg-white/10 xl:flex-row xl:gap-1.5 xl:px-3"
+          style={{ minHeight: 48, minWidth: 46 }}
         >
           {mode === "manager" ? <UserRound size={19} aria-hidden /> : <Users size={19} aria-hidden />}
-          <span className="text-[0.64rem] font-semibold leading-none md:text-sm">{mode === "manager" ? "Manager" : "Public"}</span>
+          <span className="sr-only font-semibold leading-none sm:not-sr-only sm:text-[0.66rem] xl:text-sm">{mode === "manager" ? "Manager" : "Public"}</span>
         </button>
         <button
           onClick={toggleTheme}
           aria-label={`Switch to ${theme === "dark" ? "light" : "dark"} theme`}
           className="grid shrink-0 place-items-center rounded-full hover:bg-white/10"
-          style={{ minHeight: 48, minWidth: 48 }}
+          style={{ minHeight: 48, minWidth: 46 }}
         >
           {theme === "dark" ? <Sun size={19} /> : <Moon size={19} />}
         </button>

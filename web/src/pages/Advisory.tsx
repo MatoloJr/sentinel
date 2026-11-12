@@ -78,6 +78,8 @@ export function Advisory() {
   useEffect(() => {
     const q = params.get("q");
     if (q) setQuestion(q);
+    const id = params.get("run");
+    if (id) api.run(id).then(setRun).catch(() => undefined);
   }, [params]);
 
   const top = ins.data?.region.top_priorities ?? [];

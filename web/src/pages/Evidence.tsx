@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { ArrowUpRight, CircleCheck, CircleX } from "lucide-react";
-import { Disclaimer, Empty, ErrorState, PageSkeleton, Section, Stat } from "../components/ui";
+import { Disclaimer, Empty, ErrorState, PageSkeleton, RTable, Section, Stat } from "../components/ui";
 import { api, num, pct } from "../lib/api";
 
 const METRICS: [string, string, string][] = [
@@ -33,31 +33,23 @@ export function Evidence() {
       </header>
 
       <Section title="Do the indicators catch real disasters?">
-        <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
+        <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
           <Stat label="County-events matched" value={`${matched}/${ev.length}`} hint={pct(ev.length ? matched / ev.length : null)} tone="var(--accent)" />
           <Stat label="Documented events" value={val.data.reference_events.length} hint="IFRC / ReliefWeb / NDMA" />
         </div>
-        <div className="card scroll-x">
-          <table className="table">
-            <thead><tr><th>Event</th><th>County</th><th>Window</th><th>Result</th><th>Indicator</th><th>Source</th></tr></thead>
-            <tbody>
-              {ev.map((e, i) => (
-                <tr key={i}>
-                  <td className="num">{String(e.event)}</td>
-                  <td>{String(e.county)}</td>
-                  <td className="num text-sm">{String(e.window)}</td>
-                  <td>
-                    <span className="chip">
-                      {e.result === "matched" ? <CircleCheck size={14} aria-hidden /> : <CircleX size={14} aria-hidden />} {String(e.result)}
-                    </span>
-                  </td>
-                  <td className="text-sm">{String(e.indicator_detail)}</td>
-                  <td className="text-sm"><a href={String(e.url)} target="_blank" rel="noreferrer">{String(e.source)} <ArrowUpRight size={12} className="inline" /></a></td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+        <RTable
+          stack
+          rows={ev}
+          rowKey={(_, i) => String(i)}
+          cols={[
+            { key: "e", header: "Event", primary: true, cell: (e) => <span className="num">{String(e.event)} · {String(e.county)}</span> },
+            { key: "c", header: "County", cell: (e) => String(e.county), hideOnMobile: true },
+            { key: "w", header: "Window", className: "num text-sm", cell: (e) => String(e.window) },
+            { key: "r", header: "Result", cell: (e) => <span className="chip">{e.result === "matched" ? <CircleCheck size={14} aria-hidden /> : <CircleX size={14} aria-hidden />} {String(e.result)}</span> },
+            { key: "i", header: "Indicator", className: "text-sm", cell: (e) => String(e.indicator_detail) },
+            { key: "s", header: "Source", className: "text-sm", cell: (e) => <a href={String(e.url)} target="_blank" rel="noreferrer">{String(e.source)} <ArrowUpRight size={12} className="inline" /></a> },
+          ]}
+        />
       </Section>
 
       <Section title="Seasonal outlook model card">
@@ -69,7 +61,7 @@ export function Evidence() {
               <span className="chip">threshold {card.model.threshold}</span>
               {card.git_sha && <span className="chip num">git {card.git_sha}</span>}
             </div>
-            <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
+            <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
               <Stat label="Test BSS" value={num(card.test.bss_vs_climatology, 3)} hint={`90% CI [${num(card.test.bss_90ci?.[0], 3)}, ${num(card.test.bss_90ci?.[1], 3)}]`} />
               <Stat label="ROC AUC" value={num(card.test.roc_auc, 2)} />
               <Stat label="ECE" value={num(card.test.ece, 3)} />
@@ -89,7 +81,7 @@ export function Evidence() {
 
       <Section title="Advisory agent quality">
         {agent.data && agent.data.n_runs ? (
-          <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
+          <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
             <Stat label="Validator pass rate" value={pct(agent.data.validator_pass_rate)} hint={`${agent.data.n_runs} drafts`} />
             <Stat label="Citation coverage" value={pct(agent.data.citation_coverage)} hint="numeric sentences citing a tool" />
             <Stat label="Approval rate" value={pct(agent.data.approval_rate)} hint={`${agent.data.reviewed} reviewed`} />
@@ -101,16 +93,16 @@ export function Evidence() {
       </Section>
 
       <Section title="Which metrics, and why">
-        <div className="card scroll-x">
-          <table className="table">
-            <thead><tr><th>Metric</th><th>What it tells a county manager</th><th>Used for</th></tr></thead>
-            <tbody>
-              {METRICS.map(([m, d, u]) => (
-                <tr key={m}><td className="font-semibold">{m}</td><td className="text-sm">{d}</td><td className="text-sm muted">{u}</td></tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+        <RTable
+          stack
+          rows={METRICS}
+          rowKey={([m]) => m}
+          cols={[
+            { key: "m", header: "Metric", primary: true, className: "font-semibold", cell: ([m]) => m },
+            { key: "d", header: "What it tells a county manager", className: "text-sm", cell: ([, d]) => <span className="block text-left">{d}</span> },
+            { key: "u", header: "Used for", className: "text-sm muted", cell: ([, , u]) => u },
+          ]}
+        />
         <p className="subtle">Every metric is also broken down by county and by season (Mar–May long rains vs Oct–Dec short rains), because ENSO and the Indian Ocean Dipole mostly drive the short rains.</p>
       </Section>
       <Disclaimer text="Planning-support tool, not an official warning system." />

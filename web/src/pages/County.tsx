@@ -91,7 +91,7 @@ function CountyView({ name }: { name: string }) {
             <h1>{d.county}</h1>
           </div>
           <div className="no-print flex w-full flex-wrap gap-2 sm:w-auto">
-            <label className="flex min-w-0 flex-1 items-center gap-2 sm:flex-none">
+            <label className="flex w-full items-center gap-2 sm:w-auto">
               <GitCompare size={16} aria-hidden />
               <span className="sr-only">Compare with</span>
               <select className="input sm:w-auto" value={compare} onChange={(e) => setCompare(e.target.value)}>
@@ -151,7 +151,7 @@ function CountyView({ name }: { name: string }) {
         </div>
       </Section>
 
-      {mobile && <p className="subtle -mt-6">Bars: observed · dark line: normal · dashed: below-normal line · band: normal range.</p>}
+      {mobile && <p className="subtle -mt-6">Bars: observed Â· dark line: normal Â· dashed: below-normal line Â· band: normal range.</p>}
 
       <DroughtChart d={d} other={compare ? cmp.data : undefined} />
 

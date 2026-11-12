@@ -160,7 +160,7 @@ export interface Col<T> {
  * Responsive table: a real <table> from 640px up, stacked label/value cards on phones,
  * so nothing ever scrolls sideways.
  */
-export function RTable<T>({ cols, rows, rowKey, empty = "Nothing to show." }: { cols: Col<T>[]; rows: T[]; rowKey: (r: T, i: number) => string; empty?: ReactNode }) {
+export function RTable<T>({ cols, rows, rowKey, empty = "Nothing to show.", stack = false }: { cols: Col<T>[]; rows: T[]; rowKey: (r: T, i: number) => string; empty?: ReactNode; /** phone cards: label above value (for long text) */ stack?: boolean }) {
   if (!rows.length) return <Empty>{empty}</Empty>;
   const primary = cols.find((c) => c.primary) ?? cols[0];
   const rest = cols.filter((c) => c !== primary && !c.hideOnMobile);
@@ -182,14 +182,25 @@ export function RTable<T>({ cols, rows, rowKey, empty = "Nothing to show." }: { 
         {rows.map((r, i) => (
           <li key={rowKey(r, i)} className="card grid gap-2" style={{ padding: 14 }}>
             <div className="font-semibold">{primary.cell(r)}</div>
-            <dl className="grid grid-cols-[minmax(0,auto)_minmax(0,1fr)] gap-x-4 gap-y-1.5 text-sm">
-              {rest.map((c) => (
-                <div key={c.key} className="contents">
-                  <dt className="muted">{c.header}</dt>
-                  <dd className="num m-0 min-w-0 text-right break-words">{c.cell(r)}</dd>
-                </div>
-              ))}
-            </dl>
+            {stack ? (
+              <dl className="grid gap-2 text-sm">
+                {rest.map((c) => (
+                  <div key={c.key} className="grid gap-0.5">
+                    {c.header && <dt className="subtle font-semibold">{c.header}</dt>}
+                    <dd className="m-0 min-w-0 break-words">{c.cell(r)}</dd>
+                  </div>
+                ))}
+              </dl>
+            ) : (
+              <dl className="grid grid-cols-[minmax(0,auto)_minmax(0,1fr)] gap-x-4 gap-y-1.5 text-sm">
+                {rest.map((c) => (
+                  <div key={c.key} className="contents">
+                    <dt className="muted">{c.header}</dt>
+                    <dd className="num m-0 min-w-0 text-right break-words">{c.cell(r)}</dd>
+                  </div>
+                ))}
+              </dl>
+            )}
           </li>
         ))}
       </ul>

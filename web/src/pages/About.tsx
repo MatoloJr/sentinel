@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { Disclaimer, Section } from "../components/ui";
+import { Disclaimer, RTable, Section } from "../components/ui";
 
 const ROWS: [string, string, string][] = [
   ["Question it answers", "What will the weather be? (“40 mm on Thursday”)", "Is that unusual here, and what should we do? (“40 mm in 3 days is above Garissa's 1-in-100-day level: Flood Warning”)"],
@@ -22,16 +22,16 @@ export function About() {
           what is normal there, who is exposed and which preparations to start.
         </p>
       </header>
-      <div className="card scroll-x">
-        <table className="table">
-          <thead><tr><th /><th>Phone / TV forecast</th><th>Climate Sentinel</th></tr></thead>
-          <tbody>
-            {ROWS.map(([k, a, b]) => (
-              <tr key={k}><td className="font-semibold">{k}</td><td className="muted text-sm">{a}</td><td className="text-sm">{b}</td></tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+      <RTable
+        stack
+        rows={ROWS}
+        rowKey={([k]) => k}
+        cols={[
+          { key: "k", header: "", primary: true, className: "font-semibold", cell: ([k]) => k },
+          { key: "a", header: "Phone / TV", className: "muted text-sm", cell: ([, a]) => <span className="block text-left">{a}</span> },
+          { key: "b", header: "Climate Sentinel", className: "text-sm", cell: ([, , b]) => <span className="block text-left">{b}</span> },
+        ]}
+      />
       <Section title="Where the numbers come from">
         <ul className="card ml-0 grid list-none gap-2 text-sm">
           <li><b>Rainfall and temperature:</b> ERA5 reanalysis (ECMWF, via Open-Meteo) since 1991 at each county HQ point. A model estimate, not a rain gauge.</li>
