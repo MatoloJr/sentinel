@@ -231,7 +231,7 @@ export function NotificationBell() {
     const cards = [...(insights.data?.counties ?? [])].sort((a, b) => b.priority_score - a.priority_score);
     for (const c of cards)
       if (LEVEL_RANK[c.overall_level] >= 2)
-        out.push({ id: `lvl:${c.county}:${c.overall_level}:${c.headline}`, title: `${c.county} · ${c.overall_level}`, body: c.headline, level: c.overall_level, to: `/county/${encodeURIComponent(c.county)}`, icon: BellRing });
+        out.push({ id: `lvl:${c.county}:${c.overall_level}:${c.headline}`, title: c.county, body: c.headline, level: c.overall_level, to: `/county/${encodeURIComponent(c.county)}`, icon: BellRing });
     for (const c of cards)
       if (c.rising && LEVEL_RANK[c.overall_level] < 2)
         out.push({ id: `rise:${c.county}:${insights.data?.generated_for}`, title: `Risk rising in ${c.county}`, body: c.headline, level: c.overall_level, to: `/county/${encodeURIComponent(c.county)}`, icon: TrendingUp });

@@ -121,7 +121,7 @@ describe("Notifications (top right)", () => {
     const bell = await screen.findByRole("button", { name: /Notifications \(2 unread\)/ });
     fireEvent.click(bell);
     const dialog = screen.getByRole("dialog", { name: "Notifications" });
-    expect(within(dialog).getByText("Turkana · Warning")).toBeInTheDocument();
+    expect(within(dialog).getByText("Turkana")).toBeInTheDocument();
     expect(within(dialog).getByText("Advisory awaiting approval")).toBeInTheDocument();
     fireEvent.click(within(dialog).getByRole("button", { name: /Mark all read/ }));
     expect(screen.getByRole("button", { name: "Notifications" })).toBeInTheDocument();
