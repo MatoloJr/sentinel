@@ -1,0 +1,3 @@
+target_season,n_test,bss_model,bss_90ci,bss_persistence,model_f1,persistence_f1
+MAM (issued end Feb),126,0.049,"[-0.23, 0.25]",-0.041,0.477,0.286
+OND (issued end Sep),112,0.098,"[-0.04, 0.31]",0.012,0.377,0.316

@@ -34,27 +34,67 @@ WORLDPOP_URL = (
 )
 
 
+class RateLimitError(RuntimeError):
+    """Open-Meteo daily quota exhausted: retrying today is pointless."""
+
+
+def _rate_limit_wait(reason: str) -> float | None:
+    """Seconds to wait for an Open-Meteo 429, or None if the daily quota is gone.
+
+    Open-Meteo's free tier has minutely / hourly / daily limits, and the 429 body says
+    which one was hit. Short exponential backoff can never clear an hourly limit.
+    """
+    low = reason.lower()
+    if "daily" in low:
+        return None
+    if "hourly" in low:
+        now = dt.datetime.now()
+        nxt = (now + dt.timedelta(hours=1)).replace(minute=0, second=0, microsecond=0)
+        return (nxt - now).total_seconds() + 30
+    return 65.0  # minutely (or unspecified)
+
+
 def _get(url: str, params: dict | None = None, *, tries: int = 6, timeout: int = 120,
          stream: bool = False) -> requests.Response:
-    """GET with exponential backoff. Open-Meteo answers 429 when the free quota is hit."""
+    """GET with backoff. Network errors back off exponentially; Open-Meteo 429s wait
+    for the specific quota window (minute / hour) to reset and don't use up retries."""
     wait = 5.0
-    last = None
-    for attempt in range(tries):
+    last: object = None
+    attempt = 0
+    rate_waits = 0
+    while attempt < tries:
         try:
             r = requests.get(url, params=params, headers=UA, timeout=timeout, stream=stream)
-            if r.status_code == 429:
-                reason = r.text[:200]
-                print(f"  rate limited ({reason}); waiting {wait:.0f}s")
-                time.sleep(wait)
-                wait = min(wait * 2, 900)
-                continue
-            r.raise_for_status()
-            return r
         except requests.RequestException as e:  # network hiccup
             last = e
-            print(f"  attempt {attempt + 1} failed: {e}; retry in {wait:.0f}s")
+            attempt += 1
+            print(f"  attempt {attempt} failed: {e}; retry in {wait:.0f}s")
             time.sleep(wait)
             wait = min(wait * 2, 900)
+            continue
+        if r.status_code == 429:
+            reason = r.text[:200]
+            last = f"HTTP 429 {reason}"
+            pause = _rate_limit_wait(reason)
+            rate_waits += 1
+            if pause is None or rate_waits > 8:
+                raise RateLimitError(
+                    f"Open-Meteo quota exhausted ({reason}). Progress is cached; "
+                    "re-run `python run_all.py` later (tomorrow for the daily limit) to resume.")
+            until = (dt.datetime.now() + dt.timedelta(seconds=pause)).strftime("%H:%M")
+            print(f"  rate limited ({reason}); waiting {pause:.0f}s (until ~{until})")
+            time.sleep(pause)
+            continue
+        try:
+            r.raise_for_status()
+        except requests.HTTPError as e:
+            last = e
+            attempt += 1
+            print(f"  attempt {attempt} failed: {e}; retry in {wait:.0f}s")
+            time.sleep(wait)
+            wait = min(wait * 2, 900)
+            continue
+        return r
     raise RuntimeError(f"Could not download {url}: {last}")
 
 
@@ -106,10 +146,11 @@ def fetch_daily(force: bool = False) -> pd.DataFrame:
             d.insert(0, "county", c.name)
             d["grid_lat"], d["grid_lon"] = j.get("latitude"), j.get("longitude")
             parts.append(d)
-            time.sleep(1.5)  # be polite to the free API
-        df = pd.concat(parts, ignore_index=True).drop_duplicates(["county", "date"])
-        df.to_parquet(f, index=False)
-        frames.append(df)
+            # Save after every chunk so a quota stop never loses finished work.
+            df = pd.concat(parts, ignore_index=True).drop_duplicates(["county", "date"])
+            df.to_parquet(f, index=False)
+            time.sleep(_pace_seconds(s, e))
+        frames.append(pd.read_parquet(f))
     _access_log("open_meteo_era5", ARCHIVE_URL)
     daily = pd.concat(frames, ignore_index=True)
     daily = daily.rename(columns={
@@ -120,6 +161,17 @@ def fetch_daily(force: bool = False) -> pd.DataFrame:
     daily = daily.dropna(subset=["precip"])
     daily.to_parquet(C.RAW_DIR / "daily_all.parquet", index=False)
     return daily
+
+
+def _pace_seconds(start: str, end: str) -> float:
+    """Pause that keeps us under Open-Meteo's 600 weighted calls/minute.
+
+    A request costs ~ (days / 14) * (variables / 10) calls, so one 5-year, 5-variable
+    chunk is ~65 calls; we target ~400 calls/minute to leave headroom.
+    """
+    days = (pd.Timestamp(end) - pd.Timestamp(start)).days + 1
+    weight = max(1.0, days / 14) * max(1.0, len(DAILY_VARS) / 10)
+    return max(1.5, weight / 400 * 60)
 
 
 def _chunks(start: str, end: str, years: int):
@@ -139,7 +191,8 @@ def fetch_forecast() -> pd.DataFrame:
             "latitude": c.lat, "longitude": c.lon, "forecast_days": 7, "timezone": C.TIMEZONE,
             "daily": "precipitation_sum,wind_speed_10m_max,wind_gusts_10m_max,temperature_2m_max,apparent_temperature_max",
         }, tries=3, timeout=30)
-        d = pd.DataFrame(r.json()["daily"]).rename(columns={"time": "date"})
+        d = pd.DataFrame(r.json()["daily"]).rename(
+            columns={"time": "date", "precipitation_sum": "precip_sum"})
         d.insert(0, "county", c.name)
         rows.append(d)
     fc = pd.concat(rows, ignore_index=True)

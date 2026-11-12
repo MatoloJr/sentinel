@@ -1,0 +1,15 @@
+county,issued_end_of,target_months,prob_below_normal,model_raw_prob,basis,backtest_verdict,confidence,bss_backtest,below_normal_threshold_mm,normal_mm,oni_used,dmi_used,inputs_missing
+Busia,Oct 2026,Nov 2026 - Jan 2027,0.33,0.23,Climatology (model showed no skill in backtest),No skill - use climatology,low,-0.13,374.4,455.2,2.16,,dmi_lag
+Garissa,Oct 2026,Nov 2026 - Jan 2027,0.33,0.16,Climatology (model showed no skill in backtest),No skill - use climatology,low,-0.04,88.1,123.7,2.16,,dmi_lag
+Kilifi,Oct 2026,Nov 2026 - Jan 2027,0.33,0.24,Climatology (model showed no skill in backtest),No skill - use climatology,low,-0.01,119.9,170.5,2.16,,dmi_lag
+Kisumu,Oct 2026,Nov 2026 - Jan 2027,0.33,0.24,Climatology (model showed no skill in backtest),No skill - use climatology,low,-0.04,417.3,545.2,2.16,,dmi_lag
+Kwale,Oct 2026,Nov 2026 - Jan 2027,0.24,0.24,Model (gbm),Weak or uncertain skill,low,0.02,106.5,161.0,2.16,,dmi_lag
+Lamu,Oct 2026,Nov 2026 - Jan 2027,0.16,0.16,Model (gbm),Weak or uncertain skill,low,0.01,100.2,155.5,2.16,,dmi_lag
+Makueni,Oct 2026,Nov 2026 - Jan 2027,0.33,0.24,Climatology (model showed no skill in backtest),No skill - use climatology,low,-0.01,235.2,299.3,2.16,,dmi_lag
+Mandera,Oct 2026,Nov 2026 - Jan 2027,0.33,0.16,Climatology (model showed no skill in backtest),No skill - use climatology,low,-0.03,34.1,85.3,2.16,,dmi_lag
+Marsabit,Oct 2026,Nov 2026 - Jan 2027,0.33,0.24,Climatology (model showed no skill in backtest),No skill - use climatology,low,-0.01,90.9,139.0,2.16,,dmi_lag
+Mombasa,Oct 2026,Nov 2026 - Jan 2027,0.24,0.24,Model (gbm),Weak or uncertain skill,low,0.02,130.4,185.2,2.16,,dmi_lag
+Nairobi,Oct 2026,Nov 2026 - Jan 2027,0.33,0.23,Climatology (model showed no skill in backtest),No skill - use climatology,low,-0.1,104.3,161.5,2.16,,dmi_lag
+Tana River,Oct 2026,Nov 2026 - Jan 2027,0.16,0.16,Model (gbm),Weak or uncertain skill,low,0.04,86.6,130.3,2.16,,dmi_lag
+Turkana,Oct 2026,Nov 2026 - Jan 2027,0.33,0.23,Climatology (model showed no skill in backtest),No skill - use climatology,low,-0.12,41.5,89.2,2.16,,dmi_lag
+Wajir,Oct 2026,Nov 2026 - Jan 2027,0.16,0.16,Model (gbm),Weak or uncertain skill,low,0.03,65.4,119.9,2.16,,dmi_lag

@@ -1,0 +1,4 @@
+rank,date,counties_over_p99,wettest_counties
+1,2023-11-04,9,"Mandera (117 mm, 3.56x p99), Wajir (102 mm, 3.22x p99), Tana River (64 mm, 2.48x p99), Kilifi (117 mm, 2.32x p99)"
+2,1992-05-24,3,"Kwale (345 mm, 5.41x p99), Mombasa (234 mm, 4.73x p99), Kilifi (188 mm, 3.73x p99), Busia (36 mm, 0.55x p99)"
+3,2017-05-10,3,"Mombasa (288 mm, 5.83x p99), Kwale (283 mm, 4.44x p99), Kilifi (171 mm, 3.39x p99), Busia (34 mm, 0.53x p99)"

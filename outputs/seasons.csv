@@ -1,0 +1,15 @@
+county,annual_normal_mm,n_rainy_seasons,rainy_seasons,wettest_month,driest_month,regime
+Busia,2236.5,2,Mar-May (35% of annual); Oct-Nov (19% of annual),Apr,Feb,bimodal
+Garissa,227.1,2,Mar-Apr (24% of annual); Nov-Dec (48% of annual),Nov,Jul,bimodal
+Kilifi,756.4,2,Apr-May (37% of annual); Oct-Dec (28% of annual),May,Feb,bimodal
+Kisumu,1893.8,2,Mar-May (35% of annual); Oct-Dec (33% of annual),Apr,Feb,bimodal
+Kwale,944.5,2,Apr-Jun (47% of annual); Oct (9% of annual),May,Feb,bimodal
+Lamu,600.0,2,Apr-May (37% of annual); Oct-Dec (32% of annual),May,Feb,bimodal
+Makueni,660.6,2,Mar-Apr (32% of annual); Nov-Dec (39% of annual),Nov,Jul,bimodal
+Mandera,298.6,2,Apr-May (42% of annual); Oct-Nov (47% of annual),Apr,Jun,bimodal
+Marsabit,329.8,2,Mar-Apr (33% of annual); Oct-Dec (52% of annual),Nov,Sep,bimodal
+Mombasa,777.8,2,Apr-May (34% of annual); Oct-Dec (28% of annual),May,Feb,bimodal
+Nairobi,589.2,2,Mar-May (45% of annual); Nov (14% of annual),Apr,Jul,bimodal
+Tana River,326.5,2,Apr-May (30% of annual); Oct-Dec (46% of annual),Nov,Feb,bimodal
+Turkana,370.0,2,Mar-May (43% of annual); Oct-Nov (25% of annual),Apr,Feb,bimodal
+Wajir,289.8,2,Mar-Apr (34% of annual); Oct-Dec (52% of annual),Nov,Jul,bimodal

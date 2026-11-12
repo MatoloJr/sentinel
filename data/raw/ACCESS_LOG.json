@@ -1,0 +1,34 @@
+{
+  "geoboundaries_KEN_ADM1": {
+    "url": "https://github.com/wmgeolab/geoBoundaries/raw/9469f09/releaseData/gbOpen/KEN/ADM1/geoBoundaries-KEN-ADM1_simplified.geojson",
+    "accessed_utc": "2026-11-12T10:55:32+00:00"
+  },
+  "worldpop_2020_1km_unadj": {
+    "url": "https://data.worldpop.org/GIS/Population/Global_2000_2020_1km_UNadj/2020/KEN/ken_ppp_2020_1km_Aggregated_UNadj.tif",
+    "accessed_utc": "2026-11-12T10:55:42+00:00"
+  },
+  "noaa_cpc_oni": {
+    "url": "https://www.cpc.ncep.noaa.gov/data/indices/oni.ascii.txt",
+    "accessed_utc": "2026-11-12T10:55:46+00:00"
+  },
+  "noaa_psl_dmi": {
+    "url": "https://psl.noaa.gov/gcos_wgsp/Timeseries/Data/dmi.had.long.data",
+    "accessed_utc": "2026-11-12T10:55:46+00:00"
+  },
+  "ibtracs_SI": {
+    "url": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r01/access/csv/ibtracs.SI.list.v04r01.csv",
+    "accessed_utc": "2026-11-12T10:58:21+00:00"
+  },
+  "ibtracs_NI": {
+    "url": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r01/access/csv/ibtracs.NI.list.v04r01.csv",
+    "accessed_utc": "2026-11-12T10:58:46+00:00"
+  },
+  "open_meteo_era5": {
+    "url": "https://archive-api.open-meteo.com/v1/archive",
+    "accessed_utc": "2026-11-12T12:07:54+00:00"
+  },
+  "open_meteo_forecast": {
+    "url": "https://api.open-meteo.com/v1/forecast",
+    "accessed_utc": "2026-11-12T12:08:04+00:00"
+  }
+}

@@ -1,0 +1,15 @@
+county,tropical_storms_300km,storms_per_decade,any_system_300km,any_system_600km_context,closest_approach_km,seasons_covered,exposure_rank,storms_listed,exposure_class
+Kilifi,1,0.22,1,8,209.0,1981-2026,1,IALY (2024),Low
+Kwale,1,0.22,1,8,251.0,1981-2026,2,IALY (2024),Low
+Mombasa,1,0.22,1,8,238.0,1981-2026,3,IALY (2024),Low
+Tana River,1,0.22,1,7,144.0,1981-2026,4,IALY (2024),Low
+Lamu,1,0.22,1,5,73.0,1981-2026,5,IALY (2024),Low
+Garissa,1,0.22,1,4,77.0,1981-2026,6,IALY (2024),Low
+Makueni,0,0.0,0,4,,1981-2026,7,none,None recorded
+Mandera,0,0.0,0,3,,1981-2026,8,none,None recorded
+Wajir,0,0.0,0,2,,1981-2026,9,none,None recorded
+Marsabit,0,0.0,0,1,,1981-2026,10,none,None recorded
+Nairobi,0,0.0,0,1,,1981-2026,11,none,None recorded
+Busia,0,0.0,0,0,,1981-2026,12,none,None recorded
+Kisumu,0,0.0,0,0,,1981-2026,13,none,None recorded
+Turkana,0,0.0,0,0,,1981-2026,14,none,None recorded

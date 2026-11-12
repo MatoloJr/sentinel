@@ -9,6 +9,8 @@ from .indicators import heavy_level
 
 def forecast_watch(fc: pd.DataFrame, thr: pd.DataFrame, heat_thr: pd.Series | None = None) -> pd.DataFrame:
     rows = []
+    if "precip_sum" not in fc and "precipitation_sum" in fc:  # raw Open-Meteo column name
+        fc = fc.rename(columns={"precipitation_sum": "precip_sum"})
     for county, g in fc.groupby("county"):
         g = g.sort_values("date").reset_index(drop=True)
         r3 = g["precip_sum"].rolling(3, min_periods=3).sum()

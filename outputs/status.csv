@@ -1,0 +1,15 @@
+county,zone,drought_window_end,rain_3m_mm,normal_3m_mm,pct_of_normal,drought_level,observed_to,observed_max_3day_mm_last7d,observed_ratio_to_p99,observed_heavy_level,cyclone_storms_300km,cyclone_exposure_class,cyclone_rank,population_2020,outlook_prob_below,outlook_basis,forecast_max_3day_mm,forecast_heavy_level,forecast_exceeds_p99
+Turkana,Arid north,2026-10,21.0,60.7,35.0,Warning,2026-11-05,6.3,0.16,Normal,0,None recorded,14,1226408,0.33,Climatology (model showed no skill in backtest),34.8,Watch,False
+Marsabit,Arid north,2026-10,41.9,43.4,96.0,Normal,2026-11-05,16.6,0.53,Watch,0,None recorded,10,355053,0.33,Climatology (model showed no skill in backtest),29.8,Watch,False
+Mandera,Arid north-east,2026-10,67.5,74.6,91.0,Normal,2026-11-05,3.9,0.12,Normal,0,None recorded,8,2596580,0.33,Climatology (model showed no skill in backtest),21.8,Watch,False
+Wajir,Arid north-east,2026-10,56.9,39.9,143.0,Normal,2026-11-05,10.3,0.32,Normal,0,None recorded,9,1696642,0.16,Model (gbm),52.3,Warning,True
+Garissa,Arid north-east,2026-10,45.3,22.6,,Dry season (not assessed),2026-11-05,6.9,0.26,Normal,1,Low,6,1587261,0.33,Climatology (model showed no skill in backtest),18.7,Watch,False
+Tana River,Tana basin,2026-10,73.7,52.5,141.0,Normal,2026-11-05,14.9,0.58,Watch,1,Low,4,315754,0.16,Model (gbm),30.1,Warning,True
+Makueni,Semi-arid south-east,2026-10,69.6,53.9,129.0,Normal,2026-11-05,29.6,0.68,Watch,0,None recorded,7,1074120,0.33,Climatology (model showed no skill in backtest),30.0,Watch,False
+Nairobi,Central highlands,2026-10,33.8,77.4,44.0,Warning,2026-11-05,4.5,0.11,Normal,0,None recorded,11,4633706,0.33,Climatology (model showed no skill in backtest),37.9,Watch,False
+Kisumu,Lake Victoria basin,2026-10,348.3,400.2,87.0,Normal,2026-11-05,50.3,0.75,Watch,0,None recorded,13,1206586,0.33,Climatology (model showed no skill in backtest),35.4,Normal,False
+Busia,Lake Victoria basin,2026-10,319.5,568.5,56.0,Watch,2026-11-05,28.2,0.43,Normal,0,None recorded,12,941986,0.33,Climatology (model showed no skill in backtest),22.7,Normal,False
+Lamu,Coast,2026-10,128.5,105.6,122.0,Normal,2026-11-05,11.4,0.29,Normal,1,Low,5,89892,0.16,Model (gbm),19.5,Normal,False
+Kilifi,Coast,2026-10,184.4,141.1,131.0,Normal,2026-11-05,10.4,0.21,Normal,1,Low,1,1399141,0.33,Climatology (model showed no skill in backtest),14.7,Normal,False
+Mombasa,Coast,2026-10,190.9,146.7,130.0,Normal,2026-11-05,14.4,0.29,Normal,1,Low,3,1040263,0.24,Model (gbm),9.2,Normal,False
+Kwale,Coast,2026-10,259.8,198.2,131.0,Normal,2026-11-05,10.5,0.16,Normal,1,Low,2,788722,0.24,Model (gbm),15.5,Normal,False

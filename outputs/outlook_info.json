@@ -1,0 +1,53 @@
+{
+  "split": {
+    "test_start": "2018-01-01",
+    "last_month": "2026-10-01",
+    "last_complete_year": 2025
+  },
+  "selection": {
+    "chosen": "gbm",
+    "threshold": 0.34,
+    "candidates": {
+      "logistic": {
+        "brier": 0.21859803452926954,
+        "best_threshold": 0.34,
+        "best_f1": 0.5042016806722689
+      },
+      "gbm": {
+        "brier": 0.21654890453317685,
+        "best_threshold": 0.34,
+        "best_f1": 0.46942800788954636
+      }
+    },
+    "inner_train_end": "2013-01-01",
+    "n_inner_train": 3260,
+    "n_inner_valid": 723
+  },
+  "stats_window": {
+    "stats_from": "1991-01-01",
+    "stats_to": "2017-12-01",
+    "train_end_exclusive": "2018-01-01"
+  },
+  "n_train": 4010,
+  "n_test": 1295,
+  "features": [
+    "rain_z_1m",
+    "rain_z_3m",
+    "tmean_anom_3m",
+    "oni_lag",
+    "oni_change_3m",
+    "dmi_lag",
+    "target_month_sin",
+    "target_month_cos",
+    "log_clim_target_mm",
+    "zone"
+  ],
+  "train_issue_range": [
+    "1991-01-01",
+    "2017-09-01"
+  ],
+  "test_issue_range": [
+    "2017-12-01",
+    "2026-07-01"
+  ]
+}

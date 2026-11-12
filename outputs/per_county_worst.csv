@@ -1,0 +1,85 @@
+county,hazard,when,value
+Busia,drought,2015-02,37% of normal (3-month)
+Busia,drought,2026-09,46% of normal (3-month)
+Busia,drought,2006-01,48% of normal (3-month)
+Busia,heavy rain,1994-11-14,131 mm in 3 days
+Busia,heavy rain,2020-03-19,130 mm in 3 days
+Busia,heavy rain,1998-01-10,119 mm in 3 days
+Garissa,drought,2018-02,0% of normal (3-month)
+Garissa,drought,2012-03,1% of normal (3-month)
+Garissa,drought,1994-03,4% of normal (3-month)
+Garissa,heavy rain,2023-11-21,114 mm in 3 days
+Garissa,heavy rain,2019-11-26,102 mm in 3 days
+Garissa,heavy rain,1993-01-08,94 mm in 3 days
+Kilifi,drought,2012-03,25% of normal (3-month)
+Kilifi,drought,1992-03,29% of normal (3-month)
+Kilifi,drought,2022-03,30% of normal (3-month)
+Kilifi,heavy rain,2025-10-30,239 mm in 3 days
+Kilifi,heavy rain,1992-05-24,188 mm in 3 days
+Kilifi,heavy rain,2019-05-24,176 mm in 3 days
+Kisumu,drought,2015-02,32% of normal (3-month)
+Kisumu,drought,2012-03,42% of normal (3-month)
+Kisumu,drought,1998-12,42% of normal (3-month)
+Kisumu,heavy rain,1995-04-13,131 mm in 3 days
+Kisumu,heavy rain,1997-11-22,131 mm in 3 days
+Kisumu,heavy rain,2009-05-12,124 mm in 3 days
+Kwale,drought,2012-03,25% of normal (3-month)
+Kwale,drought,1997-02,28% of normal (3-month)
+Kwale,drought,1992-03,28% of normal (3-month)
+Kwale,heavy rain,1992-05-24,345 mm in 3 days
+Kwale,heavy rain,2017-05-10,283 mm in 3 days
+Kwale,heavy rain,2019-05-24,241 mm in 3 days
+Lamu,drought,2018-02,9% of normal (3-month)
+Lamu,drought,2006-02,23% of normal (3-month)
+Lamu,drought,2012-03,25% of normal (3-month)
+Lamu,heavy rain,2020-05-11,322 mm in 3 days
+Lamu,heavy rain,1995-05-27,131 mm in 3 days
+Lamu,heavy rain,2018-10-26,121 mm in 3 days
+Makueni,drought,2001-10,18% of normal (3-month)
+Makueni,drought,1997-02,19% of normal (3-month)
+Makueni,drought,2021-10,20% of normal (3-month)
+Makueni,heavy rain,2018-11-21,126 mm in 3 days
+Makueni,heavy rain,2018-03-03,105 mm in 3 days
+Makueni,heavy rain,2013-04-08,103 mm in 3 days
+Mandera,drought,2021-10,1% of normal (3-month)
+Mandera,drought,2011-01,1% of normal (3-month)
+Mandera,drought,1998-10,2% of normal (3-month)
+Mandera,heavy rain,2023-11-19,242 mm in 3 days
+Mandera,heavy rain,1997-10-28,171 mm in 3 days
+Mandera,heavy rain,1993-05-03,120 mm in 3 days
+Marsabit,drought,2012-03,3% of normal (3-month)
+Marsabit,drought,1998-10,5% of normal (3-month)
+Marsabit,drought,2016-10,6% of normal (3-month)
+Marsabit,heavy rain,2016-04-29,89 mm in 3 days
+Marsabit,heavy rain,2024-05-05,74 mm in 3 days
+Marsabit,heavy rain,2023-11-03,69 mm in 3 days
+Mombasa,drought,1997-02,28% of normal (3-month)
+Mombasa,drought,2022-03,30% of normal (3-month)
+Mombasa,drought,2012-03,32% of normal (3-month)
+Mombasa,heavy rain,2017-05-09,288 mm in 3 days
+Mombasa,heavy rain,1992-05-24,234 mm in 3 days
+Mombasa,heavy rain,2025-10-30,227 mm in 3 days
+Nairobi,drought,2004-08,12% of normal (3-month)
+Nairobi,drought,1997-02,13% of normal (3-month)
+Nairobi,drought,2009-03,16% of normal (3-month)
+Nairobi,heavy rain,2003-05-03,82 mm in 3 days
+Nairobi,heavy rain,2011-02-16,81 mm in 3 days
+Nairobi,heavy rain,2026-03-22,80 mm in 3 days
+Tana River,drought,2018-02,1% of normal (3-month)
+Tana River,drought,2012-03,9% of normal (3-month)
+Tana River,drought,2022-03,9% of normal (3-month)
+Tana River,heavy rain,1993-01-08,82 mm in 3 days
+Tana River,heavy rain,2007-05-15,77 mm in 3 days
+Tana River,heavy rain,2009-10-31,67 mm in 3 days
+Turkana,drought,2009-09,0% of normal (3-month)
+Turkana,drought,1993-09,0% of normal (3-month)
+Turkana,drought,2026-08,0% of normal (3-month)
+Turkana,heavy rain,2011-11-11,94 mm in 3 days
+Turkana,heavy rain,1997-04-27,86 mm in 3 days
+Turkana,heavy rain,1997-11-16,82 mm in 3 days
+Wajir,drought,2025-02,0% of normal (3-month)
+Wajir,drought,2012-03,1% of normal (3-month)
+Wajir,drought,2018-02,1% of normal (3-month)
+Wajir,heavy rain,2023-11-03,108 mm in 3 days
+Wajir,heavy rain,2017-11-12,98 mm in 3 days
+Wajir,heavy rain,1997-11-18,93 mm in 3 days
