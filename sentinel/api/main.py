@@ -1,6 +1,6 @@
 """Climate Sentinel HTTP API (FastAPI). Serves pipeline outputs, insights, the model card and the agent.
 
-    uvicorn sentinel.api.main:app --reload          # dev, http://localhost:8000/docs
+    uvicorn sentinel.api.main:app --reload          # dev, http://localhost:8000/api/docs
 """
 from __future__ import annotations
 
@@ -28,6 +28,7 @@ from ..agent.tools import resolve_district
 agent_core.load_env()
 
 app = FastAPI(title="Climate Sentinel Kenya API", version="2.0",
+              docs_url="/api/docs", redoc_url=None, openapi_url="/api/openapi.json",
               description="Drought, heavy-rain and cyclone early-warning support for 14 Kenyan counties. "
                           + C.OFFICIAL_WARNING_NOTE)
 app.add_middleware(

@@ -20,7 +20,7 @@ data, read the results, validate them honestly and write down what they mean**. 
 | 0:30-2:30 | `python run_all.py` (re-run if rate-limited; it resumes). Meanwhile read DATA.md / LIMITATIONS.md | A (others review code) |
 | 2:30 | **Checkpoint 1:** `outputs/` populated, dashboard opens with real data | A, D |
 | 2:30-5:00 | Execute notebook 01; sanity-check the seasons (should be bimodal; coast peaks Apr-Jun); WorldPop vs census within about 20% | B, A |
-| 2:30-5:00 | Get a Gemini/Groq key; run the agent on 2 counties; read every tool call | D |
+| 2:30-5:00 | Get a Gemini key; run the agent on 2 counties; read every tool call | D |
 | 5:00-7:00 | Validation: do 2020-22 drought / 2023 + 2024 floods match? Write *why* misses happen (upstream rain, ERA5 smoothing) | B |
 | 5:00-7:00 | Notebook 02 first read: which counties and seasons have skill? Note it, don't tune on the test set | C |
 | End of day 1 | **Checkpoint 2:** both notebooks executed on real data, committed | all |

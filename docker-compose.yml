@@ -1,6 +1,6 @@
 # Climate Sentinel Kenya - local / demo stack
 #   docker compose --profile pipeline run --rm pipeline   # build data + outputs (first run downloads; add --offline to reuse data/raw)
-#   docker compose up --build                              # API + web on http://localhost:8080
+#   docker compose up -d                                   # API + web on http://localhost:8080 (API docs at /api/docs)
 #   docker compose --profile train run --rm train          # tune + register the outlook model
 name: climate-sentinel
 
@@ -27,8 +27,9 @@ services:
   api:
     <<: *python
     restart: unless-stopped
-    ports:
-      - "8000:8000"
+    # Reached by `web` over the compose network. To call it directly, uncomment and pick a free port:
+    # ports:
+    #   - "127.0.0.1:${API_PORT:-8000}:8000"
 
   web:
     build: ./web
@@ -38,7 +39,7 @@ services:
       api:
         condition: service_healthy
     ports:
-      - "8080:80"
+      - "${WEB_PORT:-8080}:80"
 
   pipeline:
     <<: *python

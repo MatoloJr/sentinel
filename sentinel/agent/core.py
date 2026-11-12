@@ -220,7 +220,13 @@ def load_env(path: Path | None = None) -> None:
         line = line.strip()
         if line and not line.startswith("#") and "=" in line:
             k, v = line.split("=", 1)
-            os.environ.setdefault(k.strip(), v.strip().strip('"').strip("'"))
+            v = v.strip()
+            if v[:1] in ('"', "'") and v[:1] in v[1:]:          # quoted value: keep everything inside quotes
+                v = v[1:v.index(v[0], 1)]
+            else:                                                 # unquoted: drop an inline " # comment"
+                v = v.split(" #", 1)[0].split("\t#", 1)[0].strip()
+            if v:
+                os.environ.setdefault(k.strip(), v)
 
 
 def run_to_markdown(run: dict) -> str:
