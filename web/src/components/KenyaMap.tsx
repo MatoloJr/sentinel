@@ -4,16 +4,9 @@ import type { ExpressionSpecification } from "maplibre-gl";
 import { useMemo, useState, type ReactNode } from "react";
 import MapGL, { Layer, NavigationControl, Popup, Source, type MapLayerMouseEvent } from "react-map-gl/maplibre";
 import { cssVars, useTheme } from "../lib/theme";
+import type { MapLayerMode } from "../lib/mapModes";
 
-export type MapLayerMode = "priority" | "drought" | "observed" | "forecast" | "cyclone";
-
-export const LAYER_LABEL: Record<MapLayerMode, string> = {
-  priority: "Priority",
-  drought: "Drought",
-  observed: "Rain (last 7 days)",
-  forecast: "Rain (next 7 days)",
-  cyclone: "Cyclone exposure",
-};
+export type { MapLayerMode };
 
 const PROP: Record<Exclude<MapLayerMode, "priority" | "cyclone">, string> = {
   drought: "drought_level",
