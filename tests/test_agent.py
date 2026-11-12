@@ -107,3 +107,15 @@ def test_blocked_draft_cannot_be_approved(synth):
     assert run["status"] == "blocked"
     with pytest.raises(ValueError):
         approve(run["run_id"], "Someone")
+
+
+def test_load_env_strips_inline_comments(tmp_path, monkeypatch):
+    p = tmp_path / ".env"
+    p.write_text('A_KEY=abc123   # https://example.com/key\nB_KEY="x # y"\nC_KEY=\n# D_KEY=zzz\n')
+    for k in ("A_KEY", "B_KEY", "C_KEY", "D_KEY"):
+        monkeypatch.delenv(k, raising=False)
+    core.load_env(p)
+    import os
+    assert os.environ["A_KEY"] == "abc123"
+    assert os.environ["B_KEY"] == "x # y"
+    assert "C_KEY" not in os.environ and "D_KEY" not in os.environ

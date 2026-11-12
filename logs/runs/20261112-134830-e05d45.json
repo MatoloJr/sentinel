@@ -1,0 +1,74 @@
+{
+  "run_id": "20261112-134830-e05d45",
+  "started_utc": "2026-11-12T13:48:30+00:00",
+  "provider": "gemini",
+  "model": "gemini-3.5-flash",
+  "question": "Where will the next cyclone make landfall near Lamu?",
+  "tool_calls": [
+    {
+      "id": "T1",
+      "name": "get_cyclone_exposure",
+      "args": {
+        "district": "Lamu"
+      },
+      "result": {
+        "county": "Lamu",
+        "tropical_storms_300km": 1,
+        "storms_per_decade": 0.22,
+        "any_system_300km": 1,
+        "any_system_600km_context": 5,
+        "closest_approach_km": 73.0,
+        "seasons_covered": "1981-2026",
+        "exposure_rank": 5,
+        "storms_listed": "IALY (2024)",
+        "exposure_class": "Low",
+        "by_decade": [
+          {
+            "decade": "1981-1990",
+            "storms": 0,
+            "storms_per_season": 0.0
+          },
+          {
+            "decade": "1991-2000",
+            "storms": 0,
+            "storms_per_season": 0.0
+          },
+          {
+            "decade": "2001-2010",
+            "storms": 0,
+            "storms_per_season": 0.0
+          },
+          {
+            "decade": "2011-2020",
+            "storms": 0,
+            "storms_per_season": 0.0
+          },
+          {
+            "decade": "2021-2026",
+            "storms": 1,
+            "storms_per_season": 0.17
+          }
+        ],
+        "definition": "Distinct tropical storms (>= 34 kt) whose IBTrACS track passed within 300 km of the county boundary.",
+        "no_path_forecasts": "This tool does NOT predict cyclone paths, landfall or timing.",
+        "official_centres": "Kenya Meteorological Department (https://meteo.go.ke) issues national warnings; RSMC La R\u00e9union (M\u00e9t\u00e9o-France, https://meteofrance.re/fr/cyclone) is the WMO Regional Specialized Meteorological Centre for South-West Indian Ocean cyclones."
+      },
+      "at_utc": "2026-11-12T13:48:34+00:00",
+      "ms": 59
+    }
+  ],
+  "status": "approved",
+  "approval": {
+    "approved_by": "Smoke Test",
+    "approved_at_utc": "2026-11-12T13:48:46+00:00",
+    "note": ""
+  },
+  "answer_draft": "This tool cannot predict a cyclone's path, landfall, timing, or intensity [T1]. \n\nFor official cyclone track forecasts and warnings, please consult the Kenya Meteorological Department and RSMC La R\u00e9union [T1].",
+  "validation": {
+    "passed": true,
+    "issues": [],
+    "numbers_checked": 0
+  },
+  "advisory": "This tool cannot predict a cyclone's path, landfall, timing, or intensity [T1]. \n\nFor official cyclone track forecasts and warnings, please consult the Kenya Meteorological Department and RSMC La R\u00e9union [T1].\n\n---\n*Draft from Climate Sentinel, a planning-support tool, not an official warning system. Official warnings from the Kenya Meteorological Department (KMD) and the National Disaster Operations Centre take priority over this planning-support tool. For any live cyclone: Kenya Meteorological Department (https://meteo.go.ke) issues national warnings; RSMC La R\u00e9union (M\u00e9t\u00e9o-France, https://meteofrance.re/fr/cyclone) is the WMO Regional Specialized Meteorological Centre for South-West Indian Ocean cyclones.*",
+  "finished_utc": "2026-11-12T13:48:45+00:00"
+}

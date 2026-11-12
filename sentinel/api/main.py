@@ -366,6 +366,8 @@ if WEB_DIST.exists():
 
     @app.get("/{path:path}", include_in_schema=False)
     def spa(path: str):
+        if path == "api" or path.startswith("api/"):
+            raise HTTPException(404, "unknown API route")
         f = WEB_DIST / path
         if path and f.is_file() and WEB_DIST.resolve() in f.resolve().parents:
             return FileResponse(f)

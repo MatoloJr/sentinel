@@ -1,0 +1,386 @@
+{
+  "run_id": "20261112-164736-d872e2",
+  "started_utc": "2026-11-12T13:47:36+00:00",
+  "provider": "gemini",
+  "model": "gemini-3.5-flash",
+  "question": "Prepare an advisory for Turkana county.",
+  "tool_calls": [
+    {
+      "id": "T1",
+      "name": "get_climate_status",
+      "args": {
+        "district": "Turkana"
+      },
+      "result": {
+        "county": "Turkana",
+        "data_source": "ERA5 reanalysis via Open-Meteo (model estimate, not rain-gauge)",
+        "drought": {
+          "indicator": "3-month rainfall as % of 1991-2020 normal",
+          "window_end": "2026-10",
+          "rain_3m_mm": 21.0,
+          "normal_3m_mm": 60.7,
+          "pct_of_normal": 35.0,
+          "level": "Warning",
+          "playbook_level": "Warning",
+          "last_6_windows": [
+            {
+              "window_end": "2026-05",
+              "rain_3m_mm": 173.3,
+              "normal_3m_mm": 159.1,
+              "pct_of_normal": 109,
+              "level": "Normal"
+            },
+            {
+              "window_end": "2026-06",
+              "rain_3m_mm": 79.7,
+              "normal_3m_mm": 146.3,
+              "pct_of_normal": 54,
+              "level": "Watch"
+            },
+            {
+              "window_end": "2026-07",
+              "rain_3m_mm": 52.5,
+              "normal_3m_mm": 93.6,
+              "pct_of_normal": 56,
+              "level": "Watch"
+            },
+            {
+              "window_end": "2026-08",
+              "rain_3m_mm": 0.3,
+              "normal_3m_mm": 63.0,
+              "pct_of_normal": 0,
+              "level": "Emergency"
+            },
+            {
+              "window_end": "2026-09",
+              "rain_3m_mm": 0.3,
+              "normal_3m_mm": 50.2,
+              "pct_of_normal": 1,
+              "level": "Emergency"
+            },
+            {
+              "window_end": "2026-10",
+              "rain_3m_mm": 21.0,
+              "normal_3m_mm": 60.7,
+              "pct_of_normal": 35,
+              "level": "Warning"
+            }
+          ]
+        },
+        "heavy_rain_observed": {
+          "indicator": "3-day rainfall vs county 99th percentile",
+          "observed_to": "2026-11-05",
+          "max_3day_mm_last_7_days": 6.3,
+          "ratio_to_p99": 0.16,
+          "level": "Normal",
+          "playbook_level": null
+        }
+      },
+      "at_utc": "2026-11-12T13:47:40+00:00",
+      "ms": 188
+    },
+    {
+      "id": "T2",
+      "name": "get_forecast_watch",
+      "args": {
+        "district": "Turkana"
+      },
+      "result": {
+        "county": "Turkana",
+        "forecast_from": "2026-11-12",
+        "forecast_to": "2026-11-18",
+        "forecast_7day_total_mm": 42.3,
+        "max_3day_total_mm": 34.8,
+        "max_3day_window": "12 Nov - 14 Nov",
+        "p95_3day_mm": 19.7,
+        "p99_3day_mm": 38.4,
+        "p99.9_3day_mm": 65.7,
+        "heavy_rain_level": "Watch",
+        "exceeds_p99": false,
+        "max_gust_kmh": null,
+        "gale_gust_flag": null,
+        "fetched_utc": "2026-11-12T12:08+00:00",
+        "hot_days_forecast": 0,
+        "heat_threshold_c": 39.0,
+        "forecast_age_hours": 2,
+        "stale": false,
+        "source": "Open-Meteo forecast API (numerical weather model)",
+        "playbook_level": "Watch",
+        "note": "County-level model forecast. It cannot say exactly when or where rain falls at a specific farm or village."
+      },
+      "at_utc": "2026-11-12T13:47:40+00:00",
+      "ms": 19
+    },
+    {
+      "id": "T3",
+      "name": "get_seasonal_outlook",
+      "args": {
+        "district": "Turkana"
+      },
+      "result": {
+        "county": "Turkana",
+        "issued_end_of": "Oct 2026",
+        "target_months": "Nov 2026 - Jan 2027",
+        "prob_below_normal": 0.33,
+        "model_raw_prob": 0.23,
+        "basis": "Climatology (model showed no skill in backtest)",
+        "backtest_verdict": "No skill - use climatology",
+        "confidence": "low",
+        "bss_backtest": -0.12,
+        "below_normal_threshold_mm": 41.5,
+        "normal_mm": 89.2,
+        "oni_used": 2.16,
+        "dmi_used": null,
+        "inputs_missing": "dmi_lag",
+        "prob_below_normal_pct": 33,
+        "climatological_prob_pct": 33,
+        "meaning": "Probability that total rain over the target months falls in the driest third of historical totals for that season. Climatology (no information) is 33%."
+      },
+      "at_utc": "2026-11-12T13:47:40+00:00",
+      "ms": 13
+    },
+    {
+      "id": "T4",
+      "name": "get_population_exposure",
+      "args": {
+        "district": "Turkana"
+      },
+      "result": {
+        "source": "WorldPop 2020 1km UN-adjusted, summed inside county boundaries (estimate)",
+        "county": "Turkana",
+        "population_2020": 1226408,
+        "census_2019_check": 926976,
+        "region_people_by_level": {
+          "drought_level": [
+            {
+              "level": "Dry season (not assessed)",
+              "counties": "Garissa",
+              "people": 1587261
+            },
+            {
+              "level": "Normal",
+              "counties": "Kilifi, Kisumu, Kwale, Lamu, Makueni, Mandera, Marsabit, Mombasa, Tana River, Wajir",
+              "people": 10562754
+            },
+            {
+              "level": "Warning",
+              "counties": "Nairobi, Turkana",
+              "people": 5860114
+            },
+            {
+              "level": "Watch",
+              "counties": "Busia",
+              "people": 941986
+            }
+          ],
+          "observed_heavy_level": [
+            {
+              "level": "Normal",
+              "counties": "Busia, Garissa, Kilifi, Kwale, Lamu, Mandera, Mombasa, Nairobi, Turkana, Wajir",
+              "people": 16000602
+            },
+            {
+              "level": "Watch",
+              "counties": "Kisumu, Makueni, Marsabit, Tana River",
+              "people": 2951514
+            }
+          ],
+          "forecast_heavy_level": [
+            {
+              "level": "Normal",
+              "counties": "Busia, Kilifi, Kisumu, Kwale, Lamu, Mombasa",
+              "people": 5466590
+            },
+            {
+              "level": "Warning",
+              "counties": "Tana River, Wajir",
+              "people": 2012396
+            },
+            {
+              "level": "Watch",
+              "counties": "Garissa, Makueni, Mandera, Marsabit, Nairobi, Turkana",
+              "people": 11473129
+            }
+          ],
+          "cyclone_exposure_class": [
+            {
+              "level": "Low",
+              "counties": "Garissa, Kilifi, Kwale, Lamu, Mombasa, Tana River",
+              "people": 5221033
+            },
+            {
+              "level": "None recorded",
+              "counties": "Busia, Kisumu, Makueni, Mandera, Marsabit, Nairobi, Turkana, Wajir",
+              "people": 13731083
+            }
+          ]
+        }
+      },
+      "at_utc": "2026-11-12T13:47:40+00:00",
+      "ms": 43
+    },
+    {
+      "id": "T5",
+      "name": "get_insights",
+      "args": {
+        "district": "Turkana"
+      },
+      "result": {
+        "county": "Turkana",
+        "headline": "Drought Warning: 35% of normal rain over the 3 months to 2026-10 (21.0 mm vs 60.7 mm normal)",
+        "overall_level": "Warning",
+        "priority_score": 11.13,
+        "priority_rank": 2,
+        "drivers": [
+          {
+            "hazard": "drought",
+            "level": "Warning",
+            "text": "35% of normal rain over the 3 months to 2026-10 (21.0 mm vs 60.7 mm normal)",
+            "value": 35.0,
+            "unit": "% of normal"
+          },
+          {
+            "hazard": "flood",
+            "level": "Normal",
+            "text": "Wettest 3 days in the last week: 6.3 mm (16% of the county's 1-in-100-day level)",
+            "value": 6.3,
+            "unit": "mm / 3 days"
+          }
+        ],
+        "next": {
+          "forecast": {
+            "level": "Watch",
+            "max_3day_mm": 34.8,
+            "window": "12 Nov - 14 Nov",
+            "total_7day_mm": 42.3,
+            "p99_3day_mm": 38.4,
+            "gale_gusts": null,
+            "max_gust_kmh": null,
+            "hot_days": 0,
+            "fetched_utc": "2026-11-12T12:08+00:00"
+          },
+          "outlook": {
+            "target_months": "Nov 2026 - Jan 2027",
+            "prob_below_normal": 0.33,
+            "skilful": false,
+            "verdict": "No skill - use climatology",
+            "confidence": "low",
+            "model_raw_prob": 0.23,
+            "message": "No reliable signal for Nov 2026 - Jan 2027: the model did not beat climatology in testing, so plan for normal odds (33% chance of below-normal rain)."
+          }
+        },
+        "exposure": {
+          "population_2020": 1226408,
+          "share_of_region_pct": 6.5,
+          "people_at_watch_or_above": 1226408
+        }
+      },
+      "at_utc": "2026-11-12T13:47:40+00:00",
+      "ms": 6
+    },
+    {
+      "id": "T6",
+      "name": "get_playbook_actions",
+      "args": {
+        "hazard": "drought",
+        "level": "Warning"
+      },
+      "result": {
+        "hazard": "drought",
+        "level": "Warning",
+        "level_definition": "3-month rain 25-50% of normal (comparable to NDMA 'Alarm')",
+        "actions": [
+          {
+            "id": "DR-A1",
+            "action": "Repair and rehabilitate water facilities (e.g. boreholes)",
+            "citation": "Kenya Red Cross Society / IFRC DREF, Kenya: Drought - Early Action Protocol Summary (EAP2022KE02) (WASH)"
+          },
+          {
+            "id": "DR-A2",
+            "action": "Desilt water pans and repair earth dams",
+            "citation": "Kenya Red Cross Society / IFRC DREF, Kenya: Drought - Early Action Protocol Summary (EAP2022KE02) (WASH)"
+          },
+          {
+            "id": "DR-A3",
+            "action": "Install mass water storage tanks",
+            "citation": "Kenya Red Cross Society / IFRC DREF, Kenya: Drought - Early Action Protocol Summary (EAP2022KE02) (WASH)"
+          },
+          {
+            "id": "DR-A4",
+            "action": "Provide cash for WASH to targeted households",
+            "citation": "Kenya Red Cross Society / IFRC DREF, Kenya: Drought - Early Action Protocol Summary (EAP2022KE02) (WASH / Cash)"
+          },
+          {
+            "id": "DR-A5",
+            "action": "Provide fodder for priority livestock through commodity vouchers",
+            "citation": "Kenya Red Cross Society / IFRC DREF, Kenya: Drought - Early Action Protocol Summary (EAP2022KE02) (Livelihoods)"
+          },
+          {
+            "id": "DR-A6",
+            "action": "Procure and distribute drought-tolerant seeds before the next planting season",
+            "citation": "Kenya Red Cross Society / IFRC DREF, Kenya: Drought - Early Action Protocol Summary (EAP2022KE02) (Livelihoods)"
+          },
+          {
+            "id": "DR-A7",
+            "action": "Encourage early de-stocking and saving fodder for key animals",
+            "citation": "IFRC, Public awareness and public education for disaster risk reduction: key messages (PAPE), 2nd edition (Drought, p. 47)"
+          }
+        ]
+      },
+      "at_utc": "2026-11-12T13:47:46+00:00",
+      "ms": 6
+    },
+    {
+      "id": "T7",
+      "name": "get_playbook_actions",
+      "args": {
+        "level": "Watch",
+        "hazard": "flood"
+      },
+      "result": {
+        "hazard": "flood",
+        "level": "Watch",
+        "level_definition": "3-day rain (observed or forecast) at or above the county's 95th percentile",
+        "actions": [
+          {
+            "id": "FL-W1",
+            "action": "Disseminate targeted early warnings to at-risk communities through trained volunteers",
+            "citation": "Kenya Red Cross Society / IFRC DREF, Kenya: Floods - Early Action Protocol Summary (EAP2021KE01) (Early actions / DRR)"
+          },
+          {
+            "id": "FL-W2",
+            "action": "Place or check flood depth markers at crossing points (cash for work)",
+            "citation": "Kenya Red Cross Society / IFRC DREF, Kenya: Floods - Early Action Protocol Summary (EAP2021KE01) (Early actions)"
+          },
+          {
+            "id": "FL-W3",
+            "action": "Identify evacuation sites",
+            "citation": "Kenya Red Cross Society / IFRC DREF, Kenya: Floods - Early Action Protocol Summary (EAP2021KE01) (Physical evacuation)"
+          },
+          {
+            "id": "FL-W4",
+            "action": "Pre-position shelter and WASH relief items",
+            "citation": "Kenya Red Cross Society / IFRC DREF, Kenya: Floods - Early Action Protocol Summary (EAP2021KE01) (Early actions)"
+          },
+          {
+            "id": "FL-W5",
+            "action": "Advise households to store valuables above flood level and keep extra drinking water",
+            "citation": "IFRC, Public awareness and public education for disaster risk reduction: key messages (PAPE), 2nd edition (Floods, pp. 100, 102)"
+          }
+        ]
+      },
+      "at_utc": "2026-11-12T13:47:46+00:00",
+      "ms": 1
+    }
+  ],
+  "status": "draft",
+  "approval": null,
+  "answer_draft": "**What is happening**\nTurkana is at drought Warning level [T1], with 3-month rainfall at 35.0% [T1] of normal (21.0 mm [T1] vs 60.7 mm [T1] normal) to 2026-10 [T1]. Observed 3-day max rainfall reached 6.3 mm [T1].\n\n**What is likely next**\nWe cannot say exactly when or where rain will fall at a farm or village [T2]. From 2026-11-12 [T2] to 2026-11-18 [T2], total forecast rainfall is 42.3 mm [T2] with a max 3-day total of 34.8 mm [T2] (12 Nov - 14 Nov [T2]), placing heavy rain at Watch level [T2]. For Nov 2026 - Jan 2027 [T3], the probability of below-normal rain is 33% [T3] with low confidence [T3].\n\n**Who is exposed**\nTurkana has a population of 1226408 [T4], with 1226408 [T5] people at Watch level or above [T5], holding priority rank 2 [T5].\n\n**What to prepare**\nDrought (Warning):\n- DR-A1 [T6]: Repair and rehabilitate water facilities\n- DR-A2 [T6]: Desilt water pans and repair earth dams\n- DR-A3 [T6]: Install mass water storage tanks\n- DR-A4 [T6]: Provide cash for WASH\n- DR-A5 [T6]: Provide fodder for priority livestock\n- DR-A6 [T6]: Distribute drought-tolerant seeds\n- DR-A7 [T6]: Encourage early de-stocking\n\nFlood (Watch):\n- FL-W1 [T7]: Disseminate early warnings\n- FL-W2 [T7]: Place flood depth markers\n- FL-W3 [T7]: Identify evacuation sites\n- FL-W4 [T7]: Pre-position relief items\n- FL-W5 [T7]: Advise storing valuables above flood level",
+  "validation": {
+    "passed": true,
+    "issues": [],
+    "numbers_checked": 17
+  },
+  "advisory": "**What is happening**\nTurkana is at drought Warning level [T1], with 3-month rainfall at 35.0% [T1] of normal (21.0 mm [T1] vs 60.7 mm [T1] normal) to 2026-10 [T1]. Observed 3-day max rainfall reached 6.3 mm [T1].\n\n**What is likely next**\nWe cannot say exactly when or where rain will fall at a farm or village [T2]. From 2026-11-12 [T2] to 2026-11-18 [T2], total forecast rainfall is 42.3 mm [T2] with a max 3-day total of 34.8 mm [T2] (12 Nov - 14 Nov [T2]), placing heavy rain at Watch level [T2]. For Nov 2026 - Jan 2027 [T3], the probability of below-normal rain is 33% [T3] with low confidence [T3].\n\n**Who is exposed**\nTurkana has a population of 1226408 [T4], with 1226408 [T5] people at Watch level or above [T5], holding priority rank 2 [T5].\n\n**What to prepare**\nDrought (Warning):\n- DR-A1 [T6]: Repair and rehabilitate water facilities\n- DR-A2 [T6]: Desilt water pans and repair earth dams\n- DR-A3 [T6]: Install mass water storage tanks\n- DR-A4 [T6]: Provide cash for WASH\n- DR-A5 [T6]: Provide fodder for priority livestock\n- DR-A6 [T6]: Distribute drought-tolerant seeds\n- DR-A7 [T6]: Encourage early de-stocking\n\nFlood (Watch):\n- FL-W1 [T7]: Disseminate early warnings\n- FL-W2 [T7]: Place flood depth markers\n- FL-W3 [T7]: Identify evacuation sites\n- FL-W4 [T7]: Pre-position relief items\n- FL-W5 [T7]: Advise storing valuables above flood level\n\n---\n*Draft from Climate Sentinel, a planning-support tool, not an official warning system. Official warnings from the Kenya Meteorological Department (KMD) and the National Disaster Operations Centre take priority over this planning-support tool. For any live cyclone: Kenya Meteorological Department (https://meteo.go.ke) issues national warnings; RSMC La R\u00e9union (M\u00e9t\u00e9o-France, https://meteofrance.re/fr/cyclone) is the WMO Regional Specialized Meteorological Centre for South-West Indian Ocean cyclones.*",
+  "finished_utc": "2026-11-12T13:48:06+00:00"
+}

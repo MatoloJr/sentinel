@@ -16,7 +16,8 @@ from .tools import TOOL_SCHEMAS, call_tool, now_iso
 # fake-client tests provider-neutral while only Gemini is supported.
 GEMINI_BASE_URL = "https://generativelanguage.googleapis.com/v1beta/openai/"
 GEMINI_KEY_ENV = "GEMINI_API_KEY"
-GEMINI_DEFAULT_MODEL = "gemini-2.5-flash"
+GEMINI_DEFAULT_MODEL = "gemini-3.5-flash"  # 2.5-flash is closed to new keys; override with LLM_MODEL
+GEMINI_TIMEOUT_S = float(os.environ.get("LLM_TIMEOUT_S", "90"))
 
 SYSTEM_PROMPT = f"""You are Climate Sentinel, an early-warning assistant for county disaster managers in Kenya.
 You cover only these counties: {", ".join(C.COUNTY_NAMES)}.
@@ -155,7 +156,7 @@ class Agent:
                 raise RuntimeError(f"Set {GEMINI_KEY_ENV} (free key from https://aistudio.google.com/apikey) "
                                    "in your environment or .env file.")
             from openai import OpenAI
-            self.client = OpenAI(api_key=key, base_url=GEMINI_BASE_URL)
+            self.client = OpenAI(api_key=key, base_url=GEMINI_BASE_URL, timeout=GEMINI_TIMEOUT_S, max_retries=1)
 
     def ask(self, question: str) -> dict:
         run = {"run_id": time.strftime("%Y%m%d-%H%M%S") + "-" + uuid.uuid4().hex[:6],
@@ -171,10 +172,7 @@ class Agent:
             if not calls:
                 answer = msg.content or ""
                 break
-            messages.append({"role": "assistant", "content": msg.content or "",
-                             "tool_calls": [{"id": c.id, "type": "function",
-                                             "function": {"name": c.function.name, "arguments": c.function.arguments}}
-                                            for c in calls]})
+            messages.append(_assistant_turn(msg, calls))
             for c in calls:
                 tid = f"T{len(run['tool_calls']) + 1}"
                 try:
@@ -197,6 +195,20 @@ class Agent:
         run["finished_utc"] = now_iso()
         save_run(run)
         return run
+
+
+def _assistant_turn(msg, calls) -> dict:
+    """Echo the model's tool-call turn back verbatim. Gemini 3 attaches a thought signature
+    (extra_content) to each tool call and rejects the next request if it is dropped."""
+    if hasattr(msg, "model_dump"):
+        d = msg.model_dump(exclude_none=True)
+        d["role"] = "assistant"
+        d["content"] = d.get("content") or ""
+        return d
+    return {"role": "assistant", "content": msg.content or "",
+            "tool_calls": [{"id": c.id, "type": "function",
+                            "function": {"name": c.function.name, "arguments": c.function.arguments}}
+                           for c in calls]}
 
 
 def _with_retry(fn, tries: int = 4):
