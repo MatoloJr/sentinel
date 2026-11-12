@@ -7,6 +7,7 @@ import { Sheet } from "../components/Sheet";
 import { Disclaimer, ErrorState, LevelBadge, levelColor, PageSkeleton, Segmented, Skeleton, Stat } from "../components/ui";
 import { api, fmtPeople, LEVEL_RANK } from "../lib/api";
 import { store, useApp } from "../lib/state";
+import { useBreakpoint } from "../lib/useMedia";
 import { LAYER_LABEL, type MapLayerMode } from "../lib/mapModes";
 
 const KenyaMap = lazy(() => import("../components/KenyaMap").then((m) => ({ default: m.KenyaMap })));
@@ -33,6 +34,10 @@ function ManagerOverview() {
     store.set("cs.layer", l);
   };
   const [selected, setSelected] = useState<string | null>(null);
+  const { lg } = useBreakpoint();
+  const [pane, setPane] = useState<"map" | "list">("map");
+  const showMap = lg || pane === "map";
+  const showList = lg || pane === "list";
   const ins = useQuery({ queryKey: ["insights"], queryFn: api.insights });
   const geo = useQuery({ queryKey: ["geo"], queryFn: api.counties });
   const health = useQuery({ queryKey: ["health"], queryFn: api.health });
@@ -63,8 +68,17 @@ function ManagerOverview() {
         <Stat label="Risk rising" value={d.region.rising.length} hint={d.region.rising.slice(0, 3).join(", ") || "none"} />
       </div>
 
-      <div className="grid gap-4 lg:grid-cols-[1.35fr_1fr]">
-        <div className="card grid gap-3 p-3" style={{ padding: 12 }}>
+      {!lg && (
+        <Segmented
+          label="Show"
+          value={pane}
+          onChange={setPane}
+          options={[{ value: "map", label: "Map" }, { value: "list", label: `Needs attention (${d.counties.filter((c) => c.overall_level !== "Normal").length})` }]}
+        />
+      )}
+
+      <div className="grid gap-4 lg:grid-cols-[minmax(0,1.4fr)_minmax(0,1fr)]">
+        {showMap && <div className="card grid gap-3 p-3" style={{ padding: 12 }}>
           <div className="flex flex-wrap items-center justify-between gap-2">
             <Segmented
               label="Map layer"
@@ -73,7 +87,7 @@ function ManagerOverview() {
               options={(Object.keys(LAYER_LABEL) as MapLayerMode[]).map((k) => ({ value: k, label: LAYER_LABEL[k] }))}
             />
           </div>
-          <div className="overflow-hidden rounded-2xl" style={{ height: "min(62vh, 560px)", minHeight: 340 }}>
+          <div className="overflow-hidden rounded-2xl" style={{ height: "clamp(300px, 58dvh, 620px)" }}>
             {geo.data ? (
               <Suspense fallback={<Skeleton h="100%" />}>
                 <KenyaMap
@@ -108,11 +122,11 @@ function ManagerOverview() {
               </span>
             ))}
           </div>
-        </div>
+        </div>}
 
-        <div className="grid content-start gap-3">
+        {showList && <div className="grid content-start gap-3 lg:max-h-[calc(58dvh+130px)] lg:min-h-0 lg:overflow-hidden">
           <h2>Needs attention first</h2>
-          <ol className="grid gap-2" onMouseLeave={() => setHovered(null)}>
+          <ol className="grid gap-2 lg:overflow-y-auto lg:pr-1" onMouseLeave={() => setHovered(null)}>
             {d.counties.map((c) => (
               <li key={c.county}>
                 <button
@@ -143,7 +157,7 @@ function ManagerOverview() {
               </li>
             ))}
           </ol>
-        </div>
+        </div>}
       </div>
 
       <Disclaimer text={d.note} />
@@ -153,7 +167,7 @@ function ManagerOverview() {
           <div className="grid gap-4">
             <InsightPanel card={card} compact />
             <div className="flex flex-wrap gap-2">
-              <button className="btn btn-accent" onClick={() => navigate(`/county/${encodeURIComponent(card.county)}`)}>
+              <button className="btn btn-accent" onClick={() => navigate(`/county/${encodeURIComponent(card.county)}`, { viewTransition: true })}>
                 Open county dashboard <ArrowRight size={16} />
               </button>
               <Link className="btn" to={`/advisory?q=${encodeURIComponent(`Prepare an advisory for ${card.county} county.`)}`}>

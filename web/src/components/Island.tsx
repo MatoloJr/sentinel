@@ -1,13 +1,11 @@
-import { useQuery } from "@tanstack/react-query";
 import {
-  BellRing, ChevronDown, CloudRain, Command, Compass, Info, LayoutGrid, LoaderCircle, Map as MapIcon,
-  MessageSquareText, ShieldCheck, Tornado, Users,
+  CloudRain, Compass, FlaskConical, Info, LayoutGrid, Map as MapIcon, MessageSquareText, Moon, Sun, Tornado, UserRound, Users,
 } from "lucide-react";
-import { useEffect, useLayoutEffect, useRef, useState } from "react";
-import { NavLink, useLocation, useNavigate } from "react-router-dom";
-import { api, LEVEL_RANK } from "../lib/api";
+import { useLayoutEffect, useRef, useState } from "react";
+import { NavLink, useLocation } from "react-router-dom";
 import { useApp } from "../lib/state";
-import { LevelBadge } from "./ui";
+import { toggleTheme, useTheme } from "../lib/theme";
+import { useScrollingDown } from "../lib/useMedia";
 
 type Item = { to: string; label: string; icon: typeof MapIcon };
 
@@ -17,157 +15,82 @@ export const MANAGER_NAV: Item[] = [
   { to: "/outlook", label: "Outlook", icon: CloudRain },
   { to: "/cyclones", label: "Cyclones", icon: Tornado },
   { to: "/advisory", label: "Advisory", icon: MessageSquareText },
+  { to: "/evidence", label: "Evidence", icon: FlaskConical },
+  { to: "/about", label: "About", icon: Info },
 ];
 export const PUBLIC_NAV: Item[] = [
   { to: "/", label: "My area", icon: Compass },
   { to: "/county", label: "County", icon: LayoutGrid },
+  { to: "/outlook", label: "Outlook", icon: CloudRain },
   { to: "/cyclones", label: "Cyclones", icon: Tornado },
+  { to: "/evidence", label: "Evidence", icon: FlaskConical },
   { to: "/about", label: "Why this", icon: Info },
 ];
 
 const isActive = (to: string, path: string) => (to === "/" ? path === "/" : path.startsWith(to));
 
 /**
- * Dynamic island: a floating pill centred at the bottom. It hides on scroll-down, returns on
- * scroll-up, slides an indicator under the active destination and morphs open to show live
- * alerts, data freshness and the agent's drafting state.
+ * Bottom dynamic island: every destination plus the view (manager/public) and theme switches.
+ * Floats centred, hides while scrolling down, slides an indicator under the active item, and
+ * scrolls horizontally (with edge fades) when a phone is too narrow to show everything.
  */
 export function Island() {
-  const { mode, setMode, agentBusy, setPaletteOpen } = useApp();
+  const { mode, setMode } = useApp();
+  const theme = useTheme();
   const nav = mode === "manager" ? MANAGER_NAV : PUBLIC_NAV;
   const { pathname } = useLocation();
-  const navigate = useNavigate();
-  const [open, setOpen] = useState(false);
-  const [hidden, setHidden] = useState(false);
-  const barRef = useRef<HTMLDivElement>(null);
+  const down = useScrollingDown();
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const trackRef = useRef<HTMLDivElement>(null);
   const [ind, setInd] = useState<{ x: number; w: number } | null>(null);
+  const [fade, setFade] = useState({ l: false, r: false });
 
-  const insights = useQuery({ queryKey: ["insights"], queryFn: api.insights, staleTime: 60_000 });
-  const health = useQuery({ queryKey: ["health"], queryFn: api.health, staleTime: 60_000 });
-  const alerts = (insights.data?.counties ?? [])
-    .filter((c) => LEVEL_RANK[c.overall_level] >= 2)
-    .sort((a, b) => b.priority_score - a.priority_score);
-  const watchN = insights.data?.region.counties_at_watch_or_above ?? 0;
-
-  // hide on scroll down, show on scroll up
-  useEffect(() => {
-    let last = window.scrollY;
-    const onScroll = () => {
-      const y = window.scrollY;
-      if (Math.abs(y - last) < 8) return;
-      setHidden(y > last && y > 120);
-      last = y;
-    };
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
-  useEffect(() => setOpen(false), [pathname]);
-  useEffect(() => {
-    if (agentBusy) setOpen(true);
-  }, [agentBusy]);
-
-  // sliding active indicator
   useLayoutEffect(() => {
-    const bar = barRef.current;
-    if (!bar) return;
+    const track = trackRef.current;
+    const sc = scrollRef.current;
+    if (!track || !sc) return;
     const measure = () => {
-      const el = bar.querySelector<HTMLElement>("[data-active='true']");
-      if (!el) return setInd(null);
-      setInd({ x: el.offsetLeft, w: el.offsetWidth });
+      const el = track.querySelector<HTMLElement>("[data-active='true']");
+      setInd(el ? { x: el.offsetLeft, w: el.offsetWidth } : null);
+      setFade({ l: sc.scrollLeft > 4, r: sc.scrollLeft + sc.clientWidth < sc.scrollWidth - 4 });
     };
     measure();
-    const ro = new ResizeObserver(measure);
-    ro.observe(bar);
-    return () => ro.disconnect();
+    track.querySelector<HTMLElement>("[data-active='true']")?.scrollIntoView?.({ inline: "center", block: "nearest", behavior: "smooth" });
+    const ro = typeof ResizeObserver !== "undefined" ? new ResizeObserver(measure) : null;
+    ro?.observe(sc);
+    sc.addEventListener("scroll", measure, { passive: true });
+    return () => {
+      ro?.disconnect();
+      sc.removeEventListener("scroll", measure);
+    };
   }, [pathname, mode]);
 
-  const lag = health.data?.data_lag_days;
-  const fresh = lag == null ? null : lag <= 10 ? "Fresh" : "Stale";
+  const mask =
+    fade.l || fade.r
+      ? `linear-gradient(to right, ${fade.l ? "transparent" : "#000"} 0, #000 28px, #000 calc(100% - 28px), ${fade.r ? "transparent" : "#000"} 100%)`
+      : undefined;
 
   return (
     <div
-      className="no-print fixed inset-x-0 z-40 flex justify-center px-3"
+      className="no-print pointer-events-none fixed inset-x-0 z-40 flex justify-center px-2 sm:px-3"
       style={{
-        bottom: "calc(12px + env(safe-area-inset-bottom))",
-        transform: hidden && !open ? "translateY(140%)" : "none",
-        transition: "transform 220ms ease-out",
-        pointerEvents: "none",
+        bottom: "calc(10px + env(safe-area-inset-bottom))",
+        transform: down ? "translateY(150%)" : "none",
+        transition: "transform 240ms ease-out",
       }}
     >
       <nav
         aria-label="Main"
-        className="w-full max-w-[640px]"
-        style={{
-          pointerEvents: "auto",
-          background: "color-mix(in oklab, var(--ink) 94%, var(--accent))",
-          color: "var(--surface)",
-          borderRadius: open ? 26 : 999,
-          boxShadow: "var(--shadow)",
-          transition: "border-radius 220ms ease-out",
-          overflow: "hidden",
-        }}
+        className="pointer-events-auto flex max-w-full items-center gap-1 rounded-full p-1.5"
+        style={{ background: "color-mix(in oklab, var(--ink) 94%, var(--accent))", color: "var(--surface)", boxShadow: "var(--shadow)" }}
       >
-        {/* expanding panel */}
-        <div
-          id="island-panel"
-          style={{
-            display: "grid",
-            gridTemplateRows: open ? "1fr" : "0fr",
-            transition: "grid-template-rows 240ms ease-out",
-          }}
-        >
-          <div style={{ overflow: "hidden" }}>
-            <div className="grid gap-3 px-4 pt-4 pb-2">
-              {agentBusy && (
-                <div className="flex items-center gap-2 text-sm font-semibold" role="status">
-                  <LoaderCircle size={16} className="animate-spin" aria-hidden />
-                  Gemini is drafting an advisory: calling tools, then the validator checks every number…
-                </div>
-              )}
-              <div className="flex flex-wrap items-center gap-2 text-sm">
-                <span className="chip" style={{ background: "rgb(255 255 255 / .1)", color: "inherit" }}>
-                  <ShieldCheck size={14} aria-hidden /> {fresh ?? "…"} data · ERA5 to {health.data?.daily_range?.[1] ?? "…"}
-                </span>
-                <span className="chip" style={{ background: "rgb(255 255 255 / .1)", color: "inherit" }}>
-                  <Users size={14} aria-hidden /> {watchN} of 14 counties at Watch+
-                </span>
-              </div>
-              {alerts.length > 0 ? (
-                <ul className="grid gap-1" aria-label="Counties at Warning or above">
-                  {alerts.map((c) => (
-                    <li key={c.county}>
-                      <button
-                        onClick={() => navigate(`/county/${encodeURIComponent(c.county)}`)}
-                        className="flex w-full items-center justify-between gap-3 rounded-xl px-2 py-2 text-left text-sm hover:bg-white/10"
-                        style={{ minHeight: 44 }}
-                      >
-                        <span className="min-w-0">
-                          <span className="font-semibold">{c.county}</span>{" "}
-                          <span className="opacity-75">{c.headline.split(":")[0]}</span>
-                        </span>
-                        <LevelBadge level={c.overall_level} size="sm" />
-                      </button>
-                    </li>
-                  ))}
-                </ul>
-              ) : (
-                <p className="text-sm opacity-75">No county is at Warning or above.</p>
-              )}
-            </div>
-          </div>
-        </div>
-
-        {/* the pill */}
-        <div className="flex items-center gap-1 p-1.5">
-          <div ref={barRef} className="relative flex flex-1 items-center justify-around">
+        <div ref={scrollRef} className="no-scrollbar min-w-0 overflow-x-auto" style={{ maskImage: mask, WebkitMaskImage: mask, scrollSnapType: "x proximity" }}>
+          <div ref={trackRef} className="relative flex items-center">
             {ind && (
               <span
                 aria-hidden
                 className="absolute top-0 bottom-0 rounded-full"
-                style={{
-                  left: 0, width: ind.w, transform: `translateX(${ind.x}px)`,
-                  background: "var(--accent)", transition: "transform 240ms ease-out, width 240ms ease-out",
-                }}
+                style={{ left: 0, width: ind.w, transform: `translateX(${ind.x}px)`, background: "var(--accent)", transition: "transform 260ms cubic-bezier(.2,.8,.2,1), width 260ms cubic-bezier(.2,.8,.2,1)" }}
               />
             )}
             {nav.map((n) => {
@@ -177,57 +100,39 @@ export function Island() {
                 <NavLink
                   key={n.to}
                   to={n.to}
+                  viewTransition
                   data-active={active}
                   aria-current={active ? "page" : undefined}
-                  className="relative z-10 flex flex-col items-center justify-center gap-0.5 rounded-full px-2.5 sm:flex-row sm:gap-1.5 sm:px-3.5"
-                  style={{
-                    minHeight: 44, minWidth: 44, textDecoration: "none",
-                    color: active ? "var(--accent-ink)" : "inherit", opacity: active ? 1 : 0.82,
-                    transition: "color 200ms",
-                  }}
+                  aria-label={n.label}
+                  className="relative z-10 flex shrink-0 flex-col items-center justify-center gap-0.5 rounded-full px-3 md:flex-row md:gap-1.5 md:px-3.5"
+                  style={{ minHeight: 48, minWidth: 52, textDecoration: "none", scrollSnapAlign: "center", color: active ? "var(--accent-ink)" : "inherit", opacity: active ? 1 : 0.8, transition: "color 200ms, opacity 200ms" }}
                 >
-                  <Icon size={18} aria-hidden />
-                  <span className="text-[0.66rem] font-semibold sm:text-sm">{n.label}</span>
+                  <Icon size={19} aria-hidden />
+                  <span className="text-[0.64rem] font-semibold leading-none md:text-sm">{n.label}</span>
                 </NavLink>
               );
             })}
           </div>
-          <span aria-hidden className="mx-0.5 h-7 w-px" style={{ background: "rgb(255 255 255 / .18)" }} />
-          <button
-            onClick={() => setOpen((o) => !o)}
-            aria-expanded={open}
-            aria-controls="island-panel"
-            aria-label={open ? "Hide alerts" : `Show alerts (${alerts.length} at Warning or above)`}
-            className="relative flex items-center justify-center rounded-full"
-            style={{ minHeight: 44, minWidth: 44 }}
-          >
-            {agentBusy ? <LoaderCircle size={18} className="animate-spin" /> : open ? <ChevronDown size={18} /> : <BellRing size={18} />}
-            {!open && alerts.length > 0 && (
-              <span
-                className="num absolute top-1 right-1 grid h-4 min-w-4 place-items-center rounded-full px-1 text-[10px] font-bold"
-                style={{ background: "var(--lvl-warning)", color: "#fff" }}
-              >
-                {alerts.length}
-              </span>
-            )}
-          </button>
-          <button
-            onClick={() => setMode(mode === "manager" ? "public" : "manager")}
-            className="hidden rounded-full px-3 text-xs font-bold sm:block"
-            style={{ minHeight: 44, background: "rgb(255 255 255 / .1)" }}
-            aria-label={`Switch to ${mode === "manager" ? "public" : "manager"} view`}
-          >
-            {mode === "manager" ? "Manager" : "Public"}
-          </button>
-          <button
-            onClick={() => setPaletteOpen(true)}
-            className="flex items-center justify-center rounded-full lg:hidden"
-            style={{ minHeight: 44, minWidth: 44 }}
-            aria-label="Open search and more"
-          >
-            <Command size={18} />
-          </button>
         </div>
+        <span aria-hidden className="mx-0.5 h-8 w-px shrink-0" style={{ background: "rgb(255 255 255 / .18)" }} />
+        <button
+          onClick={() => setMode(mode === "manager" ? "public" : "manager")}
+          aria-label={`Switch to ${mode === "manager" ? "public" : "manager"} view`}
+          title={mode === "manager" ? "Manager view" : "Public view"}
+          className="flex shrink-0 flex-col items-center justify-center gap-0.5 rounded-full px-2.5 hover:bg-white/10 md:flex-row md:gap-1.5 md:px-3"
+          style={{ minHeight: 48, minWidth: 48 }}
+        >
+          {mode === "manager" ? <UserRound size={19} aria-hidden /> : <Users size={19} aria-hidden />}
+          <span className="text-[0.64rem] font-semibold leading-none md:text-sm">{mode === "manager" ? "Manager" : "Public"}</span>
+        </button>
+        <button
+          onClick={toggleTheme}
+          aria-label={`Switch to ${theme === "dark" ? "light" : "dark"} theme`}
+          className="grid shrink-0 place-items-center rounded-full hover:bg-white/10"
+          style={{ minHeight: 48, minWidth: 48 }}
+        >
+          {theme === "dark" ? <Sun size={19} /> : <Moon size={19} />}
+        </button>
       </nav>
     </div>
   );

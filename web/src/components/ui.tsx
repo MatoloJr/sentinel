@@ -102,7 +102,12 @@ export function Segmented<T extends string>({
   value, options, onChange, label,
 }: { value: T; options: { value: T; label: string }[]; onChange: (v: T) => void; label: string }) {
   return (
-    <div role="radiogroup" aria-label={label} className="inline-flex flex-wrap gap-1 rounded-2xl p-1" style={{ background: "var(--surface-3)" }}>
+    <div
+      role="radiogroup"
+      aria-label={label}
+      className="no-scrollbar inline-flex max-w-full gap-1 overflow-x-auto rounded-2xl p-1"
+      style={{ background: "var(--surface-3)", scrollSnapType: "x proximity" }}
+    >
       {options.map((o) => {
         const on = o.value === value;
         return (
@@ -110,9 +115,13 @@ export function Segmented<T extends string>({
             key={o.value}
             role="radio"
             aria-checked={on}
-            onClick={() => onChange(o.value)}
-            className="rounded-xl px-3 text-sm font-semibold"
+            onClick={(e) => {
+              onChange(o.value);
+              e.currentTarget.scrollIntoView?.({ inline: "nearest", block: "nearest", behavior: "smooth" });
+            }}
+            className="shrink-0 whitespace-nowrap rounded-xl px-3 text-sm font-semibold"
             style={{
+              scrollSnapAlign: "start",
               minHeight: 36,
               background: on ? "var(--surface)" : "transparent",
               color: on ? "var(--ink)" : "var(--ink-2)",
@@ -133,5 +142,57 @@ export function Disclaimer({ text }: { text: string }) {
     <p className="subtle flex items-start gap-2">
       <TriangleAlert size={14} className="mt-1 shrink-0" aria-hidden /> {text}
     </p>
+  );
+}
+
+export interface Col<T> {
+  key: string;
+  header: ReactNode;
+  cell: (row: T) => ReactNode;
+  /** shown as the card title on phones */
+  primary?: boolean;
+  /** leave out of the phone card */
+  hideOnMobile?: boolean;
+  className?: string;
+}
+
+/**
+ * Responsive table: a real <table> from 640px up, stacked label/value cards on phones,
+ * so nothing ever scrolls sideways.
+ */
+export function RTable<T>({ cols, rows, rowKey, empty = "Nothing to show." }: { cols: Col<T>[]; rows: T[]; rowKey: (r: T, i: number) => string; empty?: ReactNode }) {
+  if (!rows.length) return <Empty>{empty}</Empty>;
+  const primary = cols.find((c) => c.primary) ?? cols[0];
+  const rest = cols.filter((c) => c !== primary && !c.hideOnMobile);
+  return (
+    <>
+      <div className="card scroll-x hidden sm:block">
+        <table className="table">
+          <thead>
+            <tr>{cols.map((c) => <th key={c.key}>{c.header}</th>)}</tr>
+          </thead>
+          <tbody>
+            {rows.map((r, i) => (
+              <tr key={rowKey(r, i)}>{cols.map((c) => <td key={c.key} className={c.className}>{c.cell(r)}</td>)}</tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+      <ul className="grid gap-2 sm:hidden">
+        {rows.map((r, i) => (
+          <li key={rowKey(r, i)} className="card grid gap-2" style={{ padding: 14 }}>
+            <div className="font-semibold">{primary.cell(r)}</div>
+            <dl className="grid grid-cols-[minmax(0,auto)_minmax(0,1fr)] gap-x-4 gap-y-1.5 text-sm">
+              {rest.map((c) => (
+                <div key={c.key} className="contents">
+                  <dt className="muted">{c.header}</dt>
+                  <dd className="num m-0 min-w-0 text-right break-words">{c.cell(r)}</dd>
+                </div>
+              ))}
+            </dl>
+          </li>
+        ))}
+      </ul>
+    </>
   );
 }

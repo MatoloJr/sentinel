@@ -12,6 +12,18 @@ function current(): "light" | "dark" {
   return window.matchMedia?.("(prefers-color-scheme: dark)").matches ? "dark" : "light";
 }
 
+export function toggleTheme() {
+  const next = current() === "dark" ? "light" : "dark";
+  const apply = () => {
+    document.documentElement.dataset.theme = next;
+  };
+  // cross-fade the whole page when the browser supports view transitions
+  const doc = document as Document & { startViewTransition?: (cb: () => void) => unknown };
+  if (doc.startViewTransition && !window.matchMedia?.("(prefers-reduced-motion: reduce)").matches) doc.startViewTransition(apply);
+  else apply();
+  store.set("cs.theme", next);
+}
+
 /** Effective theme, reacting to the OS setting and to the in-app toggle. */
 export function useTheme() {
   const [theme, setTheme] = useState(current);

@@ -1,7 +1,7 @@
 import { lazy, Suspense } from "react";
 import { Route, Routes } from "react-router-dom";
-import { CommandPalette, Fab } from "./components/CommandPalette";
 import { Island } from "./components/Island";
+import { TopBar } from "./components/TopBar";
 import { PageSkeleton } from "./components/ui";
 import { Overview } from "./pages/Overview";
 
@@ -16,7 +16,7 @@ function NotFound() {
   return (
     <div className="page grid gap-2">
       <h1>Page not found</h1>
-      <p className="muted">Use the bar below or press Ctrl+K to search.</p>
+      <p className="muted">Use the search at the top (Ctrl+K) or the bar at the bottom.</p>
     </div>
   );
 }
@@ -27,6 +27,7 @@ export default function App() {
       <a href="#main" className="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-50 btn">
         Skip to content
       </a>
+      <TopBar />
       <main id="main">
         <Suspense fallback={<PageSkeleton />}>
           <Routes>
@@ -43,8 +44,6 @@ export default function App() {
         </Suspense>
       </main>
       <Island />
-      <Fab />
-      <CommandPalette />
     </>
   );
 }

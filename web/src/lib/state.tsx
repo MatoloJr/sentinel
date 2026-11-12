@@ -5,8 +5,11 @@ export type Mode = "manager" | "public";
 interface AppState {
   mode: Mode;
   setMode: (m: Mode) => void;
-  paletteOpen: boolean;
-  setPaletteOpen: (o: boolean) => void;
+  /** universal search (top island) open / focused */
+  searchOpen: boolean;
+  setSearchOpen: (o: boolean) => void;
+  notificationsOpen: boolean;
+  setNotificationsOpen: (o: boolean) => void;
   agentBusy: boolean;
   setAgentBusy: (b: boolean) => void;
   hovered: string | null;
@@ -36,31 +39,44 @@ export const store = {
 
 export function AppProvider({ children }: { children: ReactNode }) {
   const [mode, setModeState] = useState<Mode>(() => store.get<Mode>("cs.mode", "manager"));
-  const [paletteOpen, setPaletteOpen] = useState(false);
+  const [searchOpen, setSearchOpenState] = useState(false);
+  const [notificationsOpen, setNotificationsOpenState] = useState(false);
   const [agentBusy, setAgentBusy] = useState(false);
   const [hovered, setHovered] = useState<string | null>(null);
   const setMode = useCallback((m: Mode) => {
     setModeState(m);
     store.set("cs.mode", m);
   }, []);
+  // only one top-level popover at a time
+  const setSearchOpen = useCallback((o: boolean) => {
+    setSearchOpenState(o);
+    if (o) setNotificationsOpenState(false);
+  }, []);
+  const setNotificationsOpen = useCallback((o: boolean) => {
+    setNotificationsOpenState(o);
+    if (o) setSearchOpenState(false);
+  }, []);
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       const t = e.target;
       const typing = t instanceof Element && !!t.closest("input, textarea, select, [contenteditable]");
-      if ((e.key === "k" && (e.metaKey || e.ctrlKey)) || (e.key === "/" && !typing)) {
+      if ((e.key.toLowerCase() === "k" && (e.metaKey || e.ctrlKey)) || (e.key === "/" && !typing)) {
         e.preventDefault();
-        setPaletteOpen(true);
+        setSearchOpen(true);
       }
-      if (e.key === "Escape") setPaletteOpen(false);
+      if (e.key === "Escape") {
+        setSearchOpenState(false);
+        setNotificationsOpenState(false);
+      }
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, []);
+  }, [setSearchOpen]);
 
   const value = useMemo(
-    () => ({ mode, setMode, paletteOpen, setPaletteOpen, agentBusy, setAgentBusy, hovered, setHovered }),
-    [mode, setMode, paletteOpen, agentBusy, hovered],
+    () => ({ mode, setMode, searchOpen, setSearchOpen, notificationsOpen, setNotificationsOpen, agentBusy, setAgentBusy, hovered, setHovered }),
+    [mode, setMode, searchOpen, setSearchOpen, notificationsOpen, setNotificationsOpen, agentBusy, hovered],
   );
   return <Ctx.Provider value={value}>{children}</Ctx.Provider>;
 }

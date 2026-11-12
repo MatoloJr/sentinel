@@ -19,15 +19,15 @@ export function Sheet({ open, onClose, title, children }: { open: boolean; onClo
   }, [open, onClose]);
   if (!open) return null;
   return (
-    <div className="fixed inset-0 z-50 flex items-end justify-center" style={{ background: "rgb(15 20 18 / .4)" }} onClick={onClose}>
+    <div className="fixed inset-0 z-[60] flex items-end justify-center md:items-center md:p-6" style={{ background: "rgb(15 20 18 / .4)" }} onClick={onClose}>
       <div
         ref={ref}
         tabIndex={-1}
         role="dialog"
         aria-modal="true"
         aria-label={typeof title === "string" ? title : "Details"}
-        className="rise w-full max-w-3xl overflow-y-auto rounded-t-[28px] outline-none"
-        style={{ background: "var(--surface-2)", maxHeight: "88dvh", boxShadow: "var(--shadow)", paddingBottom: "env(safe-area-inset-bottom)" }}
+        className="rise w-full max-w-3xl overflow-y-auto rounded-t-[28px] outline-none md:rounded-[28px]"
+        style={{ background: "var(--surface-2)", maxHeight: "min(90dvh, 900px)", boxShadow: "var(--shadow)", paddingBottom: "env(safe-area-inset-bottom)" }}
         onClick={(e) => e.stopPropagation()}
         onTouchStart={(e) => (startY.current = e.touches[0].clientY)}
         onTouchEnd={(e) => {

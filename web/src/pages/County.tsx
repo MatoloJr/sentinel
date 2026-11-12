@@ -1,16 +1,19 @@
 import { useQuery } from "@tanstack/react-query";
 import { ArrowLeft, GitCompare, MessageSquareText, Printer } from "lucide-react";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState, type CSSProperties } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import {
   Area, Bar, Brush, CartesianGrid, ComposedChart, Legend, Line, LineChart, ReferenceArea, ReferenceLine,
   ResponsiveContainer, Tooltip, XAxis, YAxis,
 } from "recharts";
 import { InsightPanel } from "../components/InsightPanel";
-import { Disclaimer, Empty, ErrorState, LevelBadge, levelColor, PageSkeleton, Section, Segmented } from "../components/ui";
+import { Disclaimer, Empty, ErrorState, LevelBadge, levelColor, PageSkeleton, RTable, Section, Segmented } from "../components/ui";
 import { api, COUNTIES, fmtInt, num, type CountyDetail } from "../lib/api";
 import { tooltipStyle, useChartColors } from "../lib/chartColors";
 import { store, useApp } from "../lib/state";
+import { useBreakpoint } from "../lib/useMedia";
+
+const box = (h: number, hsm: number) => ({ "--chart-h": `${h}px`, "--chart-h-sm": `${hsm}px` }) as CSSProperties;
 
 export function County() {
   const { name } = useParams();
@@ -56,6 +59,9 @@ function CountyView({ name }: { name: string }) {
   const { mode } = useApp();
   const navigate = useNavigate();
   const c = useChartColors();
+  const { mobile } = useBreakpoint();
+  const yW = mobile ? 40 : 60;
+  const fs = mobile ? 11 : 12;
   const [months, setMonths] = useState<(typeof RANGE)[number]["value"]>("60");
   const [compare, setCompare] = useState<string>("");
   const q = useQuery({ queryKey: ["county", name, months], queryFn: () => api.county(name, Number(months)), placeholderData: (p) => p });
@@ -84,11 +90,11 @@ function CountyView({ name }: { name: string }) {
             </p>
             <h1>{d.county}</h1>
           </div>
-          <div className="no-print flex flex-wrap gap-2">
-            <label className="flex items-center gap-2">
+          <div className="no-print flex w-full flex-wrap gap-2 sm:w-auto">
+            <label className="flex min-w-0 flex-1 items-center gap-2 sm:flex-none">
               <GitCompare size={16} aria-hidden />
               <span className="sr-only">Compare with</span>
-              <select className="input" style={{ width: "auto" }} value={compare} onChange={(e) => setCompare(e.target.value)}>
+              <select className="input sm:w-auto" value={compare} onChange={(e) => setCompare(e.target.value)}>
                 <option value="">Compare withâ€¦</option>
                 {COUNTIES.filter((x) => x !== d.county).map((x) => (
                   <option key={x}>{x}</option>
@@ -127,34 +133,36 @@ function CountyView({ name }: { name: string }) {
         title="Monthly rainfall vs normal"
         aside={<Segmented label="Time range" value={months} onChange={setMonths} options={RANGE.map((r) => ({ ...r }))} />}
       >
-        <div className="card" style={{ height: 340 }}>
+        <div className="card chart-box" style={box(340, 260)}>
           <ResponsiveContainer>
             <ComposedChart data={d.monthly} margin={{ top: 8, right: 8, left: -12, bottom: 0 }}>
               <CartesianGrid stroke={c.grid} vertical={false} />
-              <XAxis dataKey="date" stroke={c.ink3} fontSize={12} minTickGap={24} />
-              <YAxis stroke={c.ink3} fontSize={12} unit=" mm" width={64} />
+              <XAxis dataKey="date" stroke={c.ink3} fontSize={fs} minTickGap={mobile ? 36 : 24} />
+              <YAxis stroke={c.ink3} fontSize={fs} unit={mobile ? "" : " mm"} width={yW} />
               <Tooltip {...tooltipStyle(c)} formatter={(v: any) => `${num(Number(v), 1)} mm`} />
-              <Legend wrapperStyle={{ fontSize: 12 }} />
+              {!mobile && <Legend wrapperStyle={{ fontSize: 12 }} />}
               <Area dataKey="precip_p67" name="Normal range (upper third)" stroke="none" fill={c.accent} fillOpacity={0.12} isAnimationActive={false} />
               <Bar dataKey="precip" name="Observed" fill={c.accent} radius={[3, 3, 0, 0]} />
               <Line dataKey="precip_mean" name="Normal (1991â€“2020)" stroke={c.ink} dot={false} strokeWidth={2} />
               <Line dataKey="precip_p33" name="Below-normal line (driest third)" stroke={c.warning} dot={false} strokeDasharray="4 4" />
-              {d.monthly.length > 24 && <Brush dataKey="date" height={22} stroke={c.accent} fill={c.surface2} travellerWidth={8} />}
+              {!mobile && d.monthly.length > 24 && <Brush dataKey="date" height={22} stroke={c.accent} fill={c.surface2} travellerWidth={8} />}
             </ComposedChart>
           </ResponsiveContainer>
         </div>
       </Section>
 
+      {mobile && <p className="subtle -mt-6">Bars: observed · dark line: normal · dashed: below-normal line · band: normal range.</p>}
+
       <DroughtChart d={d} other={compare ? cmp.data : undefined} />
 
       <Section title="Last 90 days: 3-day rain vs the county's 1-in-100-day level">
         {d.daily_recent.length ? (
-          <div className="card" style={{ height: 260 }}>
+          <div className="card chart-box" style={box(260, 220)}>
             <ResponsiveContainer>
               <ComposedChart data={d.daily_recent} margin={{ top: 8, right: 8, left: -12, bottom: 0 }}>
                 <CartesianGrid stroke={c.grid} vertical={false} />
-                <XAxis dataKey="date" stroke={c.ink3} fontSize={12} minTickGap={30} />
-                <YAxis stroke={c.ink3} fontSize={12} unit=" mm" width={64} />
+                <XAxis dataKey="date" stroke={c.ink3} fontSize={fs} minTickGap={mobile ? 44 : 30} />
+                <YAxis stroke={c.ink3} fontSize={fs} unit={mobile ? "" : " mm"} width={yW} />
                 <Tooltip {...tooltipStyle(c)} formatter={(v: any) => `${num(Number(v), 1)} mm`} />
                 <Bar dataKey="precip" name="Daily rain" fill={c.ink3} />
                 <Line dataKey="rain_3d_mm" name="3-day total" stroke={c.accent} dot={false} strokeWidth={2} />
@@ -169,23 +177,16 @@ function CountyView({ name }: { name: string }) {
 
       <div className="grid gap-6 lg:grid-cols-2">
         <Section title="Long-term trends (Mannâ€“Kendall + Sen's slope)">
-          <div className="card scroll-x">
-            <table className="table">
-              <thead>
-                <tr><th>Variable</th><th>Change / decade</th><th>p-value</th><th>Significant</th></tr>
-              </thead>
-              <tbody>
-                {[...d.trends, ...d.extremes_trends].map((t, i) => (
-                  <tr key={i}>
-                    <td>{String(t.variable).replaceAll("_", " ")}</td>
-                    <td className="num">{num(t.sen_slope_per_decade as number, 2)} {String(t.unit ?? "")}</td>
-                    <td className="num">{num(t.p_value as number, 3)}</td>
-                    <td>{String(t.significant_5pct) === "true" ? "Yes" : "No"}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+          <RTable
+            rows={[...d.trends, ...d.extremes_trends]}
+            rowKey={(_, i) => String(i)}
+            cols={[
+              { key: "v", header: "Variable", primary: true, cell: (t) => String(t.variable).replaceAll("_", " ") },
+              { key: "s", header: "Change / decade", className: "num", cell: (t) => `${num(t.sen_slope_per_decade as number, 2)} ${String(t.unit ?? "")}` },
+              { key: "p", header: "p-value", className: "num", cell: (t) => num(t.p_value as number, 3) },
+              { key: "g", header: "Significant", cell: (t) => (String(t.significant_5pct) === "true" ? "Yes" : "No") },
+            ]}
+          />
         </Section>
         <Section title="Worst events on record">
           <div className="card grid gap-2">
@@ -232,13 +233,14 @@ function KeyVals({ rows }: { rows: [string, string][] }) {
 
 function DroughtChart({ d, other }: { d: CountyDetail; other?: CountyDetail }) {
   const c = useChartColors();
+  const { mobile } = useBreakpoint();
   const data = useMemo(() => {
     const o = new Map((other?.drought ?? []).map((r) => [r.date, r.pct_of_normal]));
     return d.drought.slice(-Math.max(d.monthly.length, 24)).map((r) => ({ date: r.date, pct: r.pct_of_normal, other: o.get(r.date) ?? null }));
   }, [d, other]);
   return (
     <Section title="Drought indicator: 3-month rain as % of normal">
-      <div className="card" style={{ height: 300 }}>
+      <div className="card chart-box" style={box(300, 240)}>
         <ResponsiveContainer>
           <LineChart data={data} margin={{ top: 8, right: 8, left: -12, bottom: 0 }}>
             <ReferenceArea y1={0} y2={25} fill={c.emergency} fillOpacity={0.14} />
@@ -246,10 +248,10 @@ function DroughtChart({ d, other }: { d: CountyDetail; other?: CountyDetail }) {
             <ReferenceArea y1={50} y2={75} fill={c.watch} fillOpacity={0.14} />
             <ReferenceLine y={100} stroke={c.ink3} strokeDasharray="3 3" label={{ value: "normal", fill: c.ink3, fontSize: 11, position: "insideTopRight" }} />
             <CartesianGrid stroke={c.grid} vertical={false} />
-            <XAxis dataKey="date" stroke={c.ink3} fontSize={12} minTickGap={24} />
-            <YAxis stroke={c.ink3} fontSize={12} unit="%" domain={[0, (max: number) => Math.min(300, Math.max(150, max))]} allowDataOverflow width={56} />
+            <XAxis dataKey="date" stroke={c.ink3} fontSize={mobile ? 11 : 12} minTickGap={mobile ? 36 : 24} />
+            <YAxis stroke={c.ink3} fontSize={mobile ? 11 : 12} unit="%" domain={[0, (max: number) => Math.min(300, Math.max(150, max))]} allowDataOverflow width={mobile ? 44 : 56} />
             <Tooltip {...tooltipStyle(c)} formatter={(v: any) => (v == null ? "dry season" : `${Math.round(Number(v))}%`)} />
-            <Legend wrapperStyle={{ fontSize: 12 }} />
+            {(other || !mobile) && <Legend wrapperStyle={{ fontSize: mobile ? 11 : 12 }} />}
             <Line dataKey="pct" name={d.county} stroke={c.accent} dot={false} strokeWidth={2} connectNulls={false} />
             {other && <Line dataKey="other" name={other.county} stroke={c.ink2} dot={false} strokeWidth={1.5} strokeDasharray="5 3" />}
           </LineChart>
@@ -272,22 +274,15 @@ function CompareTable({ a, b }: { a: CountyDetail; b: CountyDetail }) {
   ];
   return (
     <Section title={`${a.county} vs ${b.county}`}>
-      <div className="card scroll-x">
-        <table className="table">
-          <thead>
-            <tr><th /><th>{a.county}</th><th>{b.county}</th></tr>
-          </thead>
-          <tbody>
-            {rows.map(([k, f]) => (
-              <tr key={k}>
-                <td className="muted">{k}</td>
-                <td className="num">{f(a)}</td>
-                <td className="num">{f(b)}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+      <RTable
+        rows={rows}
+        rowKey={([k]) => k}
+        cols={[
+          { key: "k", header: "", primary: true, cell: ([k]) => k },
+          { key: "a", header: a.county, className: "num", cell: ([, f]) => f(a) },
+          { key: "b", header: b.county, className: "num", cell: ([, f]) => f(b) },
+        ]}
+      />
     </Section>
   );
 }
