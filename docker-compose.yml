@@ -1,0 +1,51 @@
+# Climate Sentinel Kenya - local / demo stack
+#   docker compose --profile pipeline run --rm pipeline   # build data + outputs (first run downloads; add --offline to reuse data/raw)
+#   docker compose up --build                              # API + web on http://localhost:8080
+#   docker compose --profile train run --rm train          # tune + register the outlook model
+name: climate-sentinel
+
+x-python: &python
+  build:
+    context: .
+    dockerfile: docker/api.Dockerfile
+  image: climate-sentinel-api:latest
+  env_file:
+    - path: .env
+      required: false
+  environment:
+    SENTINEL_DATA_DIR: /app/data
+    SENTINEL_OUT_DIR: /app/outputs
+    SENTINEL_LOG_DIR: /app/logs
+    SENTINEL_MODELS_DIR: /app/models
+  volumes:
+    - ./data:/app/data
+    - ./outputs:/app/outputs
+    - ./logs:/app/logs
+    - ./models:/app/models
+
+services:
+  api:
+    <<: *python
+    restart: unless-stopped
+    ports:
+      - "8000:8000"
+
+  web:
+    build: ./web
+    image: climate-sentinel-web:latest
+    restart: unless-stopped
+    depends_on:
+      api:
+        condition: service_healthy
+    ports:
+      - "8080:80"
+
+  pipeline:
+    <<: *python
+    profiles: ["pipeline"]
+    command: ["python", "run_all.py"]
+
+  train:
+    <<: *python
+    profiles: ["train"]
+    command: ["python", "-m", "sentinel.train", "--config", "configs/outlook.yaml"]
