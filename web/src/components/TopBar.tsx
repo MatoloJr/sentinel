@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import {
-  Bell, BellRing, CheckCheck, Clock, CornerDownLeft, FileClock, LoaderCircle, Search, ShieldCheck, TrendingUp, X,
+  Bell, BellRing, CheckCheck, Clock, CornerDownLeft, FileClock, LoaderCircle, Moon, Search, ShieldCheck, Sun, TrendingUp, X,
 } from "lucide-react";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
@@ -29,12 +29,12 @@ export function TopBar() {
   const hideSides = searchOpen && mobile;
   return (
     <header className="no-print pointer-events-none fixed inset-x-0 top-0 z-50" style={{ paddingTop: TOP }}>
-      <div className="relative mx-auto flex h-12 items-start justify-center px-3">
+      <div className={`relative mx-auto flex h-12 items-start px-3 ${mobile ? "justify-start" : "justify-center"}`}>
         <Link
           to="/"
           viewTransition
           aria-label="Climate Sentinel home"
-          className="pointer-events-auto absolute left-3 top-0 grid h-12 w-12 place-items-center rounded-full"
+          className="pointer-events-auto absolute left-3 top-0 hidden h-12 w-12 place-items-center rounded-full sm:grid"
           style={{ background: ISLAND_BG, color: "var(--surface)", boxShadow: "var(--shadow)", opacity: hideSides ? 0 : 1, transition: "opacity 150ms" }}
         >
           <svg viewBox="0 0 32 32" width="26" height="26" aria-hidden>
@@ -43,11 +43,32 @@ export function TopBar() {
           </svg>
         </Link>
         <SearchIsland />
-        <div className="pointer-events-auto absolute right-3 top-0" style={{ opacity: hideSides ? 0 : 1, transition: "opacity 150ms" }}>
+        <div
+          className="absolute right-3 top-0 flex items-center gap-2"
+          style={{ opacity: hideSides ? 0 : 1, pointerEvents: hideSides ? "none" : "auto", transition: "opacity 150ms" }}
+        >
+          <ThemeButton />
           <NotificationBell />
         </div>
       </div>
     </header>
+  );
+}
+
+// ------------------------------------------------------------------ theme switch (top right, left of the bell)
+function ThemeButton() {
+  const theme = useTheme();
+  const next = theme === "dark" ? "light" : "dark";
+  return (
+    <button
+      onClick={toggleTheme}
+      aria-label={`Switch to ${next} theme`}
+      title={`Switch to ${next} theme`}
+      className="grid h-12 w-12 place-items-center rounded-full"
+      style={{ background: ISLAND_BG, color: "var(--surface)", boxShadow: "var(--shadow)" }}
+    >
+      {theme === "dark" ? <Sun size={20} /> : <Moon size={20} />}
+    </button>
   );
 }
 
@@ -118,7 +139,10 @@ function SearchIsland() {
     else if (e.to) navigate(e.to, { viewTransition: true });
   };
 
-  const width = searchOpen ? (mobile ? "calc(100vw - 16px)" : "min(640px, calc(100vw - 32px))") : "min(520px, calc(100vw - 144px))";
+  // right side holds theme + bell (2 x 48px + gap); phones hide the logo and left-align the search
+  const width = searchOpen
+    ? mobile ? "calc(100vw - 24px)" : "min(640px, calc(100vw - 32px))"
+    : mobile ? "calc(100vw - 144px)" : "min(520px, calc(100vw - 280px))";
   let lastGroup = "";
 
   return (

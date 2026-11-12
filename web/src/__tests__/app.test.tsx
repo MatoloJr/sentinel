@@ -3,7 +3,7 @@ import { fireEvent, render, screen, waitFor, within } from "@testing-library/rea
 import { MemoryRouter, Route, Routes, useLocation } from "react-router-dom";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { InsightPanel } from "../components/InsightPanel";
-import { Island } from "../components/Island";
+import { Island, MANAGER_NAV, OverflowFab } from "../components/Island";
 import { TopBar } from "../components/TopBar";
 import type { InsightCard } from "../lib/api";
 import { buildIndex, search } from "../lib/search";
@@ -68,7 +68,7 @@ describe("Bottom island", () => {
       expect(within(nav).getByRole("link", { name: label })).toBeInTheDocument();
     }
     expect(within(nav).getByRole("button", { name: /Switch to public view/ })).toBeInTheDocument();
-    expect(within(nav).getByRole("button", { name: /theme/ })).toBeInTheDocument();
+    expect(within(nav).queryByRole("button", { name: /theme/ })).toBeNull(); // theme lives top-right now
   });
 
   it("switches to the public view (no Advisory)", () => {
@@ -78,10 +78,39 @@ describe("Bottom island", () => {
     expect(screen.queryByRole("link", { name: "Advisory" })).toBeNull();
   });
 
-  it("toggles the theme", () => {
-    wrap(<Island />);
+});
+
+describe("Overflow floating button", () => {
+  const items = MANAGER_NAV.slice(4);
+  it("opens a menu with the pages that did not fit", () => {
+    wrap(<OverflowFab items={items} />);
+    const fab = screen.getByRole("button", { name: /More pages \(3\)/ });
+    fireEvent.click(fab);
+    expect(fab).toHaveAttribute("aria-expanded", "true");
+    const menu = screen.getByRole("menu", { name: "More pages" });
+    for (const n of items) expect(within(menu).getByRole("menuitem", { name: n.label })).toBeInTheDocument();
+    fireEvent.click(within(menu).getByRole("menuitem", { name: "Evidence" }));
+    expect(screen.getByTestId("where")).toHaveTextContent("/evidence");
+  });
+
+  it("moves with the keyboard and remembers its side", () => {
+    wrap(<OverflowFab items={items} />);
+    const fab = screen.getByRole("button", { name: /More pages/ });
+    fireEvent.keyDown(fab, { key: "ArrowLeft" });
+    expect(JSON.parse(localStorage.getItem("cs.fab")!).side).toBe("left");
+    fireEvent.keyDown(fab, { key: "ArrowRight" });
+    expect(JSON.parse(localStorage.getItem("cs.fab")!).side).toBe("right");
+  });
+});
+
+describe("Top-right controls", () => {
+  it("has the theme switch left of the notification bell", () => {
+    wrap(<TopBar />);
+    const theme = screen.getByRole("button", { name: /theme/ });
+    const bell = screen.getByRole("button", { name: /Notifications/ });
+    expect(theme.compareDocumentPosition(bell) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
     const before = document.documentElement.dataset.theme;
-    fireEvent.click(screen.getByRole("button", { name: /theme/ }));
+    fireEvent.click(theme);
     expect(document.documentElement.dataset.theme).not.toBe(before);
   });
 });
