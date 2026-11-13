@@ -17,6 +17,7 @@ const LEGEND: Record<MapLayerMode, [string, string][]> = {
   drought: [["Normal", "≥75% of normal"], ["Watch", "50–75%"], ["Warning", "25–50%"], ["Emergency", "<25%"]],
   observed: [["Normal", "<p95"], ["Watch", "≥p95"], ["Warning", "≥p99"], ["Emergency", "≥p99.9"]],
   forecast: [["Normal", "<p95"], ["Watch", "≥p95"], ["Warning", "≥p99"], ["Emergency", "≥p99.9"]],
+  compound: [["Normal", "none"], ["Watch", "≥p95 rain on dry land"], ["Warning", "≥p99"], ["Emergency", "≥p99.9"]],
   cyclone: [["Normal", "None recorded"], ["Watch", "Low"], ["Warning", "Moderate"], ["Emergency", "High"]],
 };
 
@@ -63,10 +64,29 @@ function ManagerOverview() {
 
       <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
         <Stat label="Counties at Warning+" value={d.region.counties_at_warning_or_above} hint="of 14 covered" tone={d.region.counties_at_warning_or_above ? "var(--lvl-warning)" : undefined} />
-        <Stat label="People at Warning+" value={fmtPeople(d.region.people_at_warning_or_above)} hint="WorldPop 2020" />
+        <Stat label="People at Warning+" value={fmtPeople(d.region.people_at_warning_or_above)} hint="KNBS 2019 census" />
         <Stat label="Counties at Watch+" value={d.region.counties_at_watch_or_above} hint={`${fmtPeople(d.region.people_at_watch_or_above)} people`} />
-        <Stat label="Risk rising" value={d.region.rising.length} hint={d.region.rising.slice(0, 3).join(", ") || "none"} />
+        <Stat label="Risk rising" value={d.region.rising.length} hint={d.region.rising.length ? d.region.rising.slice(0, 3).join(", ") + (d.region.rising.length > 3 ? ` +${d.region.rising.length - 3} more` : "") : "none"} />
       </div>
+
+      {(d.region.whiplash?.length ?? 0) > 0 && (
+        <button
+          className="card flex w-full flex-wrap items-center gap-x-3 gap-y-1 text-left"
+          style={{ padding: 12, borderLeft: "6px solid var(--lvl-warning)" }}
+          onClick={() => { setLayer("compound"); setSelected(d.region.whiplash![0]); }}
+        >
+          <b>Rain after drought:</b>
+          <span>
+            {d.region.whiplash!.map((n) => {
+              const c = d.counties.find((x) => x.county === n);
+              return `${n}${c?.compound_level ? ` (${c.compound_level})` : ""}`;
+            }).join(", ")}
+          </span>
+          <span className="muted text-sm">
+            Heavy rain is due on land that had a dry year. Drought indicators read "Normal" once it rains; flash-flood and livestock risk is highest now.
+          </span>
+        </button>
+      )}
 
       {!lg && (
         <Segmented
@@ -103,6 +123,7 @@ function ManagerOverview() {
                       <span>Overall: {p.overall_level} · priority #{p.priority_rank}</span>
                       <span>Drought: {p.drought_level}{p.pct_of_normal != null ? ` (${Math.round(p.pct_of_normal)}% of normal)` : ""}</span>
                       <span>Rain next 7 days: {p.forecast_heavy_level ?? "–"}</span>
+                      {p.compound_level && p.compound_level !== "Normal" && <span>Rain after drought: {p.compound_level}</span>}
                       <span className="subtle">Click for actions</span>
                     </div>
                   )}
@@ -150,7 +171,7 @@ function ManagerOverview() {
                     </span>
                     <span className="text-sm muted">{c.headline}</span>
                     <span className="subtle num">
-                      {fmtPeople(c.exposure.population_2020)} people · {c.actions.length} actions · score {c.priority_score}
+                      {fmtPeople(c.exposure.population)} people · {c.actions.length} actions · score {c.priority_score}
                     </span>
                   </span>
                 </button>

@@ -38,7 +38,8 @@ export function About() {
           <li><b>7-day forecast:</b> Open-Meteo numerical weather prediction, refreshed with each pipeline run.</li>
           <li><b>Climate drivers:</b> NOAA ONI (El Niño / La Niña) and the Indian Ocean Dipole index.</li>
           <li><b>Cyclones:</b> IBTrACS best tracks since 1981 (history only, never a path forecast).</li>
-          <li><b>People:</b> WorldPop 2020, checked against the 2019 census.</li>
+          <li><b>People:</b> KNBS 2019 census county totals. WorldPop 2020 is kept as a cross-check only (it over-counts the arid north-east by up to +199%).</li>
+          <li><b>Rain after drought:</b> heavy rain (observed or forecast) on land that had at most 75% of normal rain over the previous 12 months. Validated on documented 2019 and 2023 rain-after-drought disasters (see Evidence).</li>
           <li><b>Actions:</b> Kenya Red Cross / IFRC Early Action Protocols and IFRC public-awareness messages.</li>
         </ul>
       </Section>

@@ -9,3 +9,4 @@ logs/runs/*.tmp
 node_modules/
 web/dist/
 *.tsbuildinfo
+_export/ 

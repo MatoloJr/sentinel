@@ -203,8 +203,8 @@ function CountyView({ name }: { name: string }) {
             <hr style={{ borderColor: "var(--surface-3)" }} />
             <KeyVals
               rows={[
-                ["Population (2020)", fmtInt(d.population?.population_2020 as number)],
-                ["Census 2019 check", fmtInt(d.population?.census_2019 as number)],
+                ["People (KNBS 2019 census)", fmtInt((d.population?.population ?? d.population?.census_2019) as number)],
+                ["WorldPop 2020 cross-check", `${fmtInt(d.population?.worldpop_2020 as number)}${d.population?.worldpop_vs_census_pct != null ? ` (${Number(d.population.worldpop_vs_census_pct) > 0 ? "+" : ""}${Math.round(Number(d.population.worldpop_vs_census_pct))}%)` : ""}`],
                 ["Heavy rain p95 / p99 / p99.9 (3-day)", `${num(d.heavy_thresholds?.p95_3day_mm as number, 0)} / ${num(d.heavy_thresholds?.p99_3day_mm as number, 0)} / ${num(d.heavy_thresholds?.["p99.9_3day_mm"] as number, 0)} mm`],
                 ["Hot-day threshold (apparent Tmax p95)", d.heat_threshold_c != null ? `${d.heat_threshold_c.toFixed(1)} °C` : "–"],
                 ["Tropical storms within 300 km since 1981", String(d.cyclone?.tropical_storms_300km ?? "–")],
@@ -269,7 +269,8 @@ function CompareTable({ a, b }: { a: CountyDetail; b: CountyDetail }) {
     ["Heavy rain observed", (x) => String(x.status?.observed_heavy_level ?? "–")],
     ["Heavy rain forecast", (x) => String(x.status?.forecast_heavy_level ?? "–")],
     ["Seasonal outlook", (x) => (x.outlook?.prob_below_normal != null ? `${Math.round(100 * Number(x.outlook.prob_below_normal))}% below-normal (${x.outlook.backtest_verdict})` : "–")],
-    ["People", (x) => fmtInt(x.population?.population_2020 as number)],
+    ["People", (x) => fmtInt((x.population?.population ?? x.population?.census_2019) as number)],
+    ["Rain after drought", (x) => x.insight?.compound_level ?? "–"],
     ["Priority rank", (x) => String(x.insight?.priority_rank ?? "–")],
   ];
   return (

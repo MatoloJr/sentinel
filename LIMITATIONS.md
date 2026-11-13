@@ -11,8 +11,9 @@
 - **Floods are about rivers, not only local rain.** Tana River floods usually come from rain in the central highlands,
   hundreds of km upstream of Hola. Our local 3-day indicator can **miss riverine floods** (see `outputs/validation.csv`).
   Urban flash floods (Nairobi) depend on drainage, which we do not model.
-- **Population is a 2020 model estimate (WorldPop)**, checked against the 2019 census (`outputs/population.csv`). It does not
-  show who is most vulnerable, and mobile pastoralists may not be counted where they actually are.
+- **People are KNBS 2019 census county totals.** They are 7 years old and do not show who is most vulnerable. Mobile
+  pastoralists may not be where the census counted them. WorldPop 2020 is kept only as a cross-check (`outputs/population.csv`)
+  because it over-counts the arid north-east by +89% to +199%.
 
 ## Where the model is weak
 - **Seasonal outlook.** Only about 30 years of training and 8 test years (roughly 8 forecasts per county per target season).
@@ -21,6 +22,14 @@
   which are known to be hard to predict.
 - **Dry-season targets are not forecast** (normal under 30 mm), so outlooks pause for parts of the year in arid counties.
 - **7-day watch thresholds come from ERA5,** but forecasts come from other models with different rainfall statistics.
+- **Rain after drought (compound alert).** The 12-month look-back and the 75% threshold were fixed before validation, but
+  only 3 documented events (20 county-events) were available. It caught 5 at Warning and 3 at Watch. Most Oct-Nov 2019
+  counties were missed because ERA5 showed near-normal rain over the 12 months at the HQ point, while OCHA described a
+  national drought. It uses one point per county, so a dry hinterland with a wet HQ town is missed. It does not raise
+  the flood level by itself; it is a separate alert that adds to the priority score.
+- **Live cyclone check uses the IBTrACS ACTIVE list,** which is provisional and can lag by a day or more. With
+  `--offline`, or when the list is older than 3 days, the check is marked unavailable and no Watch is raised. KMD and
+  RSMC La Réunion remain the only sources for live storms.
 - **Cyclone exposure is historical.** Few storms come within 300 km of Kenya, so the counts are small and the decade trends are not
   statistically meaningful. The system never forecasts tracks.
 - **Climate-index lag.** If ONI or DMI publication is late, the last value is carried forward (up to 3 months) and flagged.

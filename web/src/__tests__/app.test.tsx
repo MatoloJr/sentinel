@@ -16,7 +16,7 @@ const card: InsightCard = {
   drivers: [{ hazard: "drought", level: "Warning", text: "35% of normal rain", value: 35, unit: "% of normal" }],
   trend: null, significant_extreme_trends: [],
   next: { forecast: null, outlook: null }, rising: true,
-  exposure: { population_2020: 1226408, share_of_region_pct: 6.5, people_at_watch_or_above: 1226408 },
+  exposure: { population: 926976, share_of_region_pct: 6.5, people_at_watch_or_above: 926976 },
   priority_score: 11.1, priority_rank: 2, priority_explained: "",
   actions: [
     { id: "DR-A1", hazard: "drought", level: "Warning", action: "Repair and rehabilitate water facilities", timeframe: "This week", source: "KRCS EAP" },

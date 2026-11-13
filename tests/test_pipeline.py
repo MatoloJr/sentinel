@@ -54,7 +54,9 @@ def test_cyclone_uses_300km(synth):
 
 def test_population_check_columns(synth):
     p = pd.read_csv(C.OUT_DIR / "population.csv")
-    assert {"population_2020", "census_2019", "worldpop_vs_census_pct"} <= set(p.columns)
+    assert {"population", "worldpop_2020", "census_2019", "worldpop_vs_census_pct"} <= set(p.columns)
+    # official census totals drive exposure and ranking; WorldPop is only a cross-check
+    assert (p["population"] == p["census_2019"]).all()
 
 
 def test_run_summary(synth):

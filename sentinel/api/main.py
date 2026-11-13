@@ -109,6 +109,8 @@ def counties_geojson():
             props["priority_rank"] = c["priority_rank"]
             props["cyclone_level"] = c["hazard_levels"]["cyclone"]
             props["flood_level"] = c["hazard_levels"]["flood"]
+            props["compound_level"] = c.get("compound_level", "Normal")
+            props["drought_hit_land"] = c.get("compound") is not None
     return gj
 
 
@@ -243,7 +245,21 @@ def validation():
             "reference_events": C.REFERENCE_EVENTS,
             "drought_class_frequency": sio.records(sio.read("drought_class_frequency.csv")),
             "worst_droughts": sio.records(sio.read("worst_droughts.csv")),
-            "worst_heavy_rain": sio.records(sio.read("worst_heavy_rain.csv"))}
+            "worst_heavy_rain": sio.records(sio.read("worst_heavy_rain.csv")),
+            "whiplash_events": C.WHIPLASH_EVENTS}
+
+
+@app.get("/api/whiplash")
+def whiplash():
+    """Rain after drought (drought-to-flood whiplash): validation, per-county history and episodes."""
+    return {"rule": {"antecedent_months": C.WHIPLASH_ANTECEDENT_MONTHS, "dry_pct": C.WHIPLASH_DRY_PCT,
+                     "rain_levels": C.HEAVY_PCTLS},
+            "documented_events": C.WHIPLASH_EVENTS,
+            "validation": sio.records(sio.read("whiplash_validation.csv")),
+            "stats": sio.read_json("whiplash_stats.json") or {},
+            "sensitivity": sio.records(sio.read("whiplash_sensitivity.csv")),
+            "summary": sio.records(sio.read("whiplash_summary.csv")),
+            "episodes": sio.records(sio.read("whiplash_episodes.csv"))}
 
 
 # ---------------------------------------------------------------- model card

@@ -15,7 +15,7 @@ def client(synth):
 @pytest.mark.parametrize("url", ["/api/health", "/api/meta", "/api/counties", "/api/status", "/api/insights",
                                  "/api/insights?audience=public", "/api/outlook", "/api/watch", "/api/cyclones",
                                  "/api/population", "/api/validation", "/api/model", "/api/agent/runs",
-                                 "/api/agent/metrics"])
+                                 "/api/agent/metrics", "/api/whiplash"])
 def test_endpoints_ok(client, url):
     r = client.get(url)
     assert r.status_code == 200, r.text
@@ -37,7 +37,12 @@ def test_unknown_county_404(client):
 def test_geojson_has_insight_props(client):
     gj = client.get("/api/counties").json()
     props = gj["features"][0]["properties"]
-    assert {"overall_level", "priority_rank", "drought_level"} <= set(props)
+    assert {"overall_level", "priority_rank", "drought_level", "compound_level"} <= set(props)
+
+
+def test_whiplash_endpoint_has_validation_and_blind_spot(client):
+    d = client.get("/api/whiplash").json()
+    assert d["validation"] and d["sensitivity"] and "blind_spot_drought_indicator_normal_pct" in d["stats"]
 
 
 def test_public_insights_are_plain(client):

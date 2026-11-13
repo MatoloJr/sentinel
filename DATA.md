@@ -11,8 +11,9 @@ Copy the access dates into the table below before submitting.
 | Dipole Mode Index (DMI, HadISST) | Outlook feature (Indian Ocean Dipole) | NOAA PSL · https://psl.noaa.gov/gcos_wgsp/Timeseries/Data/dmi.had.long.data | Public; HadISST © Met Office (non-commercial research use) | |
 | IBTrACS v04r01, South Indian + North Indian basins | Cyclone exposure | NOAA NCEI · https://www.ncei.noaa.gov/products/international-best-track-archive | US Gov public domain (cite Knapp et al. 2010) | |
 | Kenya ADM1 county boundaries | Map, zonal sums, 300 km buffers | geoBoundaries gbOpen KEN ADM1 · https://www.geoboundaries.org | CC BY 4.0 (see `data/raw/kenya_adm1_meta.json`) | |
-| WorldPop 2020 population, 1 km, UN-adjusted | People exposed per hazard level | https://data.worldpop.org (Global_2000_2020_1km_UNadj) | CC BY 4.0 | |
-| KNBS 2019 Kenya Population and Housing Census, Vol. I (county totals) | Sanity check of the WorldPop sums only | Kenya National Bureau of Statistics | Public | |
+| IBTrACS v04r01 ACTIVE list (provisional) | Live check: Cyclone Watch only when an active storm is within 1,000 km of a coastal county | NOAA NCEI (same as above) | US Gov public domain | refreshed on every online run |
+| WorldPop 2020 population, 1 km, UN-adjusted | Cross-check of the census totals only (over-counts the arid north-east by +89% to +199%) | https://data.worldpop.org (Global_2000_2020_1km_UNadj) | CC BY 4.0 | |
+| KNBS 2019 Kenya Population and Housing Census, Vol. I (county totals) | People exposed per hazard level and the priority ranking | Kenya National Bureau of Statistics | Public | |
 | Documented events (ReliefWeb, IFRC, NDMA) | Indicator validation | URLs listed in `sentinel/config.py` → `REFERENCE_EVENTS` and `outputs/validation.csv` | Public reports | |
 | Guidance documents (KRCS/IFRC EAPs, IFRC PAPE, WFP, FAO) | Action playbook | See `PLAYBOOK.md` sources | Public reports | |
 
