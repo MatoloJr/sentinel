@@ -1,4 +1,4 @@
 rank,window_end,window,regional_mean_pct_of_normal,counties_warning_or_worse,driest_counties
-1,2012-03,Jan 2012 - Mar 2012,22.1,12,"Wajir (1%), Garissa (1%), Marsabit (3%), Turkana (8%)"
-2,1997-02,Dec 1996 - Feb 1997,24.5,11,"Turkana (1%), Wajir (7%), Garissa (9%), Nairobi (13%)"
-3,2018-02,Dec 2017 - Feb 2018,29.2,10,"Garissa (0%), Wajir (1%), Tana River (1%), Lamu (9%)"
+1,2018-02,Dec 2017 - Feb 2018,18.4,5,"Garissa (0%), Tana River (1%), Marsabit (15%), Makueni (29%)"
+2,1997-02,Dec 1996 - Feb 1997,23.3,4,"Garissa (9%), Tana River (13%), Marsabit (14%), Makueni (19%)"
+3,2009-02,Dec 2008 - Feb 2009,27.6,4,"Garissa (8%), Tana River (12%), Marsabit (18%), Makueni (44%)"

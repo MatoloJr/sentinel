@@ -9,7 +9,7 @@
     "threshold": 0.34,
     "candidates": {
       "logistic": {
-        "brier": 0.21859803452926954,
+        "brier": 0.21859803452926965,
         "best_threshold": 0.34,
         "best_f1": 0.5042016806722689
       },

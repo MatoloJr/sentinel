@@ -1,9 +1,19 @@
 {
-  "built_utc": "2026-11-12T16:08:50+00:00",
+  "built_utc": "2026-11-13T06:35:47+00:00",
   "daily_range": [
     "1991-01-01",
     "2026-11-05"
   ],
+  "whiplash": {
+    "episodes": 282,
+    "episodes_warning_plus": 104,
+    "episodes_per_county_decade": 5.6,
+    "warning_plus_per_county_decade": 2.1,
+    "p99_rain_days": 1882,
+    "p99_rain_days_on_drought_land_pct": 17.0,
+    "blind_spot_drought_indicator_normal_pct": 65.0,
+    "blind_spot_drought_indicator_below_warning_pct": 89.0
+  },
   "outlook": {
     "split": {
       "test_start": "2018-01-01",
@@ -15,7 +25,7 @@
       "threshold": 0.34,
       "candidates": {
         "logistic": {
-          "brier": 0.21859803452926954,
+          "brier": 0.21859803452926965,
           "best_threshold": 0.34,
           "best_f1": 0.5042016806722689
         },
@@ -60,5 +70,6 @@
     ]
   },
   "forecast_fetched_utc": "2026-11-12T12:08+00:00",
+  "active_storm_check_utc": null,
   "latest_complete_month": "2026-10-01"
 }

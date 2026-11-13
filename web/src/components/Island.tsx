@@ -5,7 +5,6 @@ import {
 import { useCallback, useEffect, useLayoutEffect, useRef, useState, type CSSProperties } from "react";
 import { NavLink, useLocation } from "react-router-dom";
 import { store, useApp } from "../lib/state";
-import { useScrollingDown } from "../lib/useMedia";
 
 type Item = { to: string; label: string; icon: typeof MapIcon };
 
@@ -97,7 +96,6 @@ export function Island() {
   const { mode, setMode } = useApp();
   const nav = mode === "manager" ? MANAGER_NAV : PUBLIC_NAV;
   const { pathname } = useLocation();
-  const down = useScrollingDown();
   const trackRef = useRef<HTMLDivElement>(null);
   const [ind, setInd] = useState<{ x: number; w: number } | null>(null);
   const { measureRef, modeRef, visible } = useFit(nav, pathname);
@@ -123,7 +121,7 @@ export function Island() {
 
       <div
         className="no-print pointer-events-none fixed inset-x-0 z-40 flex justify-center px-2 sm:px-3"
-        style={{ bottom: "calc(10px + env(safe-area-inset-bottom))", transform: down ? "translateY(150%)" : "none", transition: "transform 240ms ease-out" }}
+        style={{ bottom: "calc(10px + env(safe-area-inset-bottom))" }}
       >
         <nav
           aria-label="Main"
