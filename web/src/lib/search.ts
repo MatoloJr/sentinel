@@ -23,12 +23,12 @@ export const TOWNS: Record<string, string> = {
   Lamu: "Lamu", Kilifi: "Kilifi", Mombasa: "Mombasa", Kwale: "Kwale",
 };
 
-const PAGES: { label: string; to: string; keywords: string; manager?: boolean }[] = [
+const PAGES: { label: string; to: string; keywords: string }[] = [
   { label: "Overview map", to: "/", keywords: "home map priority needs attention" },
   { label: "Counties", to: "/county", keywords: "county list choose" },
   { label: "Outlook & 7-day watch", to: "/outlook", keywords: "seasonal forecast rain next week probability skill" },
   { label: "Cyclone exposure", to: "/cyclones", keywords: "storm tracks coast ibtracs" },
-  { label: "Draft an advisory", to: "/advisory", keywords: "gemini agent ask approve", manager: true },
+  { label: "Draft an advisory", to: "/advisory", keywords: "gemini agent ask approve" },
   { label: "Evidence & model card", to: "/evidence", keywords: "validation metrics brier model card accuracy" },
   { label: "How is this different from the TV forecast?", to: "/about", keywords: "about phone tv why sources" },
 ];
@@ -59,7 +59,6 @@ export function buildIndex(opts: { mode: Mode; cards?: InsightCard[]; runs?: Run
     }
   }
   for (const p of PAGES) {
-    if (p.manager && mode !== "manager") continue;
     out.push({ id: `page:${p.to}`, group: "Pages", label: p.label, keywords: p.keywords, to: p.to });
   }
   if (mode === "manager") {

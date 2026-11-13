@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import {
-  Bell, BellRing, CheckCheck, Clock, CornerDownLeft, FileClock, LoaderCircle, Moon, Search, ShieldCheck, Sun, TrendingUp, X,
+  Bell, BellRing, CheckCheck, Clock, CornerDownLeft, FileClock, LoaderCircle, Moon, Search, ShieldCheck, Sun, TrendingUp, UserRound, Users, X,
 } from "lucide-react";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
@@ -47,11 +47,31 @@ export function TopBar() {
           className="absolute right-3 top-0 flex items-center gap-2"
           style={{ opacity: hideSides ? 0 : 1, pointerEvents: hideSides ? "none" : "auto", transition: "opacity 150ms" }}
         >
+          <ViewSwitch />
           <ThemeButton />
           <NotificationBell />
         </div>
       </div>
     </header>
+  );
+}
+
+// ------------------------------------------------------------------ view switch (manager <-> public)
+function ViewSwitch() {
+  const { mode, setMode } = useApp();
+  const next = mode === "manager" ? "public" : "manager";
+  const Icon = mode === "manager" ? UserRound : Users;
+  return (
+    <button
+      onClick={() => setMode(next)}
+      aria-label={`${mode === "manager" ? "Manager" : "Public"} view. Switch to ${next} view`}
+      title={`You are in the ${mode} view. Click for the ${next} view.`}
+      className="flex h-12 min-w-12 items-center justify-center gap-2 rounded-full px-3.5"
+      style={{ background: ISLAND_BG, color: "var(--surface)", boxShadow: "var(--shadow)" }}
+    >
+      <Icon size={20} aria-hidden />
+      <span className="hidden text-sm font-semibold lg:inline">{mode === "manager" ? "Manager" : "Public"}</span>
+    </button>
   );
 }
 
@@ -79,7 +99,7 @@ function SearchIsland() {
   const theme = useTheme();
   const navigate = useNavigate();
   const { pathname } = useLocation();
-  const { mobile } = useBreakpoint();
+  const { mobile, lg } = useBreakpoint();
   const [q, setQ] = useState("");
   const [sel, setSel] = useState(0);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -139,10 +159,11 @@ function SearchIsland() {
     else if (e.to) navigate(e.to, { viewTransition: true });
   };
 
-  // right side holds theme + bell (2 x 48px + gap); phones hide the logo and left-align the search
+  // right side holds view switch + theme + bell (3 x 48px, the switch grows a label on wide screens);
+  // phones hide the logo and left-align the search
   const width = searchOpen
     ? mobile ? "calc(100vw - 24px)" : "min(640px, calc(100vw - 32px))"
-    : mobile ? "calc(100vw - 144px)" : "min(520px, calc(100vw - 280px))";
+    : mobile ? "calc(100vw - 200px)" : lg ? "min(520px, calc(100vw - 560px))" : "min(520px, calc(100vw - 384px))";
   let lastGroup = "";
 
   return (

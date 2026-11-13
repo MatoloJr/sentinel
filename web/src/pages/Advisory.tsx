@@ -55,7 +55,28 @@ function Markdown({ text, onCite }: { text: string; onCite: (id: string) => void
 
 const plain = (s: string) => s.replace(/\s?\[T\d+\]/g, "").replace(/\*\*/g, "").replace(/\n---[\s\S]*$/, "").trim();
 
+/** Advisory drafting is a manager task; the public view explains that and offers the switch. */
 export function Advisory() {
+  const { mode, setMode } = useApp();
+  if (mode === "manager") return <ManagerAdvisory />;
+  return (
+    <div className="page grid gap-6">
+      <header className="grid gap-2">
+        <h1>Advisories</h1>
+        <p className="muted max-w-[65ch]">
+          Advisories are drafted by county disaster managers with Gemini, checked number by number, and approved by a
+          named officer before release. For plain-language advice about your area, see the Overview or your county page.
+        </p>
+      </header>
+      <div className="card flex flex-wrap items-center justify-between gap-3">
+        <p className="text-sm">You are in the <b>public view</b>. Switch to the manager view to draft and review advisories.</p>
+        <button className="btn btn-accent" onClick={() => setMode("manager")}>Switch to manager view</button>
+      </div>
+    </div>
+  );
+}
+
+function ManagerAdvisory() {
   const [params] = useSearchParams();
   const qc = useQueryClient();
   const { setAgentBusy } = useApp();

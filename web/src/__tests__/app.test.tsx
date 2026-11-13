@@ -3,7 +3,7 @@ import { fireEvent, render, screen, waitFor, within } from "@testing-library/rea
 import { MemoryRouter, Route, Routes, useLocation } from "react-router-dom";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { InsightPanel } from "../components/InsightPanel";
-import { Island, MANAGER_NAV, OverflowFab } from "../components/Island";
+import { Island, NAV, OverflowFab } from "../components/Island";
 import { TopBar } from "../components/TopBar";
 import type { InsightCard } from "../lib/api";
 import { buildIndex, search } from "../lib/search";
@@ -61,27 +61,23 @@ beforeEach(() => {
 afterEach(() => vi.unstubAllGlobals());
 
 describe("Bottom island", () => {
-  it("shows every destination plus view and theme switches", () => {
-    wrap(<Island />);
+  const LABELS = ["Overview", "County", "Outlook", "Cyclones", "Advisory", "Evidence", "About"];
+
+  it("shows the same destinations in every view and no switches", () => {
+    wrap(<><TopBar /><Island /></>);
     const nav = screen.getByRole("navigation", { name: "Main" });
-    for (const label of ["Overview", "County", "Outlook", "Cyclones", "Advisory", "Evidence", "About"]) {
-      expect(within(nav).getByRole("link", { name: label })).toBeInTheDocument();
-    }
-    expect(within(nav).getByRole("button", { name: /Switch to public view/ })).toBeInTheDocument();
-    expect(within(nav).queryByRole("button", { name: /theme/ })).toBeNull(); // theme lives top-right now
-  });
+    for (const label of LABELS) expect(within(nav).getByRole("link", { name: label })).toBeInTheDocument();
+    expect(within(nav).queryByRole("button")).toBeNull(); // view + theme switches live top-right
 
-  it("switches to the public view (no Advisory)", () => {
-    wrap(<Island />);
     fireEvent.click(screen.getByRole("button", { name: /Switch to public view/ }));
-    expect(screen.getByRole("link", { name: "My area" })).toBeInTheDocument();
-    expect(screen.queryByRole("link", { name: "Advisory" })).toBeNull();
+    const after = screen.getByRole("navigation", { name: "Main" });
+    expect(within(after).getAllByRole("link").map((a) => a.getAttribute("aria-label"))).toEqual(LABELS);
+    expect(screen.getByRole("button", { name: /Public view\. Switch to manager view/ })).toBeInTheDocument();
   });
-
 });
 
 describe("Overflow floating button", () => {
-  const items = MANAGER_NAV.slice(4);
+  const items = NAV.slice(4);
   it("opens a menu with the pages that did not fit", () => {
     wrap(<OverflowFab items={items} />);
     const fab = screen.getByRole("button", { name: /More pages \(3\)/ });
@@ -104,10 +100,12 @@ describe("Overflow floating button", () => {
 });
 
 describe("Top-right controls", () => {
-  it("has the theme switch left of the notification bell", () => {
+  it("orders view switch, theme switch, then the notification bell", () => {
     wrap(<TopBar />);
+    const view = screen.getByRole("button", { name: /Switch to public view/ });
     const theme = screen.getByRole("button", { name: /theme/ });
     const bell = screen.getByRole("button", { name: /Notifications/ });
+    expect(view.compareDocumentPosition(theme) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
     expect(theme.compareDocumentPosition(bell) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
     const before = document.documentElement.dataset.theme;
     fireEvent.click(theme);

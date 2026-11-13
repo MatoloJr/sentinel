@@ -1,15 +1,15 @@
 import {
-  CloudRain, Compass, Ellipsis, FlaskConical, GripVertical, Info, LayoutGrid, Map as MapIcon, MessageSquareText, Tornado,
-  UserRound, Users,
+  CloudRain, Ellipsis, FlaskConical, GripVertical, Info, LayoutGrid, Map as MapIcon, MessageSquareText, Tornado,
 } from "lucide-react";
 import { useCallback, useEffect, useLayoutEffect, useRef, useState, type CSSProperties } from "react";
 import { NavLink, useLocation } from "react-router-dom";
-import { store, useApp } from "../lib/state";
+import { store } from "../lib/state";
 import { useScrollingDown } from "../lib/useMedia";
 
 type Item = { to: string; label: string; icon: typeof MapIcon };
 
-export const MANAGER_NAV: Item[] = [
+/** The same destinations in every view (manager and public), so the bar never changes shape. */
+export const NAV: Item[] = [
   { to: "/", label: "Overview", icon: MapIcon },
   { to: "/county", label: "County", icon: LayoutGrid },
   { to: "/outlook", label: "Outlook", icon: CloudRain },
@@ -18,19 +18,10 @@ export const MANAGER_NAV: Item[] = [
   { to: "/evidence", label: "Evidence", icon: FlaskConical },
   { to: "/about", label: "About", icon: Info },
 ];
-export const PUBLIC_NAV: Item[] = [
-  { to: "/", label: "My area", icon: Compass },
-  { to: "/county", label: "County", icon: LayoutGrid },
-  { to: "/outlook", label: "Outlook", icon: CloudRain },
-  { to: "/cyclones", label: "Cyclones", icon: Tornado },
-  { to: "/evidence", label: "Evidence", icon: FlaskConical },
-  { to: "/about", label: "Why this", icon: Info },
-];
 
 const isActive = (to: string, path: string) => (to === "/" ? path === "/" : path.startsWith(to));
 const ISLAND_BG = "color-mix(in oklab, var(--ink) 94%, var(--accent))";
 const NAV_PAD = 12; // p-1.5 on both sides
-const GAP = 4; // gap-1 between groups
 
 const itemClass =
   "relative z-10 flex shrink-0 flex-row items-center justify-center gap-1.5 rounded-full px-3 sm:flex-col sm:gap-0.5 sm:px-2.5 xl:flex-row xl:gap-1.5 xl:px-3.5";
@@ -55,7 +46,6 @@ function ItemBody({ item, active }: { item: Item; active: boolean }) {
  */
 function useFit(nav: Item[], pathname: string) {
   const measureRef = useRef<HTMLDivElement>(null);
-  const modeRef = useRef<HTMLButtonElement>(null);
   const [visible, setVisible] = useState<string[]>(() => nav.map((n) => n.to));
 
   const compute = useCallback(() => {
@@ -65,8 +55,7 @@ function useFit(nav: Item[], pathname: string) {
     const active = Array.from(m.querySelectorAll<HTMLElement>("[data-measure='active']")).map((e) => e.offsetWidth);
     if (!inactive.length || inactive.every((w) => w === 0)) return setVisible(nav.map((n) => n.to)); // not laid out (tests)
     const sidePad = window.innerWidth >= 640 ? 24 : 16;
-    const modeW = modeRef.current?.offsetWidth ?? 46;
-    const avail = window.innerWidth - sidePad - NAV_PAD - GAP * 2 - 1 - modeW;
+    const avail = window.innerWidth - sidePad - NAV_PAD;
     const activeIdx = nav.findIndex((n) => isActive(n.to, pathname));
     let used = activeIdx >= 0 ? active[activeIdx] : 0;
     const keep = new Set<number>(activeIdx >= 0 ? [activeIdx] : []);
@@ -86,28 +75,28 @@ function useFit(nav: Item[], pathname: string) {
     return () => window.removeEventListener("resize", compute);
   }, [compute]);
 
-  return { measureRef, modeRef, visible };
+  return { measureRef, visible };
 }
 
 /**
- * Bottom dynamic island: every destination plus the manager/public switch. Destinations that do
- * not fit on narrow screens move into a draggable floating button (bottom-right by default).
+ * Bottom dynamic island: every destination, identical in manager and public view (the view switch
+ * lives top-right). Destinations that do not fit on narrow screens move into a draggable floating
+ * button (bottom-right by default).
  */
 export function Island() {
-  const { mode, setMode } = useApp();
-  const nav = mode === "manager" ? MANAGER_NAV : PUBLIC_NAV;
+  const nav = NAV;
   const { pathname } = useLocation();
   const down = useScrollingDown();
   const trackRef = useRef<HTMLDivElement>(null);
   const [ind, setInd] = useState<{ x: number; w: number } | null>(null);
-  const { measureRef, modeRef, visible } = useFit(nav, pathname);
+  const { measureRef, visible } = useFit(nav, pathname);
   const shown = nav.filter((n) => visible.includes(n.to));
   const overflow = nav.filter((n) => !visible.includes(n.to));
 
   useLayoutEffect(() => {
     const el = trackRef.current?.querySelector<HTMLElement>("[data-active='true']");
     setInd(el ? { x: el.offsetLeft, w: el.offsetWidth } : null);
-  }, [pathname, mode, visible.join("|")]);
+  }, [pathname, visible.join("|")]);
 
   return (
     <>
@@ -156,18 +145,6 @@ export function Island() {
               );
             })}
           </div>
-          <span aria-hidden className="h-8 w-px shrink-0" style={{ background: "rgb(255 255 255 / .18)" }} />
-          <button
-            ref={modeRef}
-            onClick={() => setMode(mode === "manager" ? "public" : "manager")}
-            aria-label={`Switch to ${mode === "manager" ? "public" : "manager"} view`}
-            title={mode === "manager" ? "Manager view" : "Public view"}
-            className="flex shrink-0 flex-col items-center justify-center gap-0.5 rounded-full px-2 hover:bg-white/10 xl:flex-row xl:gap-1.5 xl:px-3"
-            style={{ minHeight: 48, minWidth: 46 }}
-          >
-            {mode === "manager" ? <UserRound size={19} aria-hidden /> : <Users size={19} aria-hidden />}
-            <span className="sr-only font-semibold leading-none sm:not-sr-only sm:text-[0.66rem] xl:text-sm">{mode === "manager" ? "Manager" : "Public"}</span>
-          </button>
         </nav>
       </div>
 
