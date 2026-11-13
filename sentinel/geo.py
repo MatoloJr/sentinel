@@ -41,7 +41,11 @@ def load_counties(boundaries_path) -> gpd.GeoDataFrame:
 
 # ---------------------------------------------------------------- population
 def population_by_county(counties: gpd.GeoDataFrame, raster_path) -> pd.DataFrame:
-    """Sum the WorldPop raster inside each county polygon (counts, so no reprojection needed)."""
+    """People per county.
+
+    `population` (used for exposure counts and the priority ranking) is the official KNBS 2019
+    census total. `worldpop_2020` is the WorldPop raster summed inside each county polygon and is
+    kept as a cross-check only: it over-counts the arid north-east by up to +199%."""
     import rasterio
     from rasterio.mask import mask
 
@@ -54,21 +58,52 @@ def population_by_county(counties: gpd.GeoDataFrame, raster_path) -> pd.DataFram
             if src.nodata is not None:
                 a[a == src.nodata] = 0
             a[~np.isfinite(a) | (a < 0)] = 0
-            rows.append({"county": name, "population_2020": float(a.sum())})
-    pop = pd.DataFrame(rows)
+            rows.append({"county": name, "worldpop_2020": float(a.sum())})
+    return add_census(pd.DataFrame(rows))
+
+
+def add_census(pop: pd.DataFrame) -> pd.DataFrame:
+    """Attach the census totals and make them the people count used everywhere."""
+    pop = pop.copy()
     pop["census_2019"] = pop["county"].map(C.CENSUS_2019)
-    pop["worldpop_vs_census_pct"] = 100 * (pop["population_2020"] / pop["census_2019"] - 1)
+    pop["worldpop_vs_census_pct"] = 100 * (pop["worldpop_2020"] / pop["census_2019"] - 1)
+    pop["population"] = pop["census_2019"].fillna(pop["worldpop_2020"])
+    pop["population_source"] = ["KNBS 2019 census" if pd.notna(c) else "WorldPop 2020 (no census total)"
+                                for c in pop["census_2019"]]
     return pop
 
 
 def people_by_level(status: pd.DataFrame, pop: pd.DataFrame, level_col: str) -> pd.DataFrame:
-    s = status[["county", level_col]].merge(pop[["county", "population_2020"]], on="county")
+    s = status[["county", level_col]].merge(pop[["county", "population"]], on="county")
     t = s.groupby(level_col).agg(counties=("county", lambda x: ", ".join(sorted(x))),
-                                 n_counties=("county", "size"), people=("population_2020", "sum"))
+                                 n_counties=("county", "size"), people=("population", "sum"))
     return t.reset_index().rename(columns={level_col: "level"})
 
 
 # ---------------------------------------------------------------- cyclones
+def haversine_km(lat1, lon1, lat2, lon2):
+    """Great-circle distance in km (used only for the live active-storm proximity check)."""
+    lat1, lon1, lat2, lon2 = map(np.radians, (lat1, lon1, lat2, lon2))
+    a = np.sin((lat2 - lat1) / 2) ** 2 + np.cos(lat1) * np.cos(lat2) * np.sin((lon2 - lon1) / 2) ** 2
+    return 6371.0 * 2 * np.arcsin(np.sqrt(a))
+
+
+def nearest_active_storm(active: pd.DataFrame | None, lat: float, lon: float) -> dict:
+    """Closest latest position of any active storm to a point. {} if there is none."""
+    if active is None or active.empty:
+        return {}
+    a = active.dropna(subset=["LAT", "LON"])
+    if "ISO_TIME" in a and a["ISO_TIME"].notna().any():
+        a = a.sort_values("ISO_TIME").groupby("SID", as_index=False).tail(1)  # latest fix per storm
+    if a.empty:
+        return {}
+    d = haversine_km(lat, lon, a["LAT"].to_numpy(float), a["LON"].to_numpy(float))
+    i = int(np.argmin(d))
+    r = a.iloc[i]
+    return {"name": str(r.get("NAME") or r.get("SID")), "km": round(float(d[i])), "basin": r.get("BASIN"),
+            "time": str(r.get("ISO_TIME"))}
+
+
 def cyclone_points_near(ib: pd.DataFrame, counties: gpd.GeoDataFrame,
                         radius_km: float) -> pd.DataFrame:
     """All IBTrACS track points within radius_km of each county polygon (projected CRS)."""

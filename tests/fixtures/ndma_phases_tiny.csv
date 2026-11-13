@@ -1,0 +1,11 @@
+county,month,ndma_phase,bulletin_url,accessed_utc,evidence
+Wajir,2021-01,Normal,https://example.invalid/w1.pdf,2026-11-13T00:00:00Z,County Normal Stable
+Wajir,2021-02,Alert,https://example.invalid/w2.pdf,2026-11-13T00:00:00Z,County Alert Worsening
+Wajir,2021-03,Alarm,https://example.invalid/w3.pdf,2026-11-13T00:00:00Z,County Alarm Worsening
+Wajir,2021-04,Alarm,https://example.invalid/w4.pdf,2026-11-13T00:00:00Z,County Alarm Stable
+Wajir,2021-05,Recovery,https://example.invalid/w5.pdf,2026-11-13T00:00:00Z,County Recovery Improving
+Wajir,2021-06,not available,,,no bulletin listed on NDMA KnowledgeWeb for this county-month
+Lamu,2021-01,Normal,https://example.invalid/l1.pdf,2026-11-13T00:00:00Z,County Normal Stable
+Lamu,2021-02,Normal,https://example.invalid/l2.pdf,2026-11-13T00:00:00Z,County Normal Stable
+Lamu,2021-03,Alert,https://example.invalid/l3.pdf,2026-11-13T00:00:00Z,County Alert Worsening
+Lamu,2021-04,Alert,https://example.invalid/l4.pdf,2026-11-13T00:00:00Z,County Alert Stable

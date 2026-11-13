@@ -1,0 +1,12 @@
+county,bulletins_read,not_available,recovery_excluded,dry_season_excluded,months_compared,exact_agreement_pct,within_one_level_pct,always_normal_baseline_pct,ndma_alert_plus_months,we_watch_plus_when_ndma_alert_plus_pct,we_watch_plus_when_ndma_normal_pct,we_higher_months,we_lower_months,ndma_escalations,we_earlier,same_month,we_later,not_matched,median_lead_months
+Garissa,57,12,0,15,42,50.0,78.6,42.9,24,75.0,16.7,14,7,4,1,1,1,1,0.0
+Kilifi,59,10,2,0,57,56.1,91.2,36.8,36,52.8,4.8,1,24,3,0,0,1,2,-1.0
+Kwale,56,13,5,0,51,58.8,96.1,45.1,28,50.0,17.4,4,17,4,1,1,0,2,1.5
+Lamu,57,12,0,0,57,70.2,98.2,56.1,25,72.0,21.9,8,9,4,1,2,1,0,0.0
+Makueni,55,14,0,8,47,61.7,89.4,78.7,10,100.0,43.2,18,0,3,2,1,0,0,3.0
+Mandera,57,12,2,20,35,48.6,88.6,42.9,20,95.0,26.7,16,2,5,3,0,2,0,1.0
+Marsabit,57,12,4,12,43,46.5,83.7,34.9,28,82.1,20.0,9,14,4,2,0,1,1,1.0
+Tana River,56,13,1,8,47,59.6,93.6,46.8,25,84.0,27.3,12,7,6,2,2,0,2,0.5
+Turkana,56,13,2,0,54,38.9,83.3,40.7,32,71.9,45.5,18,15,7,3,2,2,0,0.0
+Wajir,53,16,1,11,41,43.9,92.7,29.3,29,82.8,16.7,9,14,2,2,0,0,0,2.5
+ALL,563,127,17,74,474,54.0,89.9,45.8,257,73.5,25.8,109,109,42,17,9,8,8,0.5

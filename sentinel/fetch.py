@@ -275,6 +275,35 @@ def fetch_ibtracs(force: bool = False) -> pd.DataFrame:
     return ib
 
 
+IBTRACS_ACTIVE_URL = IBTRACS_URLS[0].format(basin="ACTIVE")
+
+
+def fetch_active_storms() -> pd.DataFrame:
+    """Storms IBTrACS currently lists as ACTIVE (provisional, all basins), with the fetch time.
+
+    Always re-downloaded online (it changes daily). An empty table still records `fetched_utc`,
+    so 'no active storm' and 'check not done' can be told apart."""
+    f = C.RAW_DIR / "ibtracs_active.parquet"
+    cols = ["SID", "BASIN", "NAME", "ISO_TIME", "LAT", "LON", "WMO_WIND", "USA_WIND"]
+    r = _get(IBTRACS_ACTIVE_URL, tries=3, timeout=120)
+    d = pd.read_csv(io.BytesIO(r.content), skiprows=[1], usecols=lambda c: c in cols,
+                    keep_default_na=False, na_values=[" ", ""], low_memory=False)
+    for col in ("LAT", "LON", "WMO_WIND", "USA_WIND"):
+        if col in d:
+            d[col] = pd.to_numeric(d[col], errors="coerce")
+    d["ISO_TIME"] = pd.to_datetime(d.get("ISO_TIME"), errors="coerce")
+    d = d.dropna(subset=["LAT", "LON"])
+    if d.empty:
+        d = pd.DataFrame({c: pd.Series(dtype="object") for c in cols})
+    d["fetched_utc"] = dt.datetime.now(dt.timezone.utc).isoformat(timespec="minutes")
+    meta = {"fetched_utc": d["fetched_utc"].iloc[0] if len(d) else dt.datetime.now(dt.timezone.utc).isoformat(timespec="minutes"),
+            "n_points": int(len(d))}
+    (C.RAW_DIR / "ibtracs_active_meta.json").write_text(json.dumps(meta, indent=2))
+    d.to_parquet(f, index=False)
+    _access_log("ibtracs_ACTIVE", IBTRACS_ACTIVE_URL)
+    return d
+
+
 # ---------------------------------------------------------------- boundaries + population
 def fetch_boundaries(force: bool = False) -> Path:
     f = C.RAW_DIR / "kenya_adm1.geojson"
@@ -314,6 +343,11 @@ def fetch_all(force: bool = False, skip_forecast: bool = False) -> None:
             fetch_forecast()
         except RuntimeError as e:  # the watch tool will report 'unavailable'
             print(f"  forecast unavailable: {e}")
+        print("== active storms (IBTrACS ACTIVE)")
+        try:
+            fetch_active_storms()
+        except Exception as e:  # noqa: BLE001 - live check is optional; the card says it is unavailable
+            print(f"  active-storm check unavailable: {e}")
 
 
 if __name__ == "__main__":

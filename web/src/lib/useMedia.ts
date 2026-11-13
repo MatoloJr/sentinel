@@ -22,21 +22,3 @@ export function useBreakpoint() {
   const lg = useMedia("(min-width: 1024px)");
   return { mobile: !sm, sm, md, lg };
 }
-
-/** Scroll direction for hide-on-scroll chrome. Returns true while the user scrolls down past `offset`. */
-export function useScrollingDown(offset = 120) {
-  const [down, setDown] = useState(false);
-  useEffect(() => {
-    let last = window.scrollY;
-    const onScroll = () => {
-      const y = window.scrollY;
-      if (Math.abs(y - last) < 8) return;
-      const atBottom = window.innerHeight + y >= document.documentElement.scrollHeight - 4;
-      setDown(y > last && y > offset && !atBottom);
-      last = y;
-    };
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
-  }, [offset]);
-  return down;
-}

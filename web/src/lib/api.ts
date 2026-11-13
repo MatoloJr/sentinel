@@ -13,6 +13,52 @@ export interface Action {
   source: string;
   source_url?: string;
   section?: string;
+  /** brought forward by the rain-after-drought (compound) alert */
+  compound?: boolean;
+}
+
+/** Rain after drought (drought-to-flood whiplash): heavy rain arriving on drought-hit land. */
+export interface Compound {
+  type: "drought_to_flood";
+  label: string;
+  level: Level;
+  headline: string;
+  message: string;
+  trigger: "forecast" | "observed" | null;
+  trigger_3day_mm: number | null;
+  antecedent_12m_pct: number;
+  antecedent_12m_mm: number | null;
+  antecedent_12m_normal_mm: number | null;
+  deficit_12m_mm: number | null;
+  antecedent_window_end: string | null;
+  recovery: null | { deficit_12m_mm: number; forecast_7day_mm: number; share_of_deficit_pct: number | null; text: string };
+  history: null | {
+    p99_rain_days: number | null;
+    p99_rain_days_on_drought_land: number | null;
+    share_on_drought_land_pct: number | null;
+    episodes_since_1991: number | null;
+    episodes_warning_plus: number | null;
+    last_episode: string | null;
+    recent_episodes?: Row[];
+  };
+  rule: string;
+  action_ids?: string[];
+}
+
+export interface WhiplashView {
+  rule: { antecedent_months: number; dry_pct: number; rain_levels: Record<string, number> };
+  documented_events: Record<string, unknown>[];
+  validation: Row[];
+  stats: Record<string, number | null>;
+  sensitivity: Row[];
+  summary: Row[];
+  episodes: Row[];
+}
+
+/** Our drought level vs NDMA's official county drought phase (Normal / Alert / Alarm / Emergency). */
+export interface NdmaView {
+  agreement: Row[];
+  overall: Record<string, string | number | null | Record<string, string>>;
 }
 
 export interface Driver {
@@ -29,6 +75,9 @@ export interface InsightCard {
   overall_level: Level;
   headline: string;
   hazard_levels: Record<Hazard, Level>;
+  /** level of the compound rain-after-drought alert (Normal when none) */
+  compound_level?: Level;
+  compound?: Compound | null;
   drivers: Driver[];
   trend: null | {
     variable: string;
@@ -62,7 +111,7 @@ export interface InsightCard {
     };
   };
   rising: boolean;
-  exposure: { population_2020: number; share_of_region_pct: number; people_at_watch_or_above: number };
+  exposure: { population: number; population_source?: string; share_of_region_pct: number; people_at_watch_or_above: number };
   priority_score: number;
   priority_rank: number;
   priority_explained: string;
@@ -80,6 +129,8 @@ export interface Insights {
     people_at_warning_or_above: number;
     rising: string[];
     top_priorities: string[];
+    whiplash?: string[];
+    drought_hit_land?: string[];
   };
   counties: InsightCard[];
   note: string;
@@ -241,6 +292,8 @@ export const api = {
   watch: () => req<Row[]>("/api/watch"),
   cyclones: () => req<CyclonesView>("/api/cyclones"),
   validation: () => req<{ events: Row[]; reference_events: Record<string, unknown>[]; drought_class_frequency: Row[] }>("/api/validation"),
+  whiplash: () => req<WhiplashView>("/api/whiplash"),
+  ndma: () => req<NdmaView>("/api/ndma"),
   model: () => req<{ active: Record<string, any> | null; registry: { active: string | null; history: Row[] }; pipeline_model_source?: string; pipeline_selection?: Record<string, any> }>("/api/model"),
   ask: (question: string) => req<AgentRun>("/api/agent/ask", { method: "POST", body: JSON.stringify({ question }) }),
   runs: () => req<RunSummary[]>("/api/agent/runs"),

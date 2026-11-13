@@ -1,6 +1,6 @@
-import { ArrowUpRight, CheckCircle2, Circle, Copy, TrendingDown, TrendingUp, Users } from "lucide-react";
+import { ArrowUpRight, CheckCircle2, Circle, CloudRain, Copy, TrendingDown, TrendingUp, Users } from "lucide-react";
 import { useState } from "react";
-import { fmtInt, type InsightCard } from "../lib/api";
+import { fmtInt, type Compound, type InsightCard } from "../lib/api";
 import { useChecklist } from "../lib/state";
 import { LevelBadge } from "./ui";
 
@@ -23,6 +23,37 @@ export function CopyButton({ text, label = "Copy" }: { text: string; label?: str
     >
       <Copy size={16} aria-hidden /> {done ? "Copied" : label}
     </button>
+  );
+}
+
+/** Rain after drought: the compound alert single-hazard indicators miss. */
+function CompoundBox({ c }: { c: Compound }) {
+  const active = c.level !== "Normal";
+  const h = c.history;
+  return (
+    <div
+      className="grid gap-2 rounded-2xl p-3"
+      style={{ background: "var(--surface)", borderLeft: `6px solid ${active ? "var(--lvl-warning)" : "var(--lvl-watch)"}` }}
+      aria-label="Rain after drought"
+    >
+      <div className="flex flex-wrap items-center justify-between gap-2">
+        <span className="flex items-center gap-2 font-semibold">
+          <CloudRain size={16} aria-hidden /> Rain after drought
+        </span>
+        <LevelBadge level={c.level} size="sm" />
+      </div>
+      <p className="text-sm">{c.headline}.</p>
+      <p className="text-sm muted">{c.message}</p>
+      {c.recovery && <p className="text-sm">{c.recovery.text}</p>}
+      {h && h.episodes_since_1991 != null && (
+        <p className="subtle">
+          Since 1991: {h.episodes_since_1991} rain-after-drought episodes here ({h.episodes_warning_plus ?? 0} at Warning or above)
+          {h.share_on_drought_land_pct != null ? `; ${h.share_on_drought_land_pct}% of this county's 1-in-100-day rains fell on drought-hit land` : ""}
+          {h.last_episode ? `; last on ${h.last_episode}` : ""}.
+        </p>
+      )}
+      <p className="subtle">{c.rule}</p>
+    </div>
   );
 }
 
@@ -60,6 +91,8 @@ export function InsightPanel({ card, compact = false }: { card: InsightCard; com
         ))}
       </div>
 
+      {card.compound && <CompoundBox c={card.compound} />}
+
       <div className="grid gap-3 sm:grid-cols-2">
         <div className="rounded-2xl p-3" style={{ background: "var(--surface)" }}>
           <p className="subtle font-semibold">Next 7 days</p>
@@ -82,8 +115,9 @@ export function InsightPanel({ card, compact = false }: { card: InsightCard; com
 
       <div className="flex flex-wrap items-center gap-x-6 gap-y-2 text-sm">
         <span className="flex items-center gap-2">
-          <Users size={16} aria-hidden /> <b className="num">{fmtInt(card.exposure.population_2020)}</b> people (
-          {card.exposure.share_of_region_pct}% of the 14 counties)
+          <Users size={16} aria-hidden /> <b className="num">{fmtInt(card.exposure.population)}</b> people (
+          {card.exposure.share_of_region_pct}% of the 14 counties
+          {card.exposure.population_source ? `; ${card.exposure.population_source}` : ""})
         </span>
         {card.trend && (
           <span className="flex items-center gap-2">
@@ -122,7 +156,7 @@ export function InsightPanel({ card, compact = false }: { card: InsightCard; com
                     <span className="grid min-w-0 gap-0.5">
                       <span className={on ? "line-through opacity-70" : ""}>{a.action}</span>
                       <span className="subtle">
-                        <span className="num font-semibold">{a.id}</span> · {HZ[a.hazard]} {a.level} · {a.timeframe}
+                        <span className="num font-semibold">{a.id}</span> · {a.compound ? "Rain after drought" : `${HZ[a.hazard]} ${a.level}`} · {a.timeframe}
                       </span>
                     </span>
                   </button>

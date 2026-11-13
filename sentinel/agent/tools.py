@@ -142,15 +142,16 @@ def get_population_exposure(district: str | None = None) -> dict:
     pop = _read("population.csv")
     if pop is None:
         return _missing("Population exposure")
-    out = {"source": "WorldPop 2020 1km UN-adjusted, summed inside county boundaries (estimate)"}
+    out = {"source": "KNBS 2019 census county totals (WorldPop 2020 raster sum kept as a cross-check only)"}
     if district:
         county, err = resolve_district(district)
         if err:
             return err
         r = _row(pop, county)
         out["county"] = county
-        out["population_2020"] = round(r["population_2020"])
-        out["census_2019_check"] = r.get("census_2019")
+        out["population"] = round(r["population"] if "population" in r else r["population_2020"])
+        out["population_source"] = r.get("population_source", "WorldPop 2020")
+        out["worldpop_2020_check"] = None if r.get("worldpop_2020") is None else round(r["worldpop_2020"])
     region = {}
     for col in ("drought_level", "observed_heavy_level", "forecast_heavy_level", "cyclone_exposure_class"):
         t = _read(f"people_by_{col}.csv")

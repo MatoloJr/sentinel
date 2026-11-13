@@ -30,6 +30,7 @@ class County:
     lon: float
     zone: str
     coastal: bool
+    urban: bool = False  # city county: rural/pastoral playbook actions are not shown
 
 
 # One representative point per county (the county HQ town, where most people and
@@ -42,7 +43,7 @@ COUNTIES: list[County] = [
     County("Garissa", "Garissa", -0.4532, 39.6461, "Arid north-east", False),
     County("Tana River", "Hola", -1.4980, 40.0300, "Tana basin", False),
     County("Makueni", "Wote", -1.7807, 37.6288, "Semi-arid south-east", False),
-    County("Nairobi", "Nairobi", -1.2864, 36.8172, "Central highlands", False),
+    County("Nairobi", "Nairobi", -1.2864, 36.8172, "Central highlands", False, urban=True),
     County("Kisumu", "Kisumu", -0.0917, 34.7680, "Lake Victoria basin", False),
     County("Busia", "Busia", 0.4608, 34.1115, "Lake Victoria basin", False),
     County("Lamu", "Lamu", -2.2717, 40.9020, "Coast", True),
@@ -54,7 +55,9 @@ COUNTY_NAMES = [c.name for c in COUNTIES]
 COUNTY_BY_NAME = {c.name: c for c in COUNTIES}
 
 # KNBS 2019 Kenya Population and Housing Census, Volume I (county totals).
-# Used ONLY as a sanity check against the WorldPop raster sums. Verify against the PDF.
+# These official totals are the people counts used for exposure and ranking. The WorldPop 2020
+# raster sum is kept as a cross-check only: it over-counts the arid north-east by +89% to +199%
+# (Mandera, Wajir, Garissa), which would distort the priority ranking. Verify against the PDF.
 CENSUS_2019 = {
     "Turkana": 926_976, "Marsabit": 459_785, "Mandera": 867_457, "Wajir": 781_263,
     "Garissa": 841_353, "Tana River": 315_943, "Makueni": 987_653, "Nairobi": 4_397_073,
@@ -66,6 +69,11 @@ CENSUS_2019 = {
 WET_DAY_MM = 1.0             # ETCCDI wet-day definition
 HEAVY_DAY_PCTL = 95          # heavy-rain day: > county p95 of wet-day rainfall
 DRY_SEASON_MIN_MM = 30.0     # 3-month normal below this = dry season, drought not assessed
+# Minor season: a 3-month window that normally brings less than this share of the year's rain
+# (an even spread would give 25%). A % of normal there is a small absolute shortfall, so the
+# drought level is capped at Watch and the window is left out of the "worst droughts" ranking.
+# Percent-of-normal is known to mislead outside the main rainy season (WMO-No. 1090, SPI guide).
+MINOR_SEASON_SHARE_PCT = 20.0
 
 # Drought: 3-month rainfall as % of the 1991-2020 normal for the same 3 months.
 # 75% is the lower edge of "near normal" in seasonal rainfall performance reporting;
@@ -90,6 +98,10 @@ LEVEL_RANK = {lvl: i for i, lvl in enumerate(LEVELS)}
 CYCLONE_RADIUS_KM = 300.0
 CYCLONE_CONTEXT_RADIUS_KM = 600.0  # context only; the official metric is 300 km
 TROPICAL_STORM_KT = 34.0
+# Live check: Cyclone Watch is raised only when an ACTIVE system (IBTrACS ACTIVE list, provisional)
+# is within this distance of a coastal county's HQ. Season alone is shown as background, not an alert.
+ACTIVE_STORM_WATCH_KM = 1000.0
+ACTIVE_STORM_MAX_AGE_DAYS = 3  # older active-storm data = live check unavailable
 CYCLONE_FIRST_SEASON = 1981        # reliable satellite era
 OFFICIAL_CYCLONE_CENTRES = (
     "Kenya Meteorological Department (https://meteo.go.ke) issues national warnings; "
@@ -100,6 +112,15 @@ OFFICIAL_WARNING_NOTE = (
     "Official warnings from the Kenya Meteorological Department (KMD) and the National "
     "Disaster Operations Centre take priority over this planning-support tool."
 )
+
+# ---------------------------------------------------------------- compound: drought-to-flood whiplash
+# Heavy rain that lands on drought-hit land is more dangerous than the same rain after a normal
+# year: crusted bare soil sheds water (flash floods), weak livestock die in cold rain or are swept
+# away, and water sources are contaminated. Single-hazard indicators miss this: the 3-month drought
+# indicator flips to "Normal" as soon as rain arrives, and the flood indicator ignores what came before.
+WHIPLASH_ANTECEDENT_MONTHS = 12  # rain in the 12 full months before the rain event, as % of normal
+WHIPLASH_DRY_PCT = 75.0          # antecedent at or below this = drought-hit land (lower edge of near-normal)
+WHIPLASH_EPISODE_GAP_DAYS = 30   # rain days closer than this belong to the same whiplash episode
 
 # ---------------------------------------------------------------- outlook model
 TEST_YEARS = 8                # last N complete target years are the test set
@@ -144,6 +165,37 @@ REFERENCE_EVENTS = [
         "counties": ["Mandera", "Wajir", "Garissa", "Marsabit", "Kilifi", "Kwale", "Tana River"],
         "source": "IFRC Emergency Appeal MDRKE068 operational update; NDMA bulletins",
         "url": "https://go-api.ifrc.org/api/DownloadFile/93652/MDRKE068%20OU2",
+    },
+]
+
+
+# Documented drought-to-flood transitions (rain disasters that struck while the land was still in
+# drought). Used to validate the whiplash indicator; independent of the events above.
+WHIPLASH_EVENTS = [
+    {
+        "id": "WH-2019",
+        "name": "Oct-Nov 2019 floods that 'follow a period of prolonged drought' (OCHA)",
+        "start": "2019-10-01", "end": "2019-11-30",
+        "counties": ["Mandera", "Wajir", "Marsabit", "Turkana", "Garissa", "Lamu", "Kwale", "Mombasa",
+                     "Tana River", "Kisumu", "Busia"],
+        "source": "OCHA Kenya Flash Update No. 2: Floods (5 Nov 2019)",
+        "url": "https://reliefweb.int/report/kenya/kenya-flash-update-no-2-floods-5-november-2019",
+    },
+    {
+        "id": "WH-2023A",
+        "name": "Mar-May 2023 flash floods in counties still in drought Alarm/Emergency (NDMA)",
+        "start": "2023-03-15", "end": "2023-05-31",
+        "counties": ["Marsabit", "Mandera", "Garissa", "Wajir"],
+        "source": "The Star / NDMA, 'Rains a curse for drought-stricken families' (23 Apr 2023)",
+        "url": "https://www.the-star.co.ke/news/2023-04-23-rains-a-curse-for-drought-stricken-families",
+    },
+    {
+        "id": "WH-2023B",
+        "name": "El Nino floods Oct-Dec 2023 straight after the 2020-2023 drought",
+        "start": "2023-10-15", "end": "2023-12-31",
+        "counties": ["Mandera", "Wajir", "Garissa", "Tana River", "Lamu"],
+        "source": "IFRC Operation Update MDRKE058; UNICEF Kenya sitrep 15 Dec 2023",
+        "url": "https://reliefweb.int/report/kenya/kenya-africa-floods-2023-operation-update-mdrke058",
     },
 ]
 

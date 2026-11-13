@@ -1,5 +1,4 @@
 level,counties,n_counties,people
-Dry season (not assessed),Garissa,1,1587261.226843074
-Normal,"Kilifi, Kisumu, Kwale, Lamu, Makueni, Mandera, Marsabit, Mombasa, Tana River, Wajir",10,10562754.34036956
-Warning,"Nairobi, Turkana",2,5860114.196250379
-Watch,Busia,1,941985.8702449799
+Dry season (not assessed),Garissa,1,841353
+Normal,"Kilifi, Kisumu, Kwale, Lamu, Makueni, Mandera, Marsabit, Mombasa, Tana River, Wajir",10,8240535
+Watch,"Busia, Nairobi, Turkana",3,6217730

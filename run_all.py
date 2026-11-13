@@ -4,8 +4,9 @@
 2. weather behaviour, indicators, validation, cyclone + population exposure
 3. seasonal outlook backtest + live outlook
 4. 7-day forecast watch
-5. current status table used by the dashboard and the agent
-6. insights.json: ranked, actionable county cards (manager + public views)
+5. drought-to-flood whiplash (compound hazard) history, validation and live status
+6. current status table used by the dashboard and the agent
+7. insights.json: ranked, actionable county cards (manager + public views)
 """
 from __future__ import annotations
 
@@ -64,7 +65,20 @@ def build(offline: bool, skip_forecast: bool, n_boot: int) -> dict:
     ind.worst_droughts(dro).to_csv(out / "worst_droughts.csv", index=False)
     ind.worst_heavy_rain(hr).to_csv(out / "worst_heavy_rain.csv", index=False)
     ind.per_county_worst(dro, hr).to_csv(out / "per_county_worst.csv", index=False)
-    ind.validate_events(dro, hr).to_csv(out / "validation.csv", index=False)
+
+    print("== compound: drought-to-flood whiplash")
+    ante = ind.antecedent_dryness(mon)
+    wh = ind.whiplash_indicator(hr, ante)
+    episodes = ind.whiplash_episodes(wh)
+    episodes.to_csv(out / "whiplash_episodes.csv", index=False)
+    ind.whiplash_summary(wh, episodes).to_csv(out / "whiplash_summary.csv", index=False)
+    wval = ind.validate_whiplash(wh)
+    wval.to_csv(out / "whiplash_validation.csv", index=False)
+    ind.whiplash_sensitivity(hr, mon).to_csv(out / "whiplash_sensitivity.csv", index=False)
+    wstats = ind.whiplash_stats(wh, episodes, dro)
+    (out / "whiplash_stats.json").write_text(json.dumps(wstats, indent=2))
+    summary["whiplash"] = wstats
+    pd.concat([ind.validate_events(dro, hr), wval], ignore_index=True).to_csv(out / "validation.csv", index=False)
 
     print("== geography, population, cyclones")
     counties = geo.load_counties(raw / "kenya_adm1.geojson")
@@ -98,7 +112,9 @@ def build(offline: bool, skip_forecast: bool, n_boot: int) -> dict:
         (out / "watch.csv").unlink(missing_ok=True)
 
     print("== current status")
-    status = current_status(dro, hr, w, cyc["ranking"], pop, res["live"])
+    active, active_meta = load_active_storms(raw)
+    summary["active_storm_check_utc"] = active_meta.get("fetched_utc")
+    status = current_status(dro, hr, w, cyc["ranking"], pop, res["live"], ante, active, active_meta)
     status.to_csv(out / "status.csv", index=False)
     for col in ("drought_level", "observed_heavy_level", "forecast_heavy_level", "cyclone_exposure_class"):
         if col in status and status[col].notna().any():
@@ -114,7 +130,24 @@ def build(offline: bool, skip_forecast: bool, n_boot: int) -> dict:
     return summary
 
 
-def current_status(dro, hr, w, cyc_rank, pop, live) -> pd.DataFrame:
+def load_active_storms(raw: Path) -> tuple[pd.DataFrame | None, dict]:
+    """Cached IBTrACS ACTIVE list, or (None, {}) when it is missing or too old to trust."""
+    f, m = raw / "ibtracs_active.parquet", raw / "ibtracs_active_meta.json"
+    if not (f.exists() and m.exists()):
+        return None, {}
+    meta = json.loads(m.read_text())
+    try:
+        age = dt.datetime.now(dt.timezone.utc) - dt.datetime.fromisoformat(meta["fetched_utc"])
+    except (KeyError, ValueError):
+        return None, {}
+    meta["age_days"] = round(age.total_seconds() / 86400, 1)
+    if age > dt.timedelta(days=C.ACTIVE_STORM_MAX_AGE_DAYS):
+        return None, {**meta, "stale": True}
+    return pd.read_parquet(f), meta
+
+
+def current_status(dro, hr, w, cyc_rank, pop, live, ante=None, active=None, active_meta=None) -> pd.DataFrame:
+    active_meta = active_meta or {}
     rows = []
     for name in C.COUNTY_NAMES:
         d = dro[dro["county"] == name].sort_values("date").iloc[-1]
@@ -124,28 +157,54 @@ def current_status(dro, hr, w, cyc_rank, pop, live) -> pd.DataFrame:
         lvl = max(last7["level"], key=lambda x: C.LEVEL_RANK.get(x, -1))
         cr = cyc_rank.set_index("county").loc[name]
         lv = live.set_index("county").loc[name] if name in set(live["county"]) else None
+        cty = C.COUNTY_BY_NAME[name]
         row = {
-            "county": name, "zone": C.COUNTY_BY_NAME[name].zone,
+            "county": name, "zone": cty.zone, "urban": cty.urban,
             "drought_window_end": f"{d['date']:%Y-%m}",
             "rain_3m_mm": round(float(d["rain_3m_mm"]), 1), "normal_3m_mm": round(float(d["normal_3m_mm"]), 1),
             "pct_of_normal": None if pd.isna(d["pct_of_normal"]) else round(float(d["pct_of_normal"]), 0),
             "drought_level": d["level"],
+            "drought_minor_season": bool(d.get("minor_season", False)),
+            "drought_uncapped_level": d.get("uncapped_level", d["level"]),
+            "season_share_pct": None if pd.isna(d.get("season_share_pct")) else round(float(d["season_share_pct"]), 0),
             "observed_to": f"{h['date'].max():%Y-%m-%d}",
             "observed_max_3day_mm_last7d": round(float(hi["rain_3d_mm"]), 1),
             "observed_ratio_to_p99": round(float(hi["ratio_to_p99"]), 2),
             "observed_heavy_level": lvl,
             "cyclone_storms_300km": int(cr["tropical_storms_300km"]),
             "cyclone_exposure_class": cr["exposure_class"], "cyclone_rank": int(cr["exposure_rank"]),
-            "population_2020": round(float(pop.set_index("county").loc[name, "population_2020"])),
+            "population": round(float(pop.set_index("county").loc[name, "population"])),
+            "population_source": pop.set_index("county").loc[name, "population_source"],
             "outlook_prob_below": None if lv is None else lv["prob_below_normal"],
             "outlook_basis": None if lv is None else lv["basis"],
         }
+        # live active-storm proximity (coastal counties only; None = check unavailable)
+        storm = geo.nearest_active_storm(active, cty.lat, cty.lon) if active is not None else {}
+        row.update({"active_storm_check_utc": active_meta.get("fetched_utc") if active is not None else None,
+                    "active_storm_name": storm.get("name"), "active_storm_km": storm.get("km")})
+        # antecedent dryness for the current month (12 full months before it)
+        a = ante[ante["county"] == name].sort_values("date") if ante is not None else None
+        if a is not None and len(a):
+            a = a.iloc[-1]
+            row.update({"ante_12m_pct": round(float(a["ante_pct"]), 0), "ante_12m_mm": round(float(a["ante_mm"]), 1),
+                        "ante_12m_normal_mm": round(float(a["ante_normal_mm"]), 1),
+                        "ante_12m_deficit_mm": round(float(a["ante_deficit_mm"]), 1),
+                        "ante_window_end": f"{a['date'] - pd.DateOffset(months=1):%Y-%m}"})
+        else:
+            row.update({"ante_12m_pct": None, "ante_12m_mm": None, "ante_12m_normal_mm": None,
+                        "ante_12m_deficit_mm": None, "ante_window_end": None})
         if w is not None and name in set(w["county"]):
             wr = w.set_index("county").loc[name]
             row.update({"forecast_max_3day_mm": wr["max_3day_total_mm"], "forecast_heavy_level": wr["heavy_rain_level"],
                         "forecast_exceeds_p99": bool(wr["exceeds_p99"])})
         else:
             row.update({"forecast_max_3day_mm": None, "forecast_heavy_level": None, "forecast_exceeds_p99": None})
+        # compound: heavy rain (observed last 7 days or forecast next 7) on drought-hit land
+        fc_lvl = row.get("forecast_heavy_level") or "Normal"
+        use_fc = C.LEVEL_RANK.get(fc_lvl, -1) >= C.LEVEL_RANK.get(lvl, -1)
+        rain_lvl = fc_lvl if use_fc else lvl
+        row["whiplash_level"] = ind.whiplash_level(rain_lvl, row["ante_12m_pct"])
+        row["whiplash_trigger"] = None if row["whiplash_level"] == "Normal" else ("forecast" if use_fc else "observed")
         rows.append(row)
     return pd.DataFrame(rows)
 

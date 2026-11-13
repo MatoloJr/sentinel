@@ -1,0 +1,10 @@
+{
+  "episodes": 282,
+  "episodes_warning_plus": 104,
+  "episodes_per_county_decade": 5.6,
+  "warning_plus_per_county_decade": 2.1,
+  "p99_rain_days": 1882,
+  "p99_rain_days_on_drought_land_pct": 17.0,
+  "blind_spot_drought_indicator_normal_pct": 65.0,
+  "blind_spot_drought_indicator_below_warning_pct": 89.0
+}

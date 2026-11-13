@@ -12,6 +12,7 @@ const PROP: Record<Exclude<MapLayerMode, "priority" | "cyclone">, string> = {
   drought: "drought_level",
   observed: "observed_heavy_level",
   forecast: "forecast_heavy_level",
+  compound: "compound_level",
 };
 
 const STYLE = {
