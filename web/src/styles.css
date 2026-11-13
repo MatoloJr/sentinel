@@ -169,3 +169,5 @@ html, body, #root { max-width: 100%; overflow-x: clip; }
 .maplibregl-popup-content { background: var(--surface) !important; color: var(--ink); border-radius: 12px !important; box-shadow: var(--shadow) !important; padding: 10px 12px !important; }
 .maplibregl-popup-tip { border-top-color: var(--surface) !important; border-bottom-color: var(--surface) !important; }
 .maplibregl-ctrl-attrib { font-size: 10px; }
+/* phones in full-screen map mode: keep scale + attribution above the key drawer */
+.map-fs-mobile .maplibregl-ctrl-bottom-right, .map-fs-mobile .maplibregl-ctrl-bottom-left { bottom: calc(60px + env(safe-area-inset-bottom)); }

@@ -1,9 +1,11 @@
 import "maplibre-gl/dist/maplibre-gl.css";
 import type { FeatureCollection } from "geojson";
 import type { ExpressionSpecification } from "maplibre-gl";
-import { useMemo, useState, type ReactNode } from "react";
-import MapGL, { Layer, NavigationControl, Popup, Source, type MapLayerMouseEvent } from "react-map-gl/maplibre";
+import { Crosshair } from "lucide-react";
+import { useMemo, useRef, useState, type ReactNode } from "react";
+import MapGL, { Layer, NavigationControl, Popup, ScaleControl, Source, type MapLayerMouseEvent, type MapRef } from "react-map-gl/maplibre";
 import { cssVars, useTheme } from "../lib/theme";
+import { useMapInsets } from "./MapFullscreen";
 import type { MapLayerMode } from "../lib/mapModes";
 
 export type { MapLayerMode };
@@ -28,17 +30,27 @@ interface Props {
   selected?: string | null;
   onHover?: (county: string | null) => void;
   onSelect?: (county: string) => void;
-  tooltip?: (props: Record<string, any>) => ReactNode;
+  /** tooltip content; layerId tells county fill apart from extra layers such as storm tracks */
+  tooltip?: (props: Record<string, any>, layerId: string) => ReactNode;
   height?: number | string;
   children?: ReactNode;
   fillOpacity?: number;
+  /** extra layer ids (from children) that respond to hover / click */
+  extraInteractive?: string[];
+  onFeatureClick?: (layerId: string, props: Record<string, any>) => void;
+  /** full-screen extras: "fit Kenya" button, distance scale, roomier padding */
+  expanded?: boolean;
 }
 
 export function KenyaMap({
   data, mode, highlighted, selected, onHover, onSelect, tooltip, height = "100%", children, fillOpacity = 0.72,
+  extraInteractive = [], onFeatureClick, expanded = false,
 }: Props) {
   const theme = useTheme();
-  const [hover, setHover] = useState<{ lng: number; lat: number; props: Record<string, any> } | null>(null);
+  const mapRef = useRef<MapRef>(null);
+  const [hover, setHover] = useState<{ lng: number; lat: number; props: Record<string, any>; layer: string } | null>(null);
+  const insets = useMapInsets();
+  const padding = insets ?? (expanded ? 48 : 24);
 
   const colors = useMemo(
     () => cssVars(["--lvl-normal", "--lvl-watch", "--lvl-warning", "--lvl-emergency", "--lvl-none", "--accent", "--ink", "--surface"]),
@@ -80,26 +92,31 @@ export function KenyaMap({
 
   const onMove = (e: MapLayerMouseEvent) => {
     const f = e.features?.[0];
-    const c = (f?.properties?.county as string) ?? null;
+    const layer = f?.layer?.id ?? "";
+    const c = layer === "county-fill" ? ((f?.properties?.county as string) ?? null) : null;
     onHover?.(c);
-    setHover(f ? { lng: e.lngLat.lng, lat: e.lngLat.lat, props: f.properties as Record<string, any> } : null);
+    setHover(f ? { lng: e.lngLat.lng, lat: e.lngLat.lat, props: f.properties as Record<string, any>, layer } : null);
   };
 
   return (
     <div style={{ height, width: "100%", position: "relative" }}>
       <MapGL
-        initialViewState={{ bounds: KENYA_BOUNDS, fitBoundsOptions: { padding: 24 } }}
+        ref={mapRef}
+        initialViewState={{ bounds: KENYA_BOUNDS, fitBoundsOptions: { padding } }}
         mapStyle={STYLE[theme]}
         style={{ width: "100%", height: "100%" }}
-        interactiveLayerIds={["county-fill"]}
+        interactiveLayerIds={[...extraInteractive, "county-fill"]}
         onMouseMove={onMove}
         onMouseLeave={() => {
           setHover(null);
           onHover?.(null);
         }}
         onClick={(e) => {
-          const c = e.features?.[0]?.properties?.county;
-          if (c) onSelect?.(c);
+          const f = e.features?.[0];
+          if (!f) return;
+          if (f.layer.id === "county-fill") {
+            if (f.properties?.county) onSelect?.(f.properties.county);
+          } else onFeatureClick?.(f.layer.id, f.properties as Record<string, any>);
         }}
         cursor={hover ? "pointer" : "grab"}
         attributionControl={{ compact: true }}
@@ -107,6 +124,7 @@ export function KenyaMap({
         touchPitch={false}
       >
         <NavigationControl position="top-right" showCompass={false} />
+        {expanded && <ScaleControl position="bottom-right" unit="metric" maxWidth={120} />}
         <Source id="counties" type="geojson" data={data}>
           <Layer id="county-fill" type="fill" paint={{ "fill-color": fill, "fill-opacity": fillOpacity }} />
           <Layer id="county-line" type="line" paint={{ "line-color": colors["--surface"], "line-width": 1 }} />
@@ -120,10 +138,19 @@ export function KenyaMap({
         {children}
         {hover && tooltip && (
           <Popup longitude={hover.lng} latitude={hover.lat} closeButton={false} closeOnClick={false} offset={12} maxWidth="260px">
-            {tooltip(hover.props)}
+            {tooltip(hover.props, hover.layer)}
           </Popup>
         )}
       </MapGL>
+      <button
+        onClick={() => mapRef.current?.fitBounds(KENYA_BOUNDS, { padding, duration: 600 })}
+        aria-label="Fit the map to Kenya"
+        title="Fit to Kenya"
+        className="absolute grid place-items-center rounded-md"
+        style={{ right: 10, top: 82, width: 29, height: 29, background: "#fff", color: "#333", boxShadow: "0 0 0 2px rgb(0 0 0 / .1)" }}
+      >
+        <Crosshair size={16} />
+      </button>
     </div>
   );
 }

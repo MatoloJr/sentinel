@@ -1,8 +1,12 @@
 import { useQuery } from "@tanstack/react-query";
 import { ArrowRight, TrendingUp } from "lucide-react";
-import { lazy, Suspense, useState } from "react";
+import { lazy, Suspense, useMemo, useState } from "react";
+import type { FeatureCollection } from "geojson";
 import { Link, useNavigate } from "react-router-dom";
 import { InsightPanel } from "../components/InsightPanel";
+import { EnlargeButton, KeyList, MapFullscreen, MapKey } from "../components/MapFullscreen";
+import { LAYER_KEYS } from "../lib/mapLegends";
+import type { InsightCard } from "../lib/api";
 import { Sheet } from "../components/Sheet";
 import { Disclaimer, ErrorState, LevelBadge, levelColor, PageSkeleton, Segmented, Skeleton, Stat } from "../components/ui";
 import { api, fmtPeople, LEVEL_RANK } from "../lib/api";
@@ -34,6 +38,8 @@ function ManagerOverview() {
     store.set("cs.layer", l);
   };
   const [selected, setSelected] = useState<string | null>(null);
+  const [fs, setFs] = useState(false);
+  const [fsSel, setFsSel] = useState<string | null>(null);
   const { lg } = useBreakpoint();
   const [pane, setPane] = useState<"map" | "list">("map");
   const showMap = lg || pane === "map";
@@ -87,7 +93,8 @@ function ManagerOverview() {
               options={(Object.keys(LAYER_LABEL) as MapLayerMode[]).map((k) => ({ value: k, label: LAYER_LABEL[k] }))}
             />
           </div>
-          <div className="overflow-hidden rounded-2xl" style={{ height: "clamp(300px, 58dvh, 620px)" }}>
+          <div className="relative overflow-hidden rounded-2xl" style={{ height: "clamp(300px, 58dvh, 620px)" }}>
+            {geo.data && <EnlargeButton onClick={() => { setFsSel(selected); setFs(true); }} />}
             {geo.data ? (
               <Suspense fallback={<Skeleton h="100%" />}>
                 <KenyaMap
@@ -161,6 +168,59 @@ function ManagerOverview() {
       </div>
 
       <Disclaimer text={d.note} />
+
+      {geo.data && (
+        <MapFullscreen
+          open={fs}
+          onClose={() => setFs(false)}
+          title="Kenya hazard map"
+          subtitle={`${LAYER_KEYS[layer].title} · weather data to ${health.data?.daily_range?.[1] ?? "…"}`}
+          toolbar={
+            <Segmented
+              label="Map layer"
+              value={layer}
+              onChange={setLayer}
+              options={(Object.keys(LAYER_LABEL) as MapLayerMode[]).map((k) => ({ value: k, label: LAYER_LABEL[k] }))}
+            />
+          }
+          panel={
+            <MapKey
+              k={LAYER_KEYS[layer]}
+              asOf={layer === "forecast" && health.data?.forecast_fetched_utc ? `forecast from ${new Date(health.data.forecast_fetched_utc).toLocaleString()}` : `data to ${health.data?.daily_range?.[1] ?? "…"}`}
+              extra={<LevelCounts geo={geo.data} layer={layer} />}
+            />
+          }
+          selection={fsSel ? (
+            <FsCountyDetails
+              card={d.counties.find((c) => c.county === fsSel)}
+              props={geo.data.features.find((f) => f.properties?.county === fsSel)?.properties ?? {}}
+              layer={layer}
+              onOpen={() => { setFs(false); navigate(`/county/${encodeURIComponent(fsSel)}`, { viewTransition: true }); }}
+              onActions={() => { setFs(false); setSelected(fsSel); }}
+            />
+          ) : null}
+          onClearSelection={() => setFsSel(null)}
+        >
+          <Suspense fallback={<Skeleton h="100%" />}>
+            <KenyaMap
+              expanded
+              data={geo.data}
+              mode={layer}
+              highlighted={hovered}
+              selected={fsSel}
+              onHover={setHovered}
+              onSelect={setFsSel}
+              tooltip={(p) => (
+                <div className="grid gap-0.5 text-sm">
+                  <b>{p.county}</b>
+                  <span>{layerValue(layer, p)}</span>
+                  <span className="subtle">Tap for details</span>
+                </div>
+              )}
+            />
+          </Suspense>
+        </MapFullscreen>
+      )}
 
       <Sheet open={!!card} onClose={() => setSelected(null)} title={card?.county ?? ""}>
         {card && (
@@ -237,6 +297,90 @@ function PublicOverview() {
         ))}
       </div>
       <Disclaimer text={q.data.note} />
+    </div>
+  );
+}
+
+// ------------------------------------------------------------------ full-screen helpers
+const LEVEL_PROP: Partial<Record<MapLayerMode, string>> = {
+  drought: "drought_level", observed: "observed_heavy_level", forecast: "forecast_heavy_level",
+};
+
+/** One line describing the county's value on the active layer. */
+function layerValue(layer: MapLayerMode, p: Record<string, any>): string {
+  switch (layer) {
+    case "priority":
+      return `Priority #${p.priority_rank ?? "–"} · score ${p.priority_score ?? "–"} · ${p.overall_level ?? "–"}`;
+    case "drought":
+      return p.pct_of_normal == null
+        ? `Drought: ${p.drought_level ?? "not assessed"} (dry season)`
+        : `Drought ${p.drought_level}: ${Math.round(p.pct_of_normal)}% of normal rain (3 months to ${p.drought_window_end})`;
+    case "observed":
+      return `Last 7 days ${p.observed_heavy_level}: wettest 3 days ${p.observed_max_3day_mm_last7d} mm (${Math.round(100 * (p.observed_ratio_to_p99 ?? 0))}% of its 1-in-100-day level)`;
+    case "forecast":
+      return p.forecast_max_3day_mm == null ? "No forecast in this build" : `Next 7 days ${p.forecast_heavy_level}: up to ${p.forecast_max_3day_mm} mm in 3 days`;
+    case "cyclone":
+      return `${p.cyclone_exposure_class}: ${p.cyclone_storms_300km ?? 0} tropical storm(s) within 300 km since 1981`;
+  }
+}
+
+/** "How many counties are in each class right now" for the active layer. */
+function LevelCounts({ geo, layer }: { geo: FeatureCollection; layer: MapLayerMode }) {
+  const rows = useMemo(() => {
+    const counts = new Map<string, string[]>();
+    for (const f of geo.features) {
+      const p = f.properties ?? {};
+      let k: string;
+      if (layer === "priority") k = p.overall_level ?? "Normal";
+      else if (layer === "cyclone") k = p.cyclone_exposure_class ?? "None recorded";
+      else k = p[LEVEL_PROP[layer]!] ?? "Not assessed";
+      counts.set(k, [...(counts.get(k) ?? []), p.county]);
+    }
+    const order = layer === "cyclone" ? ["High", "Moderate", "Low", "None recorded"] : ["Emergency", "Warning", "Watch", "Normal"];
+    const toLevel: Record<string, string> = { High: "Emergency", Moderate: "Warning", Low: "Watch", "None recorded": "Normal" };
+    const rank = (k: string) => (order.indexOf(k) < 0 ? 99 : order.indexOf(k));
+    return [...counts.entries()]
+      .sort((a, b) => rank(a[0]) - rank(b[0]))
+      .map(([k, cs]) => ({
+        level: layer === "cyclone" ? toLevel[k] ?? "none" : order.includes(k) ? k : "none",
+        label: `${k}: ${cs.length}`,
+        meaning: [...cs].sort().join(", "),
+      }));
+  }, [geo, layer]);
+  return (
+    <div className="grid gap-2">
+      <p className="subtle font-semibold">{layer === "priority" ? "Counties by overall level now" : "Counties in each class now"}</p>
+      <KeyList items={rows} />
+    </div>
+  );
+}
+
+function FsCountyDetails({ card, props, layer, onOpen, onActions }: {
+  card?: InsightCard; props: Record<string, any>; layer: MapLayerMode; onOpen: () => void; onActions: () => void;
+}) {
+  if (!card) return <p className="muted">No details for this county.</p>;
+  return (
+    <div className="grid gap-3 pr-6">
+      <div className="flex flex-wrap items-center gap-2">
+        <h3 className="text-lg">{card.county}</h3>
+        <LevelBadge level={card.overall_level} size="sm" />
+        <span className="chip num">Priority #{card.priority_rank}</span>
+      </div>
+      <p className="text-sm font-semibold">{layerValue(layer, props)}</p>
+      <div className="flex flex-wrap gap-1.5">
+        {(["drought", "flood", "cyclone"] as const).map((h) => (
+          <span key={h} className="chip" style={{ fontSize: 12 }}>
+            {h === "flood" ? "Heavy rain" : h[0].toUpperCase() + h.slice(1)}: {card.hazard_levels[h]}
+          </span>
+        ))}
+      </div>
+      <p className="muted text-sm">{card.headline}</p>
+      {card.next.outlook && <p className="text-sm"><b>Next 3 months:</b> {card.next.outlook.message}</p>}
+      <p className="subtle">{fmtPeople(card.exposure.population_2020)} people · {card.actions.length} playbook actions triggered</p>
+      <div className="flex flex-wrap gap-2">
+        <button className="btn btn-accent" onClick={onOpen}>Open county <ArrowRight size={16} /></button>
+        {card.actions.length > 0 && <button className="btn" onClick={onActions}>What to do</button>}
+      </div>
     </div>
   );
 }

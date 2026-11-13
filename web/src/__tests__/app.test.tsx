@@ -167,3 +167,43 @@ describe("InsightPanel", () => {
     expect(JSON.parse(localStorage.getItem("cs.check.Turkana")!)).toHaveProperty("DR-A1");
   });
 });
+
+describe("Full-screen map", () => {
+  it("shows the map, the full key and the details card, and closes with Exit or Escape", async () => {
+    const { MapFullscreen, MapKey } = await import("../components/MapFullscreen");
+    const { LAYER_KEYS } = await import("../lib/mapLegends");
+    const onClose = vi.fn();
+    const onClear = vi.fn();
+    wrap(
+      <MapFullscreen
+        open
+        onClose={onClose}
+        title="Kenya hazard map"
+        panel={<MapKey k={LAYER_KEYS.drought} />}
+        selection={<p>Turkana details</p>}
+        onClearSelection={onClear}
+      >
+        <div data-testid="the-map" />
+      </MapFullscreen>,
+    );
+    const dlg = screen.getByRole("dialog", { name: /Kenya hazard map, full screen map/ });
+    expect(within(dlg).getByTestId("the-map")).toBeInTheDocument();
+    // narrow test window -> key lives in the drawer
+    fireEvent.click(within(dlg).getByRole("button", { name: /Map key & information/ }));
+    expect(within(dlg).getByText(/50–75% of normal/)).toBeInTheDocument();
+    expect(within(dlg).getByText(/Not assessed/)).toBeInTheDocument();
+    expect(within(dlg).getByText("Turkana details")).toBeInTheDocument();
+    fireEvent.click(within(dlg).getByRole("button", { name: "Close details" }));
+    expect(onClear).toHaveBeenCalled();
+    fireEvent.keyDown(window, { key: "Escape" });
+    expect(onClose).toHaveBeenCalledTimes(1);
+    fireEvent.click(within(dlg).getByRole("button", { name: "Exit full screen" }));
+    expect(onClose).toHaveBeenCalledTimes(2);
+  });
+
+  it("renders nothing when closed", async () => {
+    const { MapFullscreen } = await import("../components/MapFullscreen");
+    wrap(<MapFullscreen open={false} onClose={() => undefined} title="x" panel={null}><div /></MapFullscreen>);
+    expect(screen.queryByRole("dialog")).toBeNull();
+  });
+});
