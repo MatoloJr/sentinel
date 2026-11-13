@@ -14,25 +14,25 @@ Zetech Alumni x Student Hackathon · ML & Data Science track · Challenge 1
 |---|---|
 | **Region** | 14 Kenyan counties, one representative point each (county HQ town): Turkana, Marsabit, Mandera, Wajir, Garissa (arid north/north-east), Tana River (Tana basin), Makueni (semi-arid south-east), Nairobi (highlands), Kisumu, Busia (Lake Victoria basin), Lamu, Kilifi, Mombasa, Kwale (coast) |
 | **Why here** | Drought and floods both recur and are well documented (2020-22 drought, 2023 and 2024 floods), giving real events to validate against. The coast adds cyclone exposure, which is low but not zero. |
-| **Target users** | County disaster risk management officers, county drought coordinators, and humanitarian responders such as Kenya Red Cross county branches |
+| **Target users** | County disaster risk management officers, county drought coordinators and humanitarian responders such as Kenya Red Cross county branches |
 | **SDGs** | **13.1** (resilience to climate hazards), **2.4** (resilient agriculture and pastoralism), **11.5** (reduce disaster deaths and losses), **1.5** (resilience of the poor) |
 
 ## What it does
 
-1. **Weather behaviour**: 1991-2020 monthly normals, rainy seasons, Mann-Kendall + Sen's slope trends, and yearly extremes (longest dry spell, heavy-rain days, maximum 3-day rain, hot days).
+1. **Weather behaviour**: 1991-2020 monthly normals, rainy seasons, Mann-Kendall + Sen's slope trends and yearly extremes (longest dry spell, heavy-rain days, maximum 3-day rain, hot days).
 2. **Hazard indicators**: drought = 3-month rain as % of normal (Normal / Watch / Warning / Emergency); heavy rain = 3-day total against the county's own p95 / p99 / p99.9. Both are validated against documented events.
 3. **Cyclone exposure**: IBTrACS tropical storms within 300 km of each county by season and decade, ranked. Distances are computed in a projected CRS.
 4. **Seasonal outlook**: the probability that the next 3 months are below normal, using ENSO and the Indian Ocean Dipole. Leak-free time split, tested on the last 8 years, compared with climatology and persistence. Where the model shows no skill, the system says so and publishes 33%.
 5. **7-day watch**: live forecast 3-day rain against each county's p99, plus coastal gale gusts and heat days.
 6. **Insights & actions** (`sentinel/insights.py`, no LLM): one card per county with the main drivers, what is likely next (with the model's tested skill), people exposed, a priority rank (severity × population, boosted when risk is rising) and the triggered playbook actions with timeframes. A public view gives plain-language advice and an SMS of at most 160 characters.
-7. **Early-warning agent (Gemini)**: 8 tools. Every number cites a tool result, a validator blocks unverified numbers or risk denials, actions come only from the cited playbook, every tool call is logged, and each draft needs human approval.
+7. **Early-warning agent (Gemini)**: 8 tools. Every number cites a tool result, a validator blocks unverified numbers or risk denials, actions come only from the cited playbook, every tool call is logged and each draft needs human approval.
 8. **Web app (React)**: an interactive map with hazard layers, a ranked "needs attention" list linked to the map, county dashboards with charts, comparison and an action checklist, the outlook and its verification, cyclone tracks, the advisory workflow and an evidence page. Navigation is a centred dynamic island at the bottom; Ctrl+K opens search. A Manager / Public switch changes the whole app's voice.
 
 ## How is this different from the forecast on my phone or TV?
 
 | | Phone / TV forecast | Climate Sentinel |
 |---|---|---|
-| Answers | What will the weather be? | Is it unusual *here*, who is exposed, and what should the county do? |
+| Answers | What will the weather be? | Is it unusual *here*, who is exposed and what should the county do? |
 | Horizon | Hours to ~10 days | Last 3 months (drought) + next 7 days (heavy rain) + next 3 months (seasonal odds) |
 | Reference | Absolute numbers | Each county's own 1991-2020 normal and extremes |
 | Drought | Rarely covered | Core indicator |
@@ -93,7 +93,7 @@ python -m sentinel.model_registry promote <version>       # refuses if the gate 
 python run_all.py --offline                                # backtest + live outlook now use the promoted config
 ```
 
-**Promotion gate**: a model becomes active only if its test Brier skill score has a 90% bootstrap lower bound above 0, or if it beats the active model on Brier without worse calibration. Otherwise the pipeline keeps its inline default, and counties without skill keep publishing 33%. Re-running many searches against the same test years slowly overfits them, so treat repeated "wins" with caution.
+**Promotion gate**: a model becomes active only if its test Brier skill score has a 90% bootstrap lower bound above 0, or if it beats the active model on Brier without worse calibration. Otherwise the pipeline keeps its inline default and counties without skill keep publishing 33%. Re-running many searches against the same test years slowly overfits them, so treat repeated "wins" with caution.
 
 ## Evaluation metrics
 
@@ -130,6 +130,6 @@ Implemented in `sentinel/metrics.py` and shown in the model card (`models/outloo
 ## Responsible AI in one paragraph
 The LLM does no arithmetic. Tools compute every number, percentage and level. Each tool result gets an id (`T1`, `T2`, …) and the
 advisory must cite it. A code validator checks every number, date and action id in the draft against the logged tool
-results, and blocks drafts that invent numbers, cite unknown results, recommend non-playbook actions or deny a risk the
+results and blocks drafts that invent numbers, cite unknown results, recommend non-playbook actions or deny a risk the
 data shows. Blocked drafts cannot be approved. Unknown counties are refused (no fuzzy guessing). Missing data produces
 "I don't know". Only public, aggregated climate data is sent to the LLM provider. No personal data is collected.

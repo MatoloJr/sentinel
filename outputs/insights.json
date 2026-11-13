@@ -216,7 +216,7 @@
       ],
       "rainy_seasons": "Mar-May (45% of annual); Nov (14% of annual)",
       "public": {
-        "summary": "Rain is well below normal. Water and pasture may run short. Conserve water and contact your ward office about water and fodder support. Heavy rain is possible. Keep drinking water, move valuables up, and know your nearest higher ground.",
+        "summary": "Rain is well below normal. Water and pasture may run short. Conserve water and contact your ward office about water and fodder support. Heavy rain is possible. Keep drinking water, move valuables up and know your nearest higher ground.",
         "sms": "Nairobi Drought WARNING: Save water; ask ward office about water/fodder help. Follow KMD/county alerts.",
         "level": "Warning"
       },
@@ -430,7 +430,7 @@
       ],
       "rainy_seasons": "Mar-May (43% of annual); Oct-Nov (25% of annual)",
       "public": {
-        "summary": "Rain is well below normal. Water and pasture may run short. Conserve water and contact your ward office about water and fodder support. Heavy rain is possible. Keep drinking water, move valuables up, and know your nearest higher ground.",
+        "summary": "Rain is well below normal. Water and pasture may run short. Conserve water and contact your ward office about water and fodder support. Heavy rain is possible. Keep drinking water, move valuables up and know your nearest higher ground.",
         "sms": "Turkana Drought WARNING: Save water; ask ward office about water/fodder help. Follow KMD/county alerts.",
         "level": "Warning"
       },
@@ -946,7 +946,7 @@
       ],
       "rainy_seasons": "Mar-Apr (24% of annual); Nov-Dec (48% of annual)",
       "public": {
-        "summary": "Heavy rain is possible. Keep drinking water, move valuables up, and know your nearest higher ground. It is cyclone season. Follow Kenya Met Department updates, secure roofs and know your evacuation route.",
+        "summary": "Heavy rain is possible. Keep drinking water, move valuables up and know your nearest higher ground. It is cyclone season. Follow Kenya Met Department updates, secure roofs and know your evacuation route.",
         "sms": "Garissa Heavy rain WATCH: Keep water, raise valuables, know high ground. Follow KMD/county alerts.",
         "level": "Watch"
       },
@@ -1078,7 +1078,7 @@
       ],
       "rainy_seasons": "Apr-May (42% of annual); Oct-Nov (47% of annual)",
       "public": {
-        "summary": "Heavy rain is possible. Keep drinking water, move valuables up, and know your nearest higher ground.",
+        "summary": "Heavy rain is possible. Keep drinking water, move valuables up and know your nearest higher ground.",
         "sms": "Mandera Heavy rain WATCH: Keep water, raise valuables, know high ground. Follow KMD/county alerts.",
         "level": "Watch"
       },
@@ -1349,7 +1349,7 @@
       ],
       "rainy_seasons": "Mar-May (35% of annual); Oct-Dec (33% of annual)",
       "public": {
-        "summary": "Heavy rain is possible. Keep drinking water, move valuables up, and know your nearest higher ground.",
+        "summary": "Heavy rain is possible. Keep drinking water, move valuables up and know your nearest higher ground.",
         "sms": "Kisumu Heavy rain WATCH: Keep water, raise valuables, know high ground. Follow KMD/county alerts.",
         "level": "Watch"
       },
@@ -1481,7 +1481,7 @@
       ],
       "rainy_seasons": "Mar-Apr (32% of annual); Nov-Dec (39% of annual)",
       "public": {
-        "summary": "Heavy rain is possible. Keep drinking water, move valuables up, and know your nearest higher ground.",
+        "summary": "Heavy rain is possible. Keep drinking water, move valuables up and know your nearest higher ground.",
         "sms": "Makueni Heavy rain WATCH: Keep water, raise valuables, know high ground. Follow KMD/county alerts.",
         "level": "Watch"
       },
@@ -1762,7 +1762,7 @@
       ],
       "rainy_seasons": "Mar-May (35% of annual); Oct-Nov (19% of annual)",
       "public": {
-        "summary": "Rain has been below normal. Save and store water, and follow county advice on water points and grazing.",
+        "summary": "Rain has been below normal. Save and store water and follow county advice on water points and grazing.",
         "sms": "Busia Drought WATCH: Save water. Follow KMD/county alerts.",
         "level": "Watch"
       },
@@ -2033,7 +2033,7 @@
       ],
       "rainy_seasons": "Mar-Apr (33% of annual); Oct-Dec (52% of annual)",
       "public": {
-        "summary": "Heavy rain is possible. Keep drinking water, move valuables up, and know your nearest higher ground.",
+        "summary": "Heavy rain is possible. Keep drinking water, move valuables up and know your nearest higher ground.",
         "sms": "Marsabit Heavy rain WATCH: Keep water, raise valuables, know high ground. Follow KMD/county alerts.",
         "level": "Watch"
       },

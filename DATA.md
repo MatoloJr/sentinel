@@ -32,6 +32,6 @@ observations, on a ~25 km grid (ERA5 itself is ~31 km; Open-Meteo serves it at 0
 
 ## Processing notes
 - Representative point per county = HQ town coordinates (`sentinel/config.py`). The notebook reports the distance to the ERA5 grid centre.
-- Only complete months (all days present) enter monthly analysis, and only complete years enter annual trends and extremes.
+- Only complete months (all days present) enter monthly analysis and only complete years enter annual trends and extremes.
 - Projected CRSs: Kenya-centred azimuthal equidistant (`+proj=aeqd +lat_0=0.5 +lon_0=38.5`) for the 300 km cyclone buffers, EPSG:6933 for areas.
 - IBTrACS: main tracks only, seasons 1981 onward (satellite era). A "tropical storm" means max(WMO_WIND, USA_WIND) ≥ 34 kt at a point within 300 km.

@@ -1,6 +1,6 @@
 """Deterministic insights and actions: turns pipeline outputs into a ranked, actionable card per county.
 
-No LLM is involved. Every number is copied from an output table, and every action comes from
+No LLM is involved. Every number is copied from an output table and every action comes from
 `sentinel/playbook.json`, so cards can be shown to managers and the public without review.
 Two views are produced from the same facts:
 * manager: drivers, what's next (with model skill), people exposed, triggered playbook actions, priority rank
@@ -24,10 +24,10 @@ CYCLONE_SEASON_MONTHS = {11, 12, 1, 2, 3, 4}  # SW Indian Ocean season, Nov-Apr
 SMS_MAX = 160
 
 PUBLIC_ADVICE = {
-    ("drought", "Watch"): "Rain has been below normal. Save and store water, and follow county advice on water points and grazing.",
+    ("drought", "Watch"): "Rain has been below normal. Save and store water and follow county advice on water points and grazing.",
     ("drought", "Warning"): "Rain is well below normal. Water and pasture may run short. Conserve water and contact your ward office about water and fodder support.",
     ("drought", "Emergency"): "Severe drought conditions. Seek help early from county and Red Cross teams for water, food and livestock support.",
-    ("flood", "Watch"): "Heavy rain is possible. Keep drinking water, move valuables up, and know your nearest higher ground.",
+    ("flood", "Watch"): "Heavy rain is possible. Keep drinking water, move valuables up and know your nearest higher ground.",
     ("flood", "Warning"): "Very heavy rain is likely. Do not walk or drive through flowing water. Be ready to move to higher ground if told to.",
     ("flood", "Emergency"): "Extreme rain or flooding. Move to higher ground now if advised and follow instructions from authorities.",
     ("cyclone", "Watch"): "It is cyclone season. Follow Kenya Met Department updates, secure roofs and know your evacuation route.",

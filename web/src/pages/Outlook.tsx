@@ -28,7 +28,7 @@ export function Outlook() {
         <h1>What's likely next</h1>
         <p className="muted max-w-[70ch]">
           The 7-day watch compares the forecast with each county's own extremes. The 3-month outlook gives the chance
-          of below-normal rain, and it is only trusted where it beat climatology in an 8-year test it never trained on.
+          of below-normal rain and it is only trusted where it beat climatology in an 8-year test it never trained on.
         </p>
         <Segmented
           label="View"

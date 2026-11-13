@@ -64,7 +64,7 @@ export function Advisory() {
       <header className="grid gap-2">
         <h1>Advisories</h1>
         <p className="muted max-w-[65ch]">
-          Advisories are drafted by county disaster managers with Gemini, checked number by number, and approved by a
+          Advisories are drafted by county disaster managers with Gemini, checked number by number and approved by a
           named officer before release. For plain-language advice about your area, see the Overview or your county page.
         </p>
       </header>
@@ -122,7 +122,7 @@ function ManagerAdvisory() {
         <h1>Draft an advisory</h1>
         <p className="muted max-w-[70ch]">
           Gemini answers only from the system's own tools. Every number must cite a tool result, a validator blocks
-          invented numbers or downplayed risk, actions come only from the playbook, and a person approves before release.
+          invented numbers or downplayed risk, actions come only from the playbook and a person approves before release.
         </p>
       </header>
 

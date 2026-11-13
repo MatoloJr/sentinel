@@ -250,7 +250,7 @@
   ],
   "status": "blocked",
   "approval": null,
-  "answer_draft": "I don't know what the weather will be in Mombasa in March of 2027 because data for that period is unavailable. The available forecast watch covers 12 November 2026 to 18 November 2026 [T2], and the seasonal outlook only covers November 2026 to January 2027 [T3].",
+  "answer_draft": "I don't know what the weather will be in Mombasa in March of 2027 because data for that period is unavailable. The available forecast watch covers 12 November 2026 to 18 November 2026 [T2] and the seasonal outlook only covers November 2026 to January 2027 [T3].",
   "validation": {
     "passed": false,
     "issues": [
@@ -258,6 +258,6 @@
     ],
     "numbers_checked": 7
   },
-  "advisory": "I don't know what the weather will be in Mombasa in March of 2027 because data for that period is unavailable. The available forecast watch covers 12 November 2026 to 18 November 2026 [T2], and the seasonal outlook only covers November 2026 to January 2027 [T3].\n\n---\n*Draft from Climate Sentinel, a planning-support tool, not an official warning system. Official warnings from the Kenya Meteorological Department (KMD) and the National Disaster Operations Centre take priority over this planning-support tool. For any live cyclone: Kenya Meteorological Department (https://meteo.go.ke) issues national warnings; RSMC La R\u00e9union (M\u00e9t\u00e9o-France, https://meteofrance.re/fr/cyclone) is the WMO Regional Specialized Meteorological Centre for South-West Indian Ocean cyclones.*",
+  "advisory": "I don't know what the weather will be in Mombasa in March of 2027 because data for that period is unavailable. The available forecast watch covers 12 November 2026 to 18 November 2026 [T2] and the seasonal outlook only covers November 2026 to January 2027 [T3].\n\n---\n*Draft from Climate Sentinel, a planning-support tool, not an official warning system. Official warnings from the Kenya Meteorological Department (KMD) and the National Disaster Operations Centre take priority over this planning-support tool. For any live cyclone: Kenya Meteorological Department (https://meteo.go.ke) issues national warnings; RSMC La R\u00e9union (M\u00e9t\u00e9o-France, https://meteofrance.re/fr/cyclone) is the WMO Regional Specialized Meteorological Centre for South-West Indian Ocean cyclones.*",
   "finished_utc": "2026-11-12T13:49:18+00:00"
 }

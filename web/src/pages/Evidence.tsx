@@ -8,12 +8,12 @@ const METRICS: [string, string, string][] = [
   ["BSS vs persistence", "Does the model beat 'the next 3 months will be like the last 3'? A model must beat both baselines to be trusted.", "Seasonal outlook"],
   ["Reliability diagram & ECE", "Calibration: when the model says 60%, below-normal rain should happen about 60% of the time. ECE is the average gap.", "Seasonal outlook"],
   ["ROC AUC / PR AUC", "Discrimination: can it rank dry seasons above wet ones? PR AUC is more honest when the event is a 1-in-3.", "Seasonal outlook"],
-  ["POD, FAR, CSI", "At the warning threshold: share of dry seasons warned (POD), share of warnings that were false (FAR), and the combined critical success index.", "Outlook & 7-day watch"],
-  ["Peirce (Hanssen–Kuipers) & Heidke skill", "POD minus false-alarm rate, and accuracy beyond chance. Fair for uncommon events, unlike plain accuracy.", "Outlook & 7-day watch"],
+  ["POD, FAR, CSI", "At the warning threshold: share of dry seasons warned (POD), share of warnings that were false (FAR) and the combined critical success index.", "Outlook & 7-day watch"],
+  ["Peirce (Hanssen–Kuipers) & Heidke skill", "POD minus false-alarm rate and accuracy beyond chance. Fair for uncommon events, unlike plain accuracy.", "Outlook & 7-day watch"],
   ["Relative economic value", "For a user whose preparation costs C and avoided loss is L: how much of a perfect forecast's savings does acting on this forecast capture? Turns skill into 'is it worth acting on?'.", "Decision value"],
   ["RPSS", "Ranked probability skill score; used if the outlook is extended to all three terciles (below / near / above normal).", "Future 3-category outlook"],
-  ["Event hit rate & lead time", "Do the drought and heavy-rain indicators reach Watch+ during documented disasters (ReliefWeb / IFRC), and how early?", "Hazard indicators"],
-  ["Validator pass rate, citation coverage, approval rate", "Share of drafts passing the number/citation validator, share of numeric sentences that cite a tool, and share of reviewed drafts a human approved.", "Advisory agent"],
+  ["Event hit rate & lead time", "Do the drought and heavy-rain indicators reach Watch+ during documented disasters (ReliefWeb / IFRC) and how early?", "Hazard indicators"],
+  ["Validator pass rate, citation coverage, approval rate", "Share of drafts passing the number/citation validator, share of numeric sentences that cite a tool and share of reviewed drafts a human approved.", "Advisory agent"],
 ];
 
 export function Evidence() {
@@ -29,7 +29,7 @@ export function Evidence() {
     <div className="page grid gap-8">
       <header className="grid gap-2">
         <h1>Evidence & model card</h1>
-        <p className="muted max-w-[70ch]">How we know the indicators and the outlook are worth listening to, and where they are not.</p>
+        <p className="muted max-w-[70ch]">How we know the indicators and the outlook are worth listening to and where they are not.</p>
       </header>
 
       <Section title="Do the indicators catch real disasters?">
@@ -92,7 +92,7 @@ export function Evidence() {
         )}
       </Section>
 
-      <Section title="Which metrics, and why">
+      <Section title="Which metrics and why">
         <RTable
           stack
           rows={METRICS}

@@ -64,7 +64,7 @@ fig.suptitle("Monthly normal rainfall (bars, mm) and mean Tmax (red, degC), 1991
         code("""seasons = csv("seasons.csv"); seasons"""),
         md("Wet months are months whose normal is above the county's average month (annual/12); contiguous wet months form a season. "
            "Expect **bimodal** regimes (long rains Mar-May, short rains Oct-Dec) in most of Kenya, a later long-rains peak "
-           "(Apr-Jun) on the coast, and a wetter, flatter regime in the Lake Victoria basin."),
+           "(Apr-Jun) on the coast and a wetter, flatter regime in the Lake Victoria basin."),
         md("## 2. Trends: annual and seasonal rainfall, temperature\nMann-Kendall test (Kendall's tau vs year) for significance, "
            "Sen's slope for the size of change, complete years only."),
         code("""tr = csv("trends.csv")
@@ -79,7 +79,7 @@ print("\\nCaution: with 14 counties x 7 variables (~98 tests) about 5 'significa
 ax = daily_ann[["Mandera", "Tana River", "Nairobi", "Kisumu", "Mombasa"]].plot(figsize=(11, 4), marker=".")
 ax.set_ylabel("Annual rain (mm)"); ax.set_title("Annual rainfall, selected counties")"""),
         md("## 3. Extremes\nLongest dry spell (consecutive days < 1 mm), heavy-rain days (above the county's own 95th percentile of wet days), "
-           "maximum 3-day rainfall, and hot days (apparent Tmax above the county's 95th percentile)."),
+           "maximum 3-day rainfall and hot days (apparent Tmax above the county's 95th percentile)."),
         code("""ext.groupby("county")[["longest_dry_spell_days", "heavy_rain_days", "max_3day_rain_mm", "hot_days"]].agg(["mean", "max"]).round(1)"""),
         code("""et = csv("extremes_trends.csv")
 et.pivot(index="county", columns="variable", values="sen_slope_per_decade").round(2).join(
@@ -114,7 +114,7 @@ for ev, g in val.groupby("event"):
     print(f"{ev}: matched {m}/{len(g)} counties, partial {p}; missed: {', '.join(g[g.result=='missed'].county) or 'none'}")
 print("\\nSources:"); [print("-", u) for u in val.url.unique()]"""),
         md("**Reading the misses:** a point estimate at the county HQ cannot see rain that fell upstream (e.g. Tana River floods are often driven by "
-           "rain in the central highlands, far from Hola), and ERA5 smooths intense local storms (urban flash floods in Nairobi). "
+           "rain in the central highlands, far from Hola) and ERA5 smooths intense local storms (urban flash floods in Nairobi). "
            "These are recorded in LIMITATIONS.md."),
         md("## 7. Cyclone exposure (IBTrACS, 300 km from the county boundary)\n"
            "Distances are computed in a Kenya-centred azimuthal equidistant projection (metres), not in degrees."),
@@ -202,7 +202,7 @@ This notebook runs the **same code** as `python -m sentinel.train` (`sentinel/tr
 5. export a versioned model (`model.joblib` + `model_card.json`) to Drive / your computer
 
 The model predicts **P(next 3 months' rain falls in the driest third)** for each county. All statistics are
-recomputed per fold from earlier years only (no leakage), and the test period is touched exactly once per run.
+recomputed per fold from earlier years only (no leakage) and the test period is touched exactly once per run.
 Run the cells top to bottom (Runtime → Run all). A CPU runtime is enough."""),
         md("## 1 · Settings"),
         code(f"""REPO_URL   = "{COLAB_REPO}"   # your fork works too

@@ -41,7 +41,7 @@ class RateLimitError(RuntimeError):
 def _rate_limit_wait(reason: str) -> float | None:
     """Seconds to wait for an Open-Meteo 429, or None if the daily quota is gone.
 
-    Open-Meteo's free tier has minutely / hourly / daily limits, and the 429 body says
+    Open-Meteo's free tier has minutely / hourly / daily limits and the 429 body says
     which one was hit. Short exponential backoff can never clear an hourly limit.
     """
     low = reason.lower()

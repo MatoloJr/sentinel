@@ -2,14 +2,14 @@ import { Link } from "react-router-dom";
 import { Disclaimer, RTable, Section } from "../components/ui";
 
 const ROWS: [string, string, string][] = [
-  ["Question it answers", "What will the weather be? (“40 mm on Thursday”)", "Is that unusual here, and what should we do? (“40 mm in 3 days is above Garissa's 1-in-100-day level: Flood Warning”)"],
+  ["Question it answers", "What will the weather be? (“40 mm on Thursday”)", "Is that unusual here and what should we do? (“40 mm in 3 days is above Garissa's 1-in-100-day level: Flood Warning”)"],
   ["Time horizon", "Hours to about 10 days", "Three horizons at once: the last 3 months (drought), the next 7 days (heavy rain) and the next 3 months (seasonal odds)"],
   ["Reference point", "Absolute numbers", "Each county's own 1991–2020 normal and its own extremes, so 20 mm can matter in Wajir but not in Busia"],
   ["Slow disasters", "Rarely mentioned", "Tracks drought as 3-month rain against normal, the hazard that affects the most Kenyans"],
   ["People", "Not considered", "Counts the people living under each alert level and ranks counties by severity × people"],
   ["What to do", "Stops at the forecast", "Each alert unlocks cited actions from Kenya Red Cross / IFRC early-action protocols, plus an SMS-length message"],
   ["Honesty about skill", "One number, no track record shown", "Shows its own test record. Where the seasonal model did not beat normal odds, it says so and publishes 33%"],
-  ["Accountability", "Broadcast as is", "AI drafts cite every number, a validator blocks invented ones, and a named person approves before release"],
+  ["Accountability", "Broadcast as is", "AI drafts cite every number, a validator blocks invented ones and a named person approves before release"],
 ];
 
 export function About() {

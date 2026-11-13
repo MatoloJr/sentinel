@@ -143,7 +143,7 @@ describe("Top island search", () => {
 });
 
 describe("Notifications (top right)", () => {
-  it("counts unread alerts and drafts, and marks them read", async () => {
+  it("counts unread alerts and drafts and marks them read", async () => {
     wrap(<TopBar />);
     const bell = await screen.findByRole("button", { name: /Notifications \(2 unread\)/ });
     fireEvent.click(bell);
@@ -167,7 +167,7 @@ describe("InsightPanel", () => {
 });
 
 describe("Full-screen map", () => {
-  it("shows the map, the full key and the details card, and closes with Exit or Escape", async () => {
+  it("shows the map, the full key and the details card and closes with Exit or Escape", async () => {
     const { MapFullscreen, MapKey } = await import("../components/MapFullscreen");
     const { LAYER_KEYS } = await import("../lib/mapLegends");
     const onClose = vi.fn();

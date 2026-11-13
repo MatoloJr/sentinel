@@ -57,5 +57,5 @@ data, read the results, validate them honestly and write down what they mean**. 
 Natural adaptation: plug the indicator, outlook and agent pipeline into a county early-warning workflow, for example a
 disaster-intelligence platform such as Hotspot or a Kenya Red Cross county branch dashboard, extended to sub-county wards and
 river-basin rainfall (upstream Tana / Nzoia), which fixes the biggest limitation. Label partnerships as *proposed*, keep
-measured prototype results separate from projected impact, and name the key assumption to test next: that county officers act
+measured prototype results separate from projected impact and name the key assumption to test next: that county officers act
 on a cited, approved advisory faster than on today's bulletins.

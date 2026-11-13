@@ -1,4 +1,4 @@
-"""Weather behaviour: climatology, seasons, trends with significance, and yearly extremes."""
+"""Weather behaviour: climatology, seasons, trends with significance and yearly extremes."""
 from __future__ import annotations
 
 import numpy as np

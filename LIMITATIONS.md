@@ -1,10 +1,10 @@
 # Limitations note
 
-**Purpose.** Climate Sentinel supports planning. It does not issue warnings, and KMD and NDOC warnings always override it.
+**Purpose.** Climate Sentinel supports planning. It does not issue warnings and KMD and NDOC warnings always override it.
 
 ## Where the data is weak
 - **Rain is modelled (ERA5), not measured.** It under-states intense local storms and over-counts drizzle days. Weakest in the
-  **arid north-east (Mandera, Wajir, Garissa, Marsabit, Turkana)**, where few gauges anchor the model, and on the **coast**,
+  **arid north-east (Mandera, Wajir, Garissa, Marsabit, Turkana)**, where few gauges anchor the model and on the **coast**,
   where a 25 km cell mixes land and sea.
 - **One point per county.** Turkana is about 68,000 km²; one grid cell at Lodwar cannot represent the whole county. Counties with
   strong internal contrasts (Makueni highlands vs lowlands, Kilifi coast vs hinterland) are averaged away.
@@ -12,7 +12,7 @@
   hundreds of km upstream of Hola. Our local 3-day indicator can **miss riverine floods** (see `outputs/validation.csv`).
   Urban flash floods (Nairobi) depend on drainage, which we do not model.
 - **Population is a 2020 model estimate (WorldPop)**, checked against the 2019 census (`outputs/population.csv`). It does not
-  show who is most vulnerable, and mobile pastoralists may not be counted where they actually are.
+  show who is most vulnerable and mobile pastoralists may not be counted where they actually are.
 
 ## Where the model is weak
 - **Seasonal outlook.** Only about 30 years of training and 8 test years (roughly 8 forecasts per county per target season).

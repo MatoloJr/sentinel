@@ -1,7 +1,7 @@
 # Evaluation metrics
 
 How Climate Sentinel Kenya is evaluated, component by component. Each metric is marked:
-- **✅** computed today: in `sentinel/metrics.py`, `sentinel/outlook.py`, `sentinel/indicators.py` or the API, and shown in the app.
+- **✅** computed today: in `sentinel/metrics.py`, `sentinel/outlook.py`, `sentinel/indicators.py` or the API and shown in the app.
 - **🟡** planned, not yet computed.
 
 The numbers quoted are from the build of 2026-11-12. Re-run `python run_all.py` to refresh them.
