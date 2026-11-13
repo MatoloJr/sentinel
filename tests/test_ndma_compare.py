@@ -50,3 +50,15 @@ def test_parse_phase_reads_bulletin_layouts(text, phase):
 @pytest.mark.parametrize("text", ["", "KILIFI COUNTY\nDROUGHT EARLY WARNING BULLETIN", "County Normal\nCounty Alert"])
 def test_parse_phase_never_guesses(text):
     assert nc.parse_phase(text)[0] == nc.NA
+
+
+@pytest.mark.parametrize("title,listed,expected", [
+    ("Mandera DEW Bulletin December 2024", "2024-12", ("Mandera", "2024-12")),  # listed under 'Wajir' by NDMA
+    ("Garissa DEW Bulletin May 2025", "2025-06", ("Garissa", "2025-05")),       # filed under June
+    ("Marsabit DEW Bulletin -July2023", "2023-07", ("Marsabit", "2023-07")),    # 'Mar'sabit is not March
+    ("Lamu DEW Bulletin- Aprill 2023", "2023-04", ("Lamu", "2023-04")),
+    ("Wajir DEW Bulletin- November", "2022-11", ("Wajir", "2022-11")),          # no year: listing year
+    ("Embu DEW Bulletin December 2024", "2024-12", ("Embu", "2024-12")),        # not one of ours -> dropped later
+])
+def test_title_gives_county_and_month(title, listed, expected):
+    assert nc.title_county_month(title, listed) == expected

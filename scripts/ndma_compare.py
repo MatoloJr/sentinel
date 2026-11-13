@@ -3,7 +3,8 @@
 NDMA (National Drought Management Authority) publishes a monthly Drought Early Warning bulletin per ASAL county
 that classifies the county as Normal / Alert / Alarm / Emergency / Recovery. Only bulletins that were actually
 downloaded and read are used: a month whose bulletin is not listed, cannot be downloaded or whose phase cannot be
-read from the PDF text is stored as "not available". Nothing is guessed.
+read from the PDF text is stored as "not available". Nothing is guessed. County and month are taken from each bulletin's title, because the NDMA listing mislabels some
+(e.g. all Dec 2024 bulletins tagged 'Wajir'); per-document results are cached in data/reference/ndma_bulletins_read.csv.
 
     node scripts/ndma_list_bulletins.js data/reference/ndma_bulletin_index.csv   # 1. list bulletins (needs Playwright)
     python scripts/ndma_compare.py extract                                       # 2. download + read phases
@@ -109,26 +110,80 @@ def _read_one(row: dict) -> dict:
             "bulletin_url": row["pdf_url"], "accessed_utc": now, "evidence": ev}
 
 
+# NDMA's listing metadata is wrong for some bulletins (e.g. every county's Dec 2024 bulletin is tagged 'Wajir';
+# May 2025 bulletins are filed under June). The bulletin's own title is used for county and month instead.
+ALL_NDMA_COUNTIES = COUNTIES + ["Baringo", "Embu", "Isiolo", "Kajiado", "Kitui", "Laikipia", "Meru", "Narok", "Nyeri",
+                                "Samburu", "Taita Taveta", "Tharaka Nithi", "West Pokot"]
+_MONTHS = {"jan": 1, "feb": 2, "mar": 3, "apr": 4, "may": 5, "jun": 6, "jul": 7, "aug": 8, "sep": 9, "oct": 10,
+           "nov": 11, "dec": 12}
+_MONTH_RE = re.compile(r"(?<![a-z])(jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)"
+                       r"(?:uary|ruary|ch|il+|e|y|ust|t|tember|ember|ober)?(?![a-z])")
+CACHE_CSV = REF / "ndma_bulletins_read.csv"
+CACHE_COLS = ["doc_id", "ndma_phase", "evidence", "accessed_utc"]
+
+
+def title_county_month(title: str, listed_month: str) -> tuple[str | None, str | None]:
+    """(county, 'YYYY-MM') named in a bulletin title; None for a part the title does not give."""
+    t = re.sub(r"[_\-]+", " ", str(title).lower())
+    t = re.sub(r"([a-z])(20\d\d)", r"\1 \2", t)  # 'February2022'
+    county = next((c for c in ALL_NDMA_COUNTIES if re.search(r"\b" + c.lower().replace(" ", r"\s*") + r"\b", t)), None)
+    rest = t
+    for c in ALL_NDMA_COUNTIES:  # 'Marsabit' must not read as 'Mar'
+        rest = re.sub(c.lower().replace(" ", r"\s*"), " ", rest)
+    m = _MONTH_RE.search(rest)
+    if not m:
+        return county, None
+    mon = _MONTHS[m.group(1)]
+    y = re.search(r"\b(20\d\d)\b", t)
+    ly, lm = int(listed_month[:4]), int(listed_month[5:7])
+    year = int(y.group(1)) if y else (ly - 1 if mon == 12 and lm == 1 else ly + 1 if mon == 1 and lm == 12 else ly)
+    return county, f"{year}-{mon:02d}"
+
+
+def relabel(idx: pd.DataFrame) -> pd.DataFrame:
+    """County and month from each bulletin's title; the listing's labels only where the title has none."""
+    idx = idx.drop_duplicates("doc_id").copy()
+    tc = [title_county_month(t, m) for t, m in zip(idx["title"], idx["month"])]
+    idx["listed_as"] = idx["county"] + " " + idx["month"]
+    idx["county"] = [c or lc for (c, _), lc in zip(tc, idx["county"])]
+    idx["month"] = [m or lm for (_, m), lm in zip(tc, idx["month"])]
+    return idx[idx["county"].isin(COUNTIES)]
+
+
+def _seed_cache(phases_csv: Path) -> pd.DataFrame:
+    """Per-document results recovered from an older ndma_phases.csv (so nothing is downloaded twice)."""
+    if not phases_csv.exists():
+        return pd.DataFrame(columns=CACHE_COLS)
+    p = pd.read_csv(phases_csv, dtype=str).fillna("")
+    p = p[(p["bulletin_url"] != "") & ~p["evidence"].str.startswith("conflicting")]
+    rows = [{"doc_id": u.split("document=")[-1], "ndma_phase": r.ndma_phase, "evidence": r.evidence,
+             "accessed_utc": r.accessed_utc} for r in p.itertuples() for u in r.bulletin_url.split()]
+    return pd.DataFrame(rows, columns=CACHE_COLS)
+
+
 def extract(index_csv: Path = INDEX_CSV, phases_csv: Path = PHASES_CSV, workers: int = 4,
             first: str = "2021-01", retry_na: bool = False) -> pd.DataFrame:
     """Download and read every listed bulletin not read yet; fill unlisted county-months with 'not available'."""
-    idx = pd.read_csv(index_csv, dtype=str)
-    idx = idx[idx["county"].isin(COUNTIES)].drop_duplicates("doc_id")
-    have = pd.read_csv(phases_csv, dtype=str).fillna("") if phases_csv.exists() else pd.DataFrame(columns=PHASE_COLS)
-    have = have[have["bulletin_url"] != ""]  # unlisted placeholders are rebuilt below
+    idx = relabel(pd.read_csv(index_csv, dtype=str))
+    cache = pd.read_csv(CACHE_CSV, dtype=str).fillna("") if CACHE_CSV.exists() else _seed_cache(phases_csv)
+    cache = cache.drop_duplicates("doc_id", keep="last")
     if retry_na:
-        have = have[have["ndma_phase"] != NA]
-    done = set(zip(have["county"], have["month"]))
-    todo = [r for r in idx.to_dict("records") if (r["county"], r["month"]) not in done]
-    print(f"{len(idx)} bulletins listed, {len(done)} already read, {len(todo)} to read")
-    rows = have.to_dict("records")
+        cache = cache[cache["ndma_phase"] != NA]
+    todo = [r for r in idx.to_dict("records") if r["doc_id"] not in set(cache["doc_id"])]
+    print(f"{len(idx)} bulletins for our counties, {len(cache)} already read, {len(todo)} to read")
+    new = []
     with cf.ThreadPoolExecutor(workers) as ex:
         for i, res in enumerate(ex.map(_read_one, todo), 1):
-            rows.append(res)
+            new.append({"doc_id": todo[i - 1]["doc_id"], **{k: res[k] for k in CACHE_COLS[1:]}})
             print(f"[{i}/{len(todo)}] {res['county']} {res['month']}: {res['ndma_phase']} | {res['evidence'][:70]}", flush=True)
-            if i % 20 == 0:
-                _write_phases(rows, idx, phases_csv, first)
-    return _write_phases(rows, idx, phases_csv, first)
+    cache = pd.concat([cache, pd.DataFrame(new, columns=CACHE_COLS)], ignore_index=True)
+    cache.to_csv(CACHE_CSV, index=False)
+    j = idx.merge(cache, on="doc_id", how="inner")
+    note = [f"{ev} [listed as {la}]" if la != f"{c} {m}" else ev
+            for ev, la, c, m in zip(j["evidence"], j["listed_as"], j["county"], j["month"])]
+    rows = pd.DataFrame({"county": j["county"], "month": j["month"], "ndma_phase": j["ndma_phase"],
+                         "bulletin_url": j["pdf_url"], "accessed_utc": j["accessed_utc"], "evidence": note})
+    return _write_phases(rows.to_dict("records"), idx, phases_csv, first)
 
 
 def _merge_duplicates(df: pd.DataFrame) -> pd.DataFrame:
@@ -141,7 +196,7 @@ def _merge_duplicates(df: pd.DataFrame) -> pd.DataFrame:
         read = g[g["ndma_phase"] != NA]
         r = (read if len(read) else g).iloc[0].to_dict()
         if read["ndma_phase"].nunique() > 1:
-            r.update(ndma_phase=NA, evidence="conflicting bulletins: " + "; ".join(f"{a} ({b[:40]})" for a, b in zip(read.ndma_phase, read.bulletin_url)))
+            r.update(ndma_phase=NA, evidence="conflicting bulletins: " + "; ".join(f"{a} (doc {b.split('=')[-1][:8]})" for a, b in zip(read.ndma_phase, read.bulletin_url)))
         elif len(read):
             r["bulletin_url"] = " ".join(read["bulletin_url"])
         out.append(r)

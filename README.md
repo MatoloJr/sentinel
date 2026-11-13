@@ -138,6 +138,26 @@ python run_all.py --offline                                # backtest + live out
 
 **Promotion gate**: a model becomes active only if its test Brier skill score has a 90% bootstrap lower bound above 0, or if it beats the active model on Brier without worse calibration. Otherwise the pipeline keeps its inline default, and counties without skill keep publishing 33%. Re-running many searches against the same test years slowly overfits them, so treat repeated "wins" with caution.
 
+## Validation
+
+**Independent check against NDMA's official drought phases.** We compared our rainfall-only drought level with the
+phase in NDMA's monthly county Drought Early Warning bulletins for our 10 ASAL counties, January 2021 to September
+2026 (`scripts/ndma_compare.py`, `outputs/ndma_agreement.csv`, Evidence page). Every phase was read from a downloaded
+bulletin; the line it came from is stored in `data/reference/ndma_phases.csv`. We used the playbook mapping
+Watch ~ Alert, Warning ~ Alarm and Emergency ~ Emergency. We read 563 county-months. Another 127 are "not available":
+69 had no bulletin listed, 56 were listed but the file is missing on NDMA's server, and in 2 the phase could not be
+read. After leaving out NDMA "Recovery" months and our dry-season months, 474 county-months could be compared. We gave
+exactly NDMA's phase in **54%** of them and were within one level in **90%**. That exact figure is only a little above
+the **46%** a forecaster would get by always saying "Normal", so the indicator does not reproduce NDMA's
+classification. When NDMA was at Alert or worse we were at Watch or worse 74% of the time. When NDMA said Normal we
+still said Watch or worse 26% of the time. We were above NDMA in 109 months and below it in 109. We were mostly lower on
+the coast (Kilifi, Kwale), where NDMA kept Alert while 3-month rain was in our Normal range (at least 75% of normal), and
+mostly higher in Makueni, Mandera and Garissa. NDMA raised a phase 42 times: we reached the same level earlier 17 times, in the same month 9,
+later 8, and not within 3 months 8. The disagreements are expected. NDMA's phase also weighs vegetation condition,
+livestock body condition, milk, water distances, prices and child malnutrition. These lag rainfall on the way into a
+drought and recover more slowly than rainfall on the way out. We use rainfall only, at one point per county. Treat
+our level as an early rainfall signal that complements NDMA's phase, not a substitute for it.
+
 ## Evaluation metrics
 
 | Component | Metrics | Why |
