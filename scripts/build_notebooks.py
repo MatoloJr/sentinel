@@ -112,10 +112,55 @@ s = val.groupby("event")["result"].value_counts().unstack(fill_value=0); display
 for ev, g in val.groupby("event"):
     m = (g.result == "matched").sum(); p = g.result.str.startswith("partial").sum()
     print(f"{ev}: matched {m}/{len(g)} counties, partial {p}; missed: {', '.join(g[g.result=='missed'].county) or 'none'}")
-print("\\nSources:"); [print("-", u) for u in val.url.unique()]"""),
+print("\\nSources:")
+for u in val.url.unique():
+    print("-", u)"""),
         md("**Reading the misses:** a point estimate at the county HQ cannot see rain that fell upstream (e.g. Tana River floods are often driven by "
            "rain in the central highlands, far from Hola), and ERA5 smooths intense local storms (urban flash floods in Nairobi). "
            "These are recorded in LIMITATIONS.md."),
+        md("### 6c. Rain after drought (compound drought-to-flood alert)\n"
+           "**Rule** (fixed before validation): 3-day rain at the county's own p95 / p99 / p99.9 (Watch / Warning / Emergency) "
+           "when the previous 12 full months had at most 75% of their 1991-2020 normal. The 3-month drought indicator turns "
+           "'Normal' as soon as it rains and the heavy-rain indicator ignores what came before, so neither flags this on its own."),
+        code("""ws = json.loads((OUT / "whiplash_stats.json").read_text())
+print(f"Episodes since 1991: {ws['episodes']} ({ws['episodes_warning_plus']} at Warning+); "
+      f"{ws['episodes_per_county_decade']} per county per decade ({ws['warning_plus_per_county_decade']} at Warning+)")
+print(f"1-in-100-day (p99) rain days: {ws['p99_rain_days']}, of which {ws['p99_rain_days_on_drought_land_pct']:.0f}% fell on drought-hit land")
+print("Blind spot - when a rain-after-drought episode started, the 3-month drought indicator said:")
+print(f"  Normal (or not assessed, dry season): {ws['blind_spot_drought_indicator_normal_pct']:.0f}% of episodes")
+print(f"  below Warning (Normal, not assessed or Watch): {ws['blind_spot_drought_indicator_below_warning_pct']:.0f}% of episodes")"""),
+        code("""wv = csv("whiplash_validation.csv")
+wv["outcome"] = wv.result.str.split(" ").str[0]
+display(wv[["event", "county", "window", "result", "indicator_detail"]])
+counts = wv.groupby("event")["outcome"].value_counts().unstack(fill_value=0).reindex(columns=["matched", "partial", "missed"], fill_value=0)
+counts.loc["TOTAL"] = counts.sum(); display(counts)
+print("Sources:")
+for src, u in wv[["source", "url"]].drop_duplicates().itertuples(index=False):
+    print("-", src, u)"""),
+        code("""sens = csv("whiplash_sensitivity.csv")
+(sens.style.apply(lambda r: ["background-color: #ffe08a; font-weight: bold" if r.published_rule else "" for _ in r], axis=1)
+     .format({"episodes_per_county_decade": "{:.1f}"}).hide(axis="index"))"""),
+        code("""from sentinel import indicators as ind
+mon = pd.read_parquet(OUT / "monthly.parquet"); hr = pd.read_parquet(OUT / "heavy_rain.parquet")
+wh = ind.whiplash_indicator(hr, ind.antecedent_dryness(mon))   # same functions run_all.py uses
+p99 = wh[wh.level.isin(["Warning", "Emergency"]) & wh.ante_pct.notna()]
+is_wh = p99.whiplash_level != "Normal"
+fig, ax = plt.subplots(figsize=(9, 5.5))
+ax.scatter(p99.ante_pct[~is_wh], p99.ratio_to_p99[~is_wh], s=9, alpha=0.45, color="#7f8c8d", label=f"p99 rain day, prior year not dry (n={(~is_wh).sum()})")
+ax.scatter(p99.ante_pct[is_wh], p99.ratio_to_p99[is_wh], s=12, alpha=0.75, color="#c0392b", label=f"rain after drought (n={is_wh.sum()})")
+ax.axvline(C.WHIPLASH_DRY_PCT, color="k", ls="--", lw=1); ax.text(C.WHIPLASH_DRY_PCT + 1, ax.get_ylim()[1] * 0.97, f"{C.WHIPLASH_DRY_PCT:.0f}% of normal", va="top", fontsize=8)
+ax.set_xlabel("Previous 12 months' rain, % of 1991-2020 normal"); ax.set_ylabel("3-day rain / county's own p99")
+ax.set_title("Every p99 heavy-rain day since 1991: how dry was the year before?"); ax.legend(loc="upper right", fontsize=8)
+print(f"{len(p99)} p99 rain days plotted ({int(wh.level.isin(['Warning', 'Emergency']).sum() - len(p99))} skipped: no 12-month history yet)")"""),
+        code("""tot = counts.loc["TOTAL"]; pub = sens[sens.published_rule].iloc[0]
+print("What the outputs show:")
+print(f"- {ws['p99_rain_days_on_drought_land_pct']:.0f}% of 1-in-100-day rain days fell on land that had at most {C.WHIPLASH_DRY_PCT:.0f}% of normal rain over the previous year (red points, left of the dashed line).")
+print(f"- When these episodes began, the standard 3-month drought indicator already read Normal or not assessed in {ws['blind_spot_drought_indicator_normal_pct']:.0f}% of cases, so a drought-only view would not have flagged them.")
+miss = wv[wv.outcome == "missed"]; wet_year = miss.result.str.contains("not dry enough").sum()
+print(f"- Against {int(tot.sum())} documented county-events the rule matched {tot['matched']}, reached Watch only in {tot['partial']} and missed {tot['missed']}; "
+      f"{wet_year} of the {len(miss)} misses had heavy rain but a previous year wetter than {C.WHIPLASH_DRY_PCT:.0f}% of normal.")
+print(f"- In the sensitivity grid the published rule ({pub.antecedent_months} months, {pub.dry_pct:.0f}%) gives {pub.matched} matches at {pub.episodes_per_county_decade:.1f} alerts per county per decade; "
+      f"the most matches ({sens.matched.max()}) come with {sens.loc[sens.matched.idxmax(), 'episodes_per_county_decade']:.1f} alerts per county per decade.")"""),
         md("## 7. Cyclone exposure (IBTrACS, 300 km from the county boundary)\n"
            "Distances are computed in a Kenya-centred azimuthal equidistant projection (metres), not in degrees."),
         code("""rk = csv("cyclone_ranking.csv"); display(rk)
@@ -130,9 +175,15 @@ for sid, t in tracks.sort_values("ISO_TIME").groupby("SID"):
 ax.set_xlim(33, 46); ax.set_ylim(-8, 6); ax.set_title("Storm tracks within 600 km (blue) and 300 km exposure class")"""),
         md("Cyclones rarely reach Kenya: South-West Indian Ocean storms mostly track south of ~10 S. Low counts are the honest result, "
            "which is why the playbook ties cyclone actions to official KMD / RSMC La Reunion warnings rather than to our exposure count."),
-        md("## 8. Population exposure (WorldPop 2020, 1 km)"),
-        code("""pop = csv("population.csv"); display(pop.round(0))
+        md("## 8. Population exposure (KNBS 2019 census)\n"
+           "People counts used for exposure and ranking are the **KNBS 2019 census** county totals (`population`). "
+           "The WorldPop 2020 1 km raster summed inside each county boundary (`worldpop_2020`) is kept only as a cross-check; "
+           "`worldpop_vs_census_pct` is how far it is from the census."),
+        code("""pop = csv("population.csv")
+display(pop[["county", "population", "population_source", "census_2019", "worldpop_2020", "worldpop_vs_census_pct"]]
+        .sort_values("worldpop_vs_census_pct").round(1))
 print("Median |WorldPop - census| difference:", round(pop.worldpop_vs_census_pct.abs().median(), 1), "%")
+print("Exposure uses census totals for all counties:", bool((pop.population == pop.census_2019).all()))
 for f in sorted(OUT.glob("people_by_*.csv")):
     print("\\n" + f.stem); display(pd.read_csv(f))"""),
     ]
