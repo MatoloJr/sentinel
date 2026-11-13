@@ -262,6 +262,14 @@ def whiplash():
             "episodes": sio.records(sio.read("whiplash_episodes.csv"))}
 
 
+@app.get("/api/ndma")
+def ndma():
+    """Independent check: our rainfall drought level vs NDMA's official county drought phase, month by month.
+    Empty lists when scripts/ndma_compare.py has not been run."""
+    return {"agreement": sio.records(sio.read("ndma_agreement.csv")),
+            "overall": sio.read_json("ndma_agreement.json") or {}}
+
+
 # ---------------------------------------------------------------- model card
 @app.get("/api/model")
 def model_card():

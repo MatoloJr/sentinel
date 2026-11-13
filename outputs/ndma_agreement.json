@@ -1,0 +1,30 @@
+{
+  "county": "ALL",
+  "bulletins_read": 177,
+  "not_available": 3,
+  "recovery_excluded": 0,
+  "dry_season_excluded": 20,
+  "months_compared": 157,
+  "exact_agreement_pct": 47.1,
+  "within_one_level_pct": 91.7,
+  "always_normal_baseline_pct": 17.2,
+  "ndma_alert_plus_months": 130,
+  "we_watch_plus_when_ndma_alert_plus_pct": 81.5,
+  "we_watch_plus_when_ndma_normal_pct": 66.7,
+  "we_higher_months": 37,
+  "we_lower_months": 46,
+  "ndma_escalations": 21,
+  "we_earlier": 11,
+  "same_month": 4,
+  "we_later": 6,
+  "not_matched": 0,
+  "median_lead_months": 1.0,
+  "mapping": {
+    "Normal": "Normal",
+    "Watch": "Alert",
+    "Warning": "Alarm",
+    "Emergency": "Emergency"
+  },
+  "period": "2021-01 to 2022-06",
+  "source": "NDMA KnowledgeWeb county Drought Early Warning bulletins"
+}

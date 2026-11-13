@@ -22,6 +22,7 @@ export function Evidence() {
   const model = useQuery({ queryKey: ["model"], queryFn: api.model });
   const agent = useQuery({ queryKey: ["agentMetrics"], queryFn: api.agentMetrics });
   const wl = useQuery({ queryKey: ["whiplash"], queryFn: api.whiplash });
+  const nd = useQuery({ queryKey: ["ndma"], queryFn: api.ndma });
   if (val.isPending) return <PageSkeleton />;
   if (val.isError) return <div className="page"><ErrorState error={val.error} retry={() => val.refetch()} /></div>;
   const ev = val.data.events.filter((e) => e.hazard !== "whiplash"); // compound events have their own section
@@ -119,6 +120,38 @@ export function Evidence() {
         ) : wl.isError ? (
           <Empty>Rain-after-drought outputs not built yet. Run <code>python run_all.py --offline</code>.</Empty>
         ) : null}
+      </Section>
+
+      <Section title="Independent check: NDMA official drought phases">
+        <p className="muted max-w-[75ch]">
+          Month by month, our rainfall-only drought level against the phase in NDMA's county Drought Early Warning
+          bulletins (Watch ~ Alert, Warning ~ Alarm, Emergency ~ Emergency). NDMA also weighs vegetation, livestock,
+          water access and nutrition, so it often stays in Alert or Alarm after the rain has returned. Months with no
+          readable bulletin, NDMA "Recovery" months and our dry-season months are left out.
+        </p>
+        {nd.data && nd.data.agreement.length > 0 ? (
+          <>
+            <RTable
+              rows={nd.data.agreement}
+              rowKey={(r) => String(r.county)}
+              cols={[
+                { key: "c", header: "County", primary: true, cell: (r) => <span className={r.county === "ALL" ? "font-semibold" : undefined}>{String(r.county)}</span> },
+                { key: "n", header: "Months compared", className: "num", cell: (r) => String(r.months_compared) },
+                { key: "e", header: "Exact", className: "num", cell: (r) => (r.exact_agreement_pct == null ? "–" : `${r.exact_agreement_pct}%`) },
+                { key: "w", header: "Within one level", className: "num", cell: (r) => (r.within_one_level_pct == null ? "–" : `${r.within_one_level_pct}%`) },
+                { key: "b", header: "If always 'Normal'", className: "num", hideOnMobile: true, cell: (r) => (r.always_normal_baseline_pct == null ? "–" : `${r.always_normal_baseline_pct}%`) },
+                { key: "t", header: "NDMA escalations: we earlier / same / later / missed", className: "num", cell: (r) => `${r.we_earlier} / ${r.same_month} / ${r.we_later} / ${r.not_matched}` },
+              ]}
+            />
+            <p className="subtle">
+              Source: {String(nd.data.overall.source ?? "NDMA bulletins")}, {String(nd.data.overall.period ?? "")}. "If always 'Normal'"
+              is the agreement a forecaster would get by never warning; "earlier / later" compares the month NDMA raised the
+              phase with the first month (within 3 either side) that our indicator reached the same level.
+            </p>
+          </>
+        ) : nd.isPending ? null : (
+          <Empty>NDMA comparison not built yet. Run <code>python scripts/ndma_compare.py</code>.</Empty>
+        )}
       </Section>
 
       <Section title="Seasonal outlook model card">

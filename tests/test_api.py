@@ -15,7 +15,7 @@ def client(synth):
 @pytest.mark.parametrize("url", ["/api/health", "/api/meta", "/api/counties", "/api/status", "/api/insights",
                                  "/api/insights?audience=public", "/api/outlook", "/api/watch", "/api/cyclones",
                                  "/api/population", "/api/validation", "/api/model", "/api/agent/runs",
-                                 "/api/agent/metrics", "/api/whiplash"])
+                                 "/api/agent/metrics", "/api/whiplash", "/api/ndma"])
 def test_endpoints_ok(client, url):
     r = client.get(url)
     assert r.status_code == 200, r.text

@@ -55,6 +55,12 @@ export interface WhiplashView {
   episodes: Row[];
 }
 
+/** Our drought level vs NDMA's official county drought phase (Normal / Alert / Alarm / Emergency). */
+export interface NdmaView {
+  agreement: Row[];
+  overall: Record<string, string | number | null | Record<string, string>>;
+}
+
 export interface Driver {
   hazard: Hazard;
   level: string;
@@ -287,6 +293,7 @@ export const api = {
   cyclones: () => req<CyclonesView>("/api/cyclones"),
   validation: () => req<{ events: Row[]; reference_events: Record<string, unknown>[]; drought_class_frequency: Row[] }>("/api/validation"),
   whiplash: () => req<WhiplashView>("/api/whiplash"),
+  ndma: () => req<NdmaView>("/api/ndma"),
   model: () => req<{ active: Record<string, any> | null; registry: { active: string | null; history: Row[] }; pipeline_model_source?: string; pipeline_selection?: Record<string, any> }>("/api/model"),
   ask: (question: string) => req<AgentRun>("/api/agent/ask", { method: "POST", body: JSON.stringify({ question }) }),
   runs: () => req<RunSummary[]>("/api/agent/runs"),
