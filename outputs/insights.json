@@ -1933,8 +1933,8 @@
         {
           "hazard": "cyclone",
           "level": "Normal",
-          "text": "Cyclone season (Nov-Apr). Live storm check unavailable; follow KMD and RSMC La Reunion. 1 tropical storm(s) passed within 300 km since 1981",
-          "value": null,
+          "text": "Cyclone season (Nov-Apr): no active storm within 1,000 km at last check (2026-11-13). 1 tropical storm(s) passed within 300 km since 1981",
+          "value": 1075,
           "unit": "km"
         }
       ],
@@ -2024,8 +2024,8 @@
         {
           "hazard": "cyclone",
           "level": "Normal",
-          "text": "Cyclone season (Nov-Apr). Live storm check unavailable; follow KMD and RSMC La Reunion. 1 tropical storm(s) passed within 300 km since 1981",
-          "value": null,
+          "text": "Cyclone season (Nov-Apr): no active storm within 1,000 km at last check (2026-11-13). 1 tropical storm(s) passed within 300 km since 1981",
+          "value": 1077,
           "unit": "km"
         }
       ],
@@ -2115,8 +2115,8 @@
         {
           "hazard": "cyclone",
           "level": "Normal",
-          "text": "Cyclone season (Nov-Apr). Live storm check unavailable; follow KMD and RSMC La Reunion. 1 tropical storm(s) passed within 300 km since 1981",
-          "value": null,
+          "text": "Cyclone season (Nov-Apr): no active storm within 1,000 km at last check (2026-11-13). 1 tropical storm(s) passed within 300 km since 1981",
+          "value": 1084,
           "unit": "km"
         }
       ],
@@ -2199,8 +2199,8 @@
         {
           "hazard": "cyclone",
           "level": "Normal",
-          "text": "Cyclone season (Nov-Apr). Live storm check unavailable; follow KMD and RSMC La Reunion. 1 tropical storm(s) passed within 300 km since 1981",
-          "value": null,
+          "text": "Cyclone season (Nov-Apr): no active storm within 1,000 km at last check (2026-11-13). 1 tropical storm(s) passed within 300 km since 1981",
+          "value": 1065,
           "unit": "km"
         }
       ],

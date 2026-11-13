@@ -1,5 +1,5 @@
 {
-  "built_utc": "2026-11-13T06:35:47+00:00",
+  "built_utc": "2026-11-13T08:44:11+00:00",
   "daily_range": [
     "1991-01-01",
     "2026-11-05"
@@ -70,6 +70,6 @@
     ]
   },
   "forecast_fetched_utc": "2026-11-12T12:08+00:00",
-  "active_storm_check_utc": null,
+  "active_storm_check_utc": "2026-11-13T08:43+00:00",
   "latest_complete_month": "2026-10-01"
 }
